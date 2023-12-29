@@ -36,6 +36,7 @@ export const RecipeSearch = () => {
 						<SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
 					}
 					type="search"
+					autoComplete="off"
 					onChange={async (e) => {
 						setQuery(e.target.value)
 					}}
