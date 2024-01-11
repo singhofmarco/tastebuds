@@ -4,6 +4,14 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
+export type OpenAiRecipe = {
+  title: string;
+  ingredients: string[];
+  steps: string[];
+  totalTime: string;
+  cuisineType: string;
+};
+
 export type EdamamResponse = {
   q: string;
   from: number;

@@ -3,12 +3,13 @@
 import { Input } from "@nextui-org/input"
 import { SearchIcon } from "./icons"
 import { RecipeCard } from "./recipe-card"
-import { EdamamHit } from "@/types"
+import { EdamamHit, OpenAiRecipe } from "@/types"
 import { FormEvent, useState } from "react"
 
 export const RecipeSearch = () => {
     const [query, setQuery] = useState<string>('')
-	const [edamamRecipes, setEdamamRecipes] = useState<EdamamHit[]>([])
+	const [edamamRecipes, setEdamamRecipes] = useState<OpenAiRecipe[]>([])
+	const [image_url, setImageUrl] = useState<string>('')
 
 	async function onSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault()
@@ -17,7 +18,8 @@ export const RecipeSearch = () => {
 
 		const recipes = await res.json()
 
-		setEdamamRecipes(recipes.data.hits)
+		setEdamamRecipes([recipes.data])
+		setImageUrl(recipes.image_url)
 	}
 
     return (
@@ -43,8 +45,8 @@ export const RecipeSearch = () => {
 				/>
 			</form>
 			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
-				{edamamRecipes.map((hit: EdamamHit) => (
-					<RecipeCard key={hit.recipe.uri} recipe={hit.recipe} />
+				{edamamRecipes.map((recipe: OpenAiRecipe) => (
+					<RecipeCard key={recipe.title} recipe={recipe} image={image_url} />
 				))}
 			</ul>
         </div>
