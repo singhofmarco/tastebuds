@@ -10,6 +10,7 @@ export type OpenAiRecipe = {
   steps: string[];
   totalTime: string;
   cuisineType: string;
+  description: string;
 };
 
 export type EdamamResponse = {

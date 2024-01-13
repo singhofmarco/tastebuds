@@ -1,5 +1,6 @@
 import { EdamamIngredient, EdamamRecipe, OpenAiRecipe } from "@/types";
 import { Button } from "@nextui-org/button";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Image } from "@nextui-org/image";
@@ -49,19 +50,25 @@ export const RecipeCard = ({ recipe, image }: { recipe: OpenAiRecipe, image: str
                         <div>Time: { recipe.totalTime }</div>
                     </div>
                 </div>
-                <h2 className="mt-4 font-bold">Ingredients</h2>
-                <ul className="list-disc pl-4">
-                    {recipe.ingredients.map((ingredient: string) => (
-                        <li key={ingredient}>{ingredient}</li>
-                    ))}
-                </ul>
-
-                <h2 className="mt-4 font-bold">Steps</h2>
-                <ul className="list-disc pl-4">
-                    {recipe.steps.map((step: string) => (
-                        <li key={step}>{step}</li>
-                    ))}
-                </ul>
+                <Accordion variant="splitted" defaultExpandedKeys={[1]}>
+                  <AccordionItem key="1" aria-label="Description" title="Description">
+                    <p>{recipe.description}</p>
+                  </AccordionItem>
+                  <AccordionItem key="2" aria-label="Ingredients" title="Ingredients">
+                    <ul className="list-disc pl-4">
+                      {recipe.ingredients.map((ingredient: string) => (
+                          <li key={ingredient}>{ingredient}</li>
+                      ))}
+                    </ul>
+                  </AccordionItem>
+                  <AccordionItem key="3" aria-label="Steps" title="Steps">
+                    <ul className="list-disc pl-4">
+                      {recipe.steps.map((step: string) => (
+                          <li key={step}>{step}</li>
+                      ))}
+                    </ul>
+                  </AccordionItem>
+                </Accordion>
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onPress={onClose}>
