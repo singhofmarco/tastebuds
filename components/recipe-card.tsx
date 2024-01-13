@@ -5,6 +5,7 @@ import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Image } from "@nextui-org/image";
 import { Link } from "@nextui-org/link";
+import { save } from "@/app/actions";
 
 export const RecipeCard = ({ recipe, image }: { recipe: OpenAiRecipe, image: string }) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -71,7 +72,7 @@ export const RecipeCard = ({ recipe, image }: { recipe: OpenAiRecipe, image: str
                 </Accordion>
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" onPress={onClose}>
+                <Button color="primary" onPress={() => save(recipe, "")}>
                   Save
                 </Button>
               </ModalFooter>

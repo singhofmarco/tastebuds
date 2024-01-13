@@ -14,10 +14,13 @@ model Recipe {
   updatedAt   DateTime         @default(now()) @db.Timestamp(6)
   description String?
   published   Boolean          @default(false)
-  imageUrl    String?
-  userId      Int
-  user        User             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  ingredients Ingredient[]
+  image       String           @db.Text
+  userId      Int?
+  user        User?             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ingredients Json
+  steps       Json
+  totalTime   String
+  cuisineType     String
   teams       TeamsOnRecipes[]
 }
 
@@ -25,7 +28,7 @@ model Ingredient {
   id       Int    @id @default(autoincrement())
   name     String @db.VarChar(255)
   recipeId Int
-  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  // recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Team {
