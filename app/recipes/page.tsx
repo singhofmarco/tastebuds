@@ -6,10 +6,10 @@ const prisma = new PrismaClient()
 
 export default async function RecipesPage() {
 	const savedRecipes = await prisma.recipe.findMany()
-savedRecipes.map((recipe) => {
-	console.log(recipe)	
-}
-)
+
+	savedRecipes.forEach((recipe) => {
+		recipe.saved = true
+	})
 
 	return (
 		<div>

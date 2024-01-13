@@ -71,10 +71,13 @@ export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
                   </AccordionItem>
                 </Accordion>
               </ModalBody>
+
               <ModalFooter>
+              { ! recipe.saved && (
                 <Button color="primary" onPress={() => save(recipe)}>
                   Save
                 </Button>
+              )}
               </ModalFooter>
             </>
           )}
