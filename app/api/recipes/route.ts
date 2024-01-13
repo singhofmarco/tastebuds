@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
     const completion = await openai.chat.completions.create({
         messages: [
-            { role: "system", content: "You are a system to generate a recipe based on a request from a user. Return one recipe per request. Use the metric system. The user request might be a vague description of a dish but it could also include a list of ingredients the user wants to have incorporated in the dish. You may generate a dish that requires ingredients other than what the user specified unless instructed to only include the ingredients listed. Always output a JSON object which looks like: {  title, ingredients, steps, totalTime, cuisineType }" },
+            { role: "system", content: "You are a system to generate a usable recipe based on a request from a user. Return one recipe per request. Adhere to proven ratios of ingredients in cooking and baking. Use the metric system. You may divert from the metric system, if it makes sense for the type of ingredient like bell peppers should be counted as opposed to be weighted, yeast comes in packets. The user request might be a vague description of a dish or baked good but it could also include a list of ingredients the user wants to have incorporated in the recipe. Always output a JSON object which looks like: {  title: string, ingredients: string[], steps: string[], totalTime: string, cuisineType: string, paragraphStoryAboutChildhood: string }" },
             { role: "user", content: query },
         ],
         model: "gpt-4-1106-preview",
@@ -20,16 +20,19 @@ export async function GET(request: Request) {
 
     const data = JSON.parse(completion.choices[0].message.content ?? "")
 
+    /**
     const response = await openai.images.generate({
         model: "dall-e-3",
-        prompt: data.title,
+        prompt: "Create a realistic image of: " + data.title,
         n: 1,
         size: "1024x1024",
-        response_format: "url"
+        response_format: "b64_json"
     });
 
-    const image_url = response.data[0].url;
+    */
 
+    //const image_url = response.data[0].b64_json;
+    const image_url = ""
 
     return Response.json({ data, image_url })
 }
