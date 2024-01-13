@@ -19,7 +19,7 @@ export const RecipeCard = ({ recipe, image }: { recipe: OpenAiRecipe, image: str
                 isZoomed
                 alt="Card background"
                 className="z-0 w-full h-full object-cover"
-                src={image}
+                src={"data:image/png;base64," + image}
                 width={500}
                 height={625}
             />
@@ -41,7 +41,7 @@ export const RecipeCard = ({ recipe, image }: { recipe: OpenAiRecipe, image: str
                         removeWrapper
                         alt="Card background"
                         className="z-0 w-25 object-cover"
-                        src={image}
+                        src={"data:image/png;base64," + image}
                         width={75}
                         height={125}
                     />
