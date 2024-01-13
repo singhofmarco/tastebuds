@@ -11,6 +11,7 @@ export type OpenAiRecipe = {
   totalTime: string;
   cuisineType: string;
   description: string;
+  image: string;
 };
 
 export type EdamamResponse = {

@@ -3,10 +3,10 @@
 import { OpenAiRecipe } from "@/types"
 import { PrismaClient } from "@prisma/client"
 
-export async function save(recipe: OpenAiRecipe, image: string) {
+export async function save(recipe: OpenAiRecipe) {
     const prisma = new PrismaClient()
 
-    const { title, description, ingredients, steps, totalTime, cuisineType } = recipe
+    const { title, description, image, ingredients, steps, totalTime, cuisineType } = recipe
 
     const storedRecipe = await prisma.recipe.create({
         data: {

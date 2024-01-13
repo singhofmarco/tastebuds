@@ -7,7 +7,7 @@ import { Image } from "@nextui-org/image";
 import { Link } from "@nextui-org/link";
 import { save } from "@/app/actions";
 
-export const RecipeCard = ({ recipe, image }: { recipe: OpenAiRecipe, image: string }) => {
+export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
 
     return (
@@ -21,7 +21,7 @@ export const RecipeCard = ({ recipe, image }: { recipe: OpenAiRecipe, image: str
                 isZoomed
                 alt="Card background"
                 className="z-0 w-full h-full object-cover"
-                src={"data:image/png;base64," + image}
+                src={"data:image/png;base64," + recipe.image}
                 width={500}
                 height={625}
             />
@@ -43,7 +43,7 @@ export const RecipeCard = ({ recipe, image }: { recipe: OpenAiRecipe, image: str
                         removeWrapper
                         alt="Card background"
                         className="z-0 w-25 object-cover"
-                        src={"data:image/png;base64," + image}
+                        src={"data:image/png;base64," + recipe.image}
                         width={75}
                         height={125}
                     />
@@ -72,7 +72,7 @@ export const RecipeCard = ({ recipe, image }: { recipe: OpenAiRecipe, image: str
                 </Accordion>
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" onPress={() => save(recipe, "")}>
+                <Button color="primary" onPress={() => save(recipe)}>
                   Save
                 </Button>
               </ModalFooter>
