@@ -1,10 +1,9 @@
-import { EdamamIngredient, EdamamRecipe, OpenAiRecipe } from "@/types";
+import { OpenAiRecipe } from "@/types";
 import { Button } from "@nextui-org/button";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
+import { Card, CardFooter } from "@nextui-org/card";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Image } from "@nextui-org/image";
-import { Link } from "@nextui-org/link";
 import { save } from "@/app/actions";
 
 export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {

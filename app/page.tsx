@@ -1,44 +1,39 @@
-import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code"
-import { button as buttonStyles } from "@nextui-org/theme";
-import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
 import { Button } from "@nextui-org/button";
 
 export default function Home() {
 	return (
 		<section className="flex flex-col items-center justify-center gap-8 py-8 md:py-10">
+			<Image src="/logo.svg"
+						 alt="Tastebuds"
+						 width={680}
+						 height={823}
+						  className="w-48 h-48" />
 			<div className="inline-block max-w-lg text-center justify-center">
 				<h1 className={title()}>Cook&nbsp;</h1>
-				<h1 className={title({ color: "violet" })}>creative&nbsp;</h1>
+				<h1 className={title({ color: "yellow" })}>creative&nbsp;</h1>
 				<br />
 				<h1 className={title()}>
 					meals with your friends, without the hassle.
 				</h1>
 				<h2 className={subtitle({ class: "mt-4" })}>
-					Beautiful, fast and modern React UI library.
+					With Tastebuds, and <mark className="bg-gradient-to-br from-50% from-red-600/75 to-orange-600/75 rounded-sm px-1 shadow-md text-white">the power of AI</mark>, there&apos;s no need to put fun cooking nights on the back-burner.
 				</h2>
 			</div>
 
-			<div className="max-w-[900px] gap- grid grid-cols-12 grid-rows-2 px-8">
-				<Card className="col-span-12 sm:col-span-4 h-[300px]"
-				isPressable
-				isFooterBlurred>
-					<Image
-						removeWrapper
-						alt="Card background"
-						className="z-0 w-full h-full object-cover"
-						src="https://images.unsplash.com/photo-1555126634-323283e090fa?q=80&w=500&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-					/>
-					<CardFooter className="absolute z-10 bottom-0 flex-col !items-start"
-					>
-						<p className="text-tiny text-white/60 uppercase font-bold">Essentials</p>
-						<h4 className="text-white font-medium text-large">Noodle Soup</h4>
-					</CardFooter>
-				</Card>
+			<div className="max-w-[900px] gap-4 flex px-8">
+				<Button variant="solid" size="lg" radius="sm"
+					className="bg-gradient-to-tr from-pink-600 to-yellow-500 text-white"
+				 	endContent={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+						<path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+					</svg>
+				}>
+					Create a new recipe
+				</Button>
+				<Button variant="ghost" radius="sm" color="default" size="lg">
+					Sign up
+				</Button>
 			</div>
 		</section>
 	);
