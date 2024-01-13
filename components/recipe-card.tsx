@@ -51,7 +51,7 @@ export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
                         <div>Time: { recipe.totalTime }</div>
                     </div>
                 </div>
-                <Accordion variant="splitted" defaultExpandedKeys={[1]}>
+                <Accordion variant="splitted" defaultExpandedKeys={['1']}>
                   <AccordionItem key="1" aria-label="Description" title="Description">
                     <p>{recipe.description}</p>
                   </AccordionItem>
