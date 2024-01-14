@@ -6,7 +6,7 @@ import { RecipeCard } from "./recipe-card"
 import { EdamamHit, OpenAiRecipe } from "@/types"
 import { FormEvent, useEffect, useState } from "react"
 
-export const RecipeSearch = ({savedRecipes}: {savedRecipes: OpenAiRecipe[]}) => {
+export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
     const [query, setQuery] = useState<string>('')
 	const [edamamRecipes, setEdamamRecipes] = useState<OpenAiRecipe[]>([])
 	const [recipes, setRecipes] = useState<OpenAiRecipe[]>([])
