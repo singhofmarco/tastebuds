@@ -34,35 +34,34 @@ export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">{ recipe.title }</ModalHeader>
+              <ModalHeader className="flex flex-col">
+                <div>{ recipe.title }</div>
+                <div className="text-tiny text-black/60 uppercase font-bold">{ recipe.cuisineType }</div>
+              </ModalHeader>
               <ModalBody>
 
-              <div className="flex gap-4 items-center">
+              <div className="flex gap-4 items-start">
                     <Image
                         removeWrapper
                         alt="Card background"
-                        className="z-0 w-25 object-cover"
+                        className="z-0 w-28 object-cover"
                         src={"data:image/png;base64," + recipe.image}
                         width={75}
                         height={125}
                     />
-                    <div className="">
-                        <div>Time: { recipe.totalTime }</div>
-                    </div>
+                    <div>Time: { recipe.totalTime }</div>
                 </div>
-                <Accordion variant="splitted" defaultExpandedKeys={['1']}>
-                  <AccordionItem key="1" aria-label="Description" title="Description">
-                    <p>{recipe.description}</p>
-                  </AccordionItem>
-                  <AccordionItem key="2" aria-label="Ingredients" title="Ingredients">
+                <p>{recipe.description}</p>
+                <Accordion className="px-0" variant="splitted" defaultExpandedKeys={['1']}>
+                  <AccordionItem key="1" aria-label="Ingredients" title="Ingredients"  subtitle={recipe.ingredients.length + " items"}>
                     <ul className="list-disc pl-4">
                       {recipe.ingredients.map((ingredient: string) => (
                           <li key={ingredient}>{ingredient}</li>
                       ))}
                     </ul>
                   </AccordionItem>
-                  <AccordionItem key="3" aria-label="Steps" title="Steps">
-                    <ul className="list-disc pl-4">
+                  <AccordionItem key="2" aria-label="Instructions" title="Instructions" subtitle={recipe.steps.length + " steps"}>
+                    <ul className="list-decimal pl-4">
                       {recipe.steps.map((step: string) => (
                           <li key={step}>{step}</li>
                       ))}
