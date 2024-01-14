@@ -5,13 +5,9 @@ export const siteConfig = {
 	description: "Cook together without the hassle.",
 	navItems: [
 		{
-			label: "Home",
-			href: "/",
+		label: "Recipes",
+		href: "/recipes",
 		},
-    {
-      label: "Recipes",
-      href: "/recipes",
-    },
 	],
 	navMenuItems: [
 		{
