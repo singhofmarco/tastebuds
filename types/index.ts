@@ -12,6 +12,7 @@ export type OpenAiRecipe = {
   cuisineType: string;
   description: string;
   image: string;
+  saved: boolean;
 };
 
 export type EdamamResponse = {
