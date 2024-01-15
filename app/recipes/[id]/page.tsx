@@ -40,7 +40,7 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
                 <div className="aspect-h-1 aspect-w-1 w-full">
                 <Image
                     className="h-full w-full object-cover object-center sm:rounded-lg shadow-lg"
-                    src={"data:image/jpeg;base64," + recipe?.image}
+                    src={recipe?.image ?? ""}
                     alt={recipe?.title || "Recipe image"}
                     width={1024}
                     height={1024}

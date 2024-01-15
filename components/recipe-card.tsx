@@ -3,9 +3,9 @@ import { Button } from "@nextui-org/button";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Card, CardFooter } from "@nextui-org/card";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
-import { Image } from "@nextui-org/image";
 import { save } from "@/app/actions";
 import Link from "next/link";
+import Image from "next/image";
 
 export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -20,11 +20,9 @@ export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
               className="h-full"
               isFooterBlurred>
               <Image
-                  removeWrapper
-                  isZoomed
                   alt="Card background"
-                  className="z-0 w-full h-full object-cover"
-                  src={"data:image/png;base64," + recipe.image}
+                  className="z-0 w-full h-full object-cover hover:scale-110 transition-all"
+                  src={recipe.image}
                   width={500}
                   height={625}
               />
@@ -50,7 +48,7 @@ export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
                         removeWrapper
                         alt="Card background"
                         className="z-0 w-28 object-cover"
-                        src={"data:image/png;base64," + recipe.image}
+                        src={recipe.image}
                         width={75}
                         height={125}
                     />
