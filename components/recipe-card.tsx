@@ -17,11 +17,11 @@ export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
           className="col-span-12 sm:col-span-3 h-[300px]"
         >
           <Card
-              className="h-full"
+              className="h-full group"
               isFooterBlurred>
               <Image
                   alt="Card background"
-                  className="z-0 w-full h-full object-cover hover:scale-110 transition-all"
+                  className="z-0 w-full h-full object-cover group-hover:scale-110 transition-transform"
                   src={recipe.image}
                   width={500}
                   height={625}
