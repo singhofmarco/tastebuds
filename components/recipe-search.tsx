@@ -3,16 +3,16 @@
 import { Input } from "@nextui-org/input"
 import { SearchIcon } from "./icons"
 import { RecipeCard } from "./recipe-card"
-import { EdamamHit, OpenAiRecipe } from "@/types"
-import { FormEvent, useEffect, useState } from "react"
-import { Button } from "@nextui-org/button"
+import { OpenAiRecipe } from "@/types"
+import { useEffect, useState } from "react"
 
 export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
     const [query, setQuery] = useState<string>('')
-	const [edamamRecipes, setEdamamRecipes] = useState<OpenAiRecipe[]>([])
 	const [recipes, setRecipes] = useState<OpenAiRecipe[]>([])
-	const [image_url, setImageUrl] = useState<string>('')
 
+	/**
+	 *
+	const [edamamRecipes, setEdamamRecipes] = useState<OpenAiRecipe[]>([])
 	async function onSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault()
 
@@ -21,19 +21,25 @@ export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
 		const recipes = await res.json()
 
 		setEdamamRecipes([recipes.data])
-		setImageUrl(recipes.image_url)
 	}
+	 */
 
 	useEffect(() => {
-		const recipesToShow = query.length && edamamRecipes.length ? edamamRecipes : savedRecipes
-		setRecipes(recipesToShow)
-	}, [query, edamamRecipes, savedRecipes])
+		if (query.length) {
+			const filteredRecipes = savedRecipes.filter((recipe: OpenAiRecipe) => {
+				return recipe.title.toLowerCase().includes(query.toLowerCase()) || recipe.cuisineType.toLowerCase().includes(query.toLowerCase())
+			})
+			setRecipes(filteredRecipes)
+		} else {
+			setRecipes(savedRecipes)
+		}
+	}, [query, savedRecipes])
 
     return (
         <div className="mt-8 flex flex-col gap-y-4 px-8">
 			<form
 				className="flex-1"
-				onSubmit={onSubmit}
+				onSubmit={(e) => { e.preventDefault() }}
 			>
 				<div className="flex gap-4">
 					<Input
@@ -53,13 +59,6 @@ export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
 							setQuery(e.target.value)
 						}}
 					/>
-					<Button
-						type="submit"
-						variant="solid"
-						color="primary"
-					>
-						Search
-					</Button>
 				</div>
 			</form>
 			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
