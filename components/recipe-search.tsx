@@ -61,11 +61,17 @@ export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
 					/>
 				</div>
 			</form>
+			{ recipes.length === 0 ? (
+				<div className="grid justify-center items-center h-full text-center">
+					<p className="text-default-400">No recipes found.</p>
+				</div>
+				) : (
 			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
 				{recipes.map((recipe: OpenAiRecipe) => (
 					<RecipeCard key={recipe.title} recipe={recipe} />
 				))}
 			</ul>
+			)}
         </div>
     )
 }
