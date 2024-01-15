@@ -5,31 +5,36 @@ import { Card, CardFooter } from "@nextui-org/card";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Image } from "@nextui-org/image";
 import { save } from "@/app/actions";
+import Link from "next/link";
 
 export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
 
     return (
         <>
-        <Card className="col-span-12 sm:col-span-3 h-[300px]"
-            onClick={() => onOpen()}
-            isPressable
-            isFooterBlurred>
-            <Image
-                removeWrapper
-                isZoomed
-                alt="Card background"
-                className="z-0 w-full h-full object-cover"
-                src={"data:image/png;base64," + recipe.image}
-                width={500}
-                height={625}
-            />
-            <CardFooter className="absolute z-10 bottom-0 flex-col !items-start"
-            >
-                <p className="text-tiny text-white/60 uppercase font-bold">{ recipe.cuisineType }</p>
-                <h4 className="text-white font-medium text-large">{ recipe.title }</h4>
-            </CardFooter>
-        </Card>
+        <Link
+          href={`/recipes/${recipe.id}`}
+          className="col-span-12 sm:col-span-3 h-[300px]"
+        >
+          <Card
+              className="h-full"
+              isFooterBlurred>
+              <Image
+                  removeWrapper
+                  isZoomed
+                  alt="Card background"
+                  className="z-0 w-full h-full object-cover"
+                  src={"data:image/png;base64," + recipe.image}
+                  width={500}
+                  height={625}
+              />
+              <CardFooter className="absolute z-10 bottom-0 flex-col !items-start"
+              >
+                  <p className="text-tiny text-white/60 uppercase font-bold">{ recipe.cuisineType }</p>
+                  <h4 className="text-white font-medium text-large">{ recipe.title }</h4>
+              </CardFooter>
+          </Card>
+        </Link>
         <Modal backdrop='blur' isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           {(onClose) => (

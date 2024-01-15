@@ -5,6 +5,7 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 };
 
 export type OpenAiRecipe = {
+  id: string;
   title: string;
   ingredients: string[];
   steps: string[];
