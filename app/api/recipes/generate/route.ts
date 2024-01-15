@@ -25,10 +25,10 @@ export async function GET(request: Request) {
         prompt: "Create a realistic image of: " + data.title,
         n: 1,
         size: "1024x1024",
-        response_format: "b64_json"
+        response_format: "url"
     });
 
-    const image_url = response.data[0].b64_json;
+    const image_url = response.data[0].url;
     data.image = image_url
 
     return Response.json({ data })

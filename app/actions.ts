@@ -2,6 +2,7 @@
 
 import { OpenAiRecipe } from "@/types"
 import { PrismaClient } from "@prisma/client"
+import { revalidatePath } from "next/cache"
 
 export async function save(recipe: OpenAiRecipe) {
     const prisma = new PrismaClient()
@@ -19,4 +20,6 @@ export async function save(recipe: OpenAiRecipe) {
             image,
         }
     })
+
+    revalidatePath("/recipes")
   }

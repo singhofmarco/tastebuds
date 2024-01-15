@@ -1,28 +1,18 @@
 "use client"
 
 import { Input } from "@nextui-org/input"
-import { SearchIcon } from "./icons"
+import { PlusIcon, SearchIcon } from "./icons"
 import { RecipeCard } from "./recipe-card"
 import { OpenAiRecipe } from "@/types"
 import { useEffect, useState } from "react"
+import { Card, CardFooter } from "@nextui-org/card"
+import AddRecipeModal from "./add-recipe-modal"
+import { useDisclosure } from "@nextui-org/modal"
 
 export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
     const [query, setQuery] = useState<string>('')
 	const [recipes, setRecipes] = useState<OpenAiRecipe[]>([])
-
-	/**
-	 *
-	const [edamamRecipes, setEdamamRecipes] = useState<OpenAiRecipe[]>([])
-	async function onSubmit(e: FormEvent<HTMLFormElement>) {
-		e.preventDefault()
-
-		const res = await fetch(`/api/recipes/generate?query=${query}`)
-
-		const recipes = await res.json()
-
-		setEdamamRecipes([recipes.data])
-	}
-	 */
+	const {isOpen: isAddRecipeModalOpen, onOpen: onAddRecipeModalOpen, onClose: onAddRecipeModalClose} = useDisclosure()
 
 	useEffect(() => {
 		if (query.length) {
@@ -61,17 +51,28 @@ export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
 					/>
 				</div>
 			</form>
-			{ recipes.length === 0 ? (
+			{ recipes.length === 0 && (
 				<div className="grid justify-center items-center h-full text-center">
 					<p className="text-default-400">No recipes found.</p>
 				</div>
-				) : (
+				)}
 			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
 				{recipes.map((recipe: OpenAiRecipe) => (
 					<RecipeCard key={recipe.title} recipe={recipe} />
 				))}
+				<Card
+					className="col-span-12 sm:col-span-3 h-[300px] group"
+					onPress={onAddRecipeModalOpen}
+					isPressable
+					isFooterBlurred>
+					<PlusIcon className="z-0 p-28 w-full h-full object-cover group-hover:scale-110 transition-transform" />
+					<CardFooter className="absolute z-10 bottom-0 flex-col !items-start">
+						<p className="text-tiny text-foreground-500 uppercase font-bold">Add</p>
+						<h4 className="font-medium text-large">New Recipe</h4>
+					</CardFooter>
+          		</Card>
 			</ul>
-			)}
+			<AddRecipeModal isOpen={isAddRecipeModalOpen} onClose={onAddRecipeModalClose} />
         </div>
     )
 }
