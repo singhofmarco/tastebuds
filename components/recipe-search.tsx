@@ -5,6 +5,7 @@ import { SearchIcon } from "./icons"
 import { RecipeCard } from "./recipe-card"
 import { EdamamHit, OpenAiRecipe } from "@/types"
 import { FormEvent, useEffect, useState } from "react"
+import { Button } from "@nextui-org/button"
 
 export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
     const [query, setQuery] = useState<string>('')
@@ -31,24 +32,35 @@ export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
     return (
         <div className="mt-8 flex flex-col gap-y-4 px-8">
 			<form
-				onSubmit={onSubmit}>
-				<Input
-					aria-label="Search"
-					classNames={{
-						inputWrapper: "bg-default-100",
-						input: "text-sm",
-					}}
-					labelPlacement="outside"
-					placeholder="Search..."
-					startContent={
-						<SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-					}
-					type="search"
-					autoComplete="off"
-					onChange={async (e) => {
-						setQuery(e.target.value)
-					}}
-				/>
+				className="flex-1"
+				onSubmit={onSubmit}
+			>
+				<div className="flex gap-4">
+					<Input
+						aria-label="Search"
+						classNames={{
+							inputWrapper: "bg-default-100",
+							input: "text-sm",
+						}}
+						labelPlacement="outside"
+						placeholder="Search..."
+						startContent={
+							<SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+						}
+						type="search"
+						autoComplete="off"
+						onChange={async (e) => {
+							setQuery(e.target.value)
+						}}
+					/>
+					<Button
+						type="submit"
+						variant="solid"
+						color="primary"
+					>
+						Search
+					</Button>
+				</div>
 			</form>
 			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
 				{recipes.map((recipe: OpenAiRecipe) => (
