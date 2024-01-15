@@ -20,7 +20,9 @@ export default async function RecipesPage() {
 
 	return (
 		<div>
-			<h1 className={title()}>Recipes</h1>
+			<div className="text-center">
+				<h1 className={title()}>Recipes</h1>
+			</div>
 			<RecipeSearch savedRecipes={savedRecipes} />
 		</div>
 	);
