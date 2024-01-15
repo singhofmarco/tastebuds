@@ -45,7 +45,6 @@ export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
 
               <div className="flex gap-4 items-start">
                     <Image
-                        removeWrapper
                         alt="Card background"
                         className="z-0 w-28 object-cover"
                         src={recipe.image}
