@@ -14,9 +14,8 @@ import {
   ModalFooter,
 } from "@nextui-org/modal";
 import { Spinner } from "@nextui-org/spinner";
-import Image from "next/image";
 import { useState } from "react";
-import { ClockIcon, GlobeIcon } from "./icons";
+import { AiIcon, ClockIcon, GlobeIcon } from "./icons";
 
 export default function AddRecipeModal({
   isOpen,
@@ -83,13 +82,9 @@ export default function AddRecipeModal({
               {!isLoading && recipe && (
                 <>
                   <div className="flex gap-4 items-start">
-                    <Image
-                      alt="Card background"
-                      className="z-0 w-28 object-cover rounded-md shadow-md"
-                      src={recipe.image}
-                      width={75}
-                      height={125}
-                    />
+                    <div className="w-24 h-24 shadow-md rounded-sm bg-foreground-100 flex justify-center items-center">
+                        <AiIcon className="w-8 h-8 text-foreground" />
+                    </div>
                     <div className="flex flex-col gap-y-2">
                     <Chip
                         aria-label="Cuisine Type"

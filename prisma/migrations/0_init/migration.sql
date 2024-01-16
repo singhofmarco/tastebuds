@@ -6,7 +6,7 @@ CREATE TABLE "Recipe" (
     "updatedAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "description" TEXT,
     "published" BOOLEAN NOT NULL DEFAULT false,
-    "image" TEXT NOT NULL,
+    "image" TEXT,
     "userId" INTEGER,
     "ingredients" JSONB NOT NULL,
     "steps" JSONB NOT NULL,

@@ -20,16 +20,5 @@ export async function GET(request: Request) {
 
     const data = JSON.parse(completion.choices[0].message.content ?? "")
 
-    const response = await openai.images.generate({
-        model: "dall-e-3",
-        prompt: "Create a realistic image of: " + data.title,
-        n: 1,
-        size: "1024x1024",
-        response_format: "url"
-    });
-
-    const image_url = response.data[0].url;
-    data.image = image_url
-
     return Response.json({ data })
 }

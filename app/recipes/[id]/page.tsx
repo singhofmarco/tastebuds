@@ -5,6 +5,7 @@ import { Chip } from "@nextui-org/chip";
 import { ClockIcon, GlobeIcon } from "@/components/icons";
 import Breadcrumbs from "@/components/breadcrumbs";
 import BreadcrumbItem from "@/components/breadcrumb-item";
+import RecipeImage from "@/components/recipe-image";
 
 const prisma = new PrismaClient().$extends({
 	result: {
@@ -25,31 +26,41 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
         }
     })
 
-    const ingredients = recipe?.ingredients && recipe?.ingredients instanceof Object ? recipe?.ingredients : JSON.parse(recipe?.ingredients?.toString() || "[]")
-    const steps = recipe?.steps && recipe?.steps instanceof Object ? recipe?.steps : JSON.parse(recipe?.steps?.toString() || "[]")
+    if (!recipe) {
+        return (
+            <div className="flex flex-col items-center justify-center gap-8 py-8 md:py-10">
+                <Image src="/logo.svg"
+                    alt="Tastebuds"
+                    width={680}
+                    height={823}
+                    className="w-48 h-48" />
+                <div className="inline-block max-w-lg text-center justify-center">
+                    <h1 className={title()}>404</h1>
+                    <h2 className={subtitle({ class: "mt-4" })}>
+                        Recipe not found.
+                    </h2>
+                </div>
+            </div>
+        )
+    }
+
+    const ingredients = recipe.ingredients && recipe.ingredients instanceof Object ? recipe.ingredients : JSON.parse(recipe.ingredients?.toString() || "[]")
+    const steps = recipe.steps && recipe.steps instanceof Object ? recipe.steps : JSON.parse(recipe.steps?.toString() || "[]")
 
     return (
         <>
         <Breadcrumbs className="hidden md:block">
             <BreadcrumbItem href="/recipes">Recipes</BreadcrumbItem>
-            <BreadcrumbItem href="#" current>{recipe?.title}</BreadcrumbItem>
+            <BreadcrumbItem href="#" current>{recipe.title}</BreadcrumbItem>
         </Breadcrumbs>
 
         <div className="md:mt-8 lg:grid lg:grid-cols-5 lg:items-start lg:gap-x-8">
             <div className="col-span-2">
-                <div className="aspect-h-1 aspect-w-1 w-full">
-                <Image
-                    className="h-full w-full object-cover object-center sm:rounded-lg shadow-lg"
-                    src={recipe?.image ?? ""}
-                    alt={recipe?.title || "Recipe image"}
-                    width={1024}
-                    height={1024}
-                />
-                </div>
+                  <RecipeImage recipe={recipe} />
             </div>
 
             <div className="col-span-3 mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <h1 className={title()}>{recipe?.title}</h1>
+              <h1 className={title()}>{recipe.title}</h1>
 
 
 
@@ -60,14 +71,14 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
                         variant="flat"
                         startContent={<GlobeIcon />}
                         >
-                        {recipe?.cuisineType}
+                        {recipe.cuisineType}
                     </Chip>
                     <Chip
                         startContent={<ClockIcon />}
                         color="success"
                         variant="flat"
                         >
-                        {recipe?.totalTime}
+                        {recipe.totalTime}
                     </Chip>
                 </div>
 
@@ -77,7 +88,7 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
                 <div
                   className="space-y-6 text-base"
                 >
-                    {recipe?.description}
+                    {recipe.description}
                  </div>
               </div>
 

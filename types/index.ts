@@ -12,7 +12,7 @@ export type OpenAiRecipe = {
   totalTime: string;
   cuisineType: string;
   description: string;
-  image: string;
+  image?: string;
   saved: boolean;
 };
 

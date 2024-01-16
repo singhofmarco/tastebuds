@@ -14,13 +14,13 @@ model Recipe {
   updatedAt   DateTime         @default(now()) @db.Timestamp(6)
   description String?
   published   Boolean          @default(false)
-  image       String           @db.Text
+  image       String?           @db.Text
   userId      Int?
   user        User?             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ingredients Json
   steps       Json
   totalTime   String
-  cuisineType     String
+  cuisineType String
   teams       TeamsOnRecipes[]
 }
 
