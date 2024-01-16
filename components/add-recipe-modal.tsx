@@ -51,7 +51,7 @@ export default function AddRecipeModal({
   }
 
   return (
-    <Modal backdrop="blur" isOpen={isOpen} onClose={onClose}>
+    <Modal backdrop="blur" isOpen={isOpen} onClose={onClose} placement="top-center">
       <ModalContent>
         {(onClose) => (
           <>
