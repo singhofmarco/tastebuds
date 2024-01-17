@@ -17,6 +17,10 @@ import { Spinner } from "@nextui-org/spinner";
 import { useState } from "react";
 import { AiIcon, ClockIcon, GlobeIcon } from "./icons";
 
+export const config = {
+  runtime: 'edge', // 'nodejs' is the default
+};
+
 export default function AddRecipeModal({
   isOpen,
   onClose,
@@ -50,6 +54,18 @@ export default function AddRecipeModal({
     setIsLoading(false);
   }
 
+  async function handleSaveRecipe() {
+    if (!recipe) return;
+
+    setIsLoading(true);
+
+    await save(recipe)
+
+    setIsLoading(false);
+
+    onClose();
+  }
+
   return (
     <Modal backdrop="blur" isOpen={isOpen} onClose={onClose} placement="top-center">
       <ModalContent>
@@ -79,7 +95,7 @@ export default function AddRecipeModal({
               />
                 )}
 
-              {!isLoading && recipe && (
+              {recipe && (
                 <>
                   <div className="flex gap-4 items-start">
                     <div className="w-24 h-24 shadow-md rounded-sm bg-foreground-100 flex justify-center items-center">
@@ -152,13 +168,14 @@ export default function AddRecipeModal({
 
               {recipe && (
                 <>
-                  <Button color="primary" onPress={() => {
-                        save(recipe)
-                        onClose()
-                  }}>
+                  <Button color="primary" onPress={handleSaveRecipe}
+                       isDisabled={isLoading}
+                       endContent={isLoading && <Spinner size="sm" color="white" />}
+                       >
                     Save
                   </Button>
-                  <Button color="danger" onPress={clearGeneratedRecipe}>
+                  <Button color="danger" onPress={clearGeneratedRecipe}
+                    isDisabled={isLoading}>
                     Generate Another
                   </Button>
                 </>
