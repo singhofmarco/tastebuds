@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client"
-import Image from "next/image";
 import { subtitle, title } from "@/components/primitives";
 import { Chip } from "@nextui-org/chip";
 import { ClockIcon, GlobeIcon } from "@/components/icons";
 import Breadcrumbs from "@/components/breadcrumbs";
 import BreadcrumbItem from "@/components/breadcrumb-item";
 import RecipeImage from "@/components/recipe-image";
+import { notFound } from "next/navigation";
 
 const prisma = new PrismaClient().$extends({
 	result: {
@@ -27,21 +27,7 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
     })
 
     if (!recipe) {
-        return (
-            <div className="flex flex-col items-center justify-center gap-8 py-8 md:py-10">
-                <Image src="/logo.svg"
-                    alt="Tastebuds"
-                    width={680}
-                    height={823}
-                    className="w-48 h-48" />
-                <div className="inline-block max-w-lg text-center justify-center">
-                    <h1 className={title()}>404</h1>
-                    <h2 className={subtitle({ class: "mt-4" })}>
-                        Recipe not found.
-                    </h2>
-                </div>
-            </div>
-        )
+        notFound()
     }
 
     const ingredients = recipe.ingredients && recipe.ingredients instanceof Object ? recipe.ingredients : JSON.parse(recipe.ingredients?.toString() || "[]")
