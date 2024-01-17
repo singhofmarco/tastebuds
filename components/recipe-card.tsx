@@ -1,10 +1,10 @@
-import { OpenAiRecipe } from "@/types";
 import { Card, CardBody, CardFooter } from "@nextui-org/card";
 import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
+import { Recipe } from "@prisma/client";
 
-export const RecipeCard = ({ recipe }: { recipe: OpenAiRecipe }) => {
+export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
     return (
         <Link
           href={`/recipes/${recipe.id}`}

@@ -2,21 +2,21 @@
 
 import { Input } from "@nextui-org/input"
 import { PlusIcon, SearchIcon } from "./icons"
-import { RecipeCard } from "./recipe-card"
-import { OpenAiRecipe } from "@/types"
 import { useEffect, useState } from "react"
 import { Card, CardFooter } from "@nextui-org/card"
 import AddRecipeModal from "./add-recipe-modal"
 import { useDisclosure } from "@nextui-org/modal"
+import { RecipeCard } from "./recipe-card"
+import { Recipe } from "@prisma/client"
 
-export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
+export const RecipeSearch = ({children, savedRecipes}: {children: React.ReactNode[], savedRecipes: any}) => {
     const [query, setQuery] = useState<string>('')
-	const [recipes, setRecipes] = useState<OpenAiRecipe[]>([])
+	const [recipes, setRecipes] = useState<Recipe[]>([])
 	const {isOpen: isAddRecipeModalOpen, onOpen: onAddRecipeModalOpen, onClose: onAddRecipeModalClose} = useDisclosure()
 
 	useEffect(() => {
 		if (query.length) {
-			const filteredRecipes = savedRecipes.filter((recipe: OpenAiRecipe) => {
+			const filteredRecipes = savedRecipes.filter((recipe: Recipe) => {
 				return recipe.title.toLowerCase().includes(query.toLowerCase()) || recipe.cuisineType.toLowerCase().includes(query.toLowerCase())
 			})
 			setRecipes(filteredRecipes)
@@ -24,6 +24,12 @@ export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
 			setRecipes(savedRecipes)
 		}
 	}, [query, savedRecipes])
+
+	const filteredRecipes = (
+		recipes.map((recipe: Recipe) => (
+			<RecipeCard key={recipe.title} recipe={recipe} />
+		))
+	)
 
     return (
         <div className="mt-8 flex flex-col gap-y-4 px-8">
@@ -51,15 +57,13 @@ export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
 					/>
 				</div>
 			</form>
-			{ recipes.length === 0 && (
+			{(query.length > 0 && filteredRecipes.length === 0) && (
 				<div className="grid justify-center items-center h-full text-center">
 					<p className="text-default-400">No recipes found.</p>
 				</div>
-				)}
+			)}
 			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
-				{recipes.map((recipe: OpenAiRecipe) => (
-					<RecipeCard key={recipe.title} recipe={recipe} />
-				))}
+				{ query.length ? filteredRecipes : children }
 				<Card
 					className="col-span-12 sm:col-span-3 h-[300px] group"
 					onPress={onAddRecipeModalOpen}
