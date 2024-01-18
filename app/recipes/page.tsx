@@ -17,7 +17,11 @@ const prisma = new PrismaClient().$extends({
 
 
 export default async function RecipesPage() {
-	const savedRecipes = await prisma.recipe.findMany()
+	const savedRecipes = await prisma.recipe.findMany({
+		orderBy: {
+			createdAt: 'desc'
+		}
+	})
 
 	return (
 		<div>
