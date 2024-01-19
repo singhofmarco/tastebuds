@@ -1,8 +1,6 @@
 import OpenAI from "openai"
 
-export const config = {
-    runtime: 'edge', // 'nodejs' is the default
-}
+export const runtime = 'edge'
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
