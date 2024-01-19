@@ -43,11 +43,11 @@ export default function AddRecipeModal({
 
     setIsGenerating(true);
 
-    for await (const peopleSoFar of makeStreamingJsonRequest<OpenAiRecipe>({
+    for await (const recipeResponse of makeStreamingJsonRequest<OpenAiRecipe>({
       url: `/api/recipes/generate?query=${query}`,
       method: "GET",
     })) {
-      setRecipe(peopleSoFar);
+      setRecipe(recipeResponse);
     }
 
     setIsGenerating(false);
