@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client"
 import { subtitle, title } from "@/components/primitives";
 import { Chip } from "@nextui-org/chip";
 import { ClockIcon, GlobeIcon } from "@/components/icons";
@@ -6,18 +5,7 @@ import Breadcrumbs from "@/components/breadcrumbs";
 import BreadcrumbItem from "@/components/breadcrumb-item";
 import RecipeImage from "@/components/recipe-image";
 import { notFound } from "next/navigation";
-
-const prisma = new PrismaClient().$extends({
-	result: {
-		recipe: {
-		  saved: {
-			compute() {
-			  return true
-			},
-		  },
-		},
-	  },
-})
+import prisma from "@/app/lib/prisma";
 
 export default async function RecipeDetailPage({ params }: { params: { id: string } }) {
     const recipe = await prisma.recipe.findUnique({

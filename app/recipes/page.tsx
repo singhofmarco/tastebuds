@@ -1,20 +1,8 @@
 import { title } from "@/components/primitives";
 import { RecipeCard } from "@/components/recipe-card";
 import { RecipeSearch } from "@/components/recipe-search";
-import { PrismaClient, Recipe } from "@prisma/client"
-
-const prisma = new PrismaClient().$extends({
-	result: {
-		recipe: {
-		  saved: {
-			compute() {
-			  return true
-			},
-		  },
-		},
-	  },
-})
-
+import { Recipe } from "@prisma/client"
+import prisma from "../lib/prisma";
 
 export default async function RecipesPage() {
 	const savedRecipes = await prisma.recipe.findMany({
