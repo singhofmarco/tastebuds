@@ -1,33 +1,62 @@
 "use client"
 
 import { Input } from "@nextui-org/input"
-import { PlusIcon, SearchIcon } from "./icons"
-import { Card, CardBody, CardFooter } from "@nextui-org/card"
-import AddRecipeModal from "./add-recipe-modal"
-import { useDisclosure } from "@nextui-org/modal"
-import { useSearchParams } from "next/navigation"
+import { SearchIcon } from "./icons"
+import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { useDebouncedCallback } from "use-debounce"
+import { Chip } from "@nextui-org/chip"
+import { ScrollShadow } from "@nextui-org/scroll-shadow"
+import { useEffect, useState, useTransition } from "react"
+import { Spinner } from "@nextui-org/spinner"
 
-export const RecipeSearch = ({ children }: { children: React.ReactElement }) => {
-	const {isOpen: isAddRecipeModalOpen, onOpen: onAddRecipeModalOpen, onClose: onAddRecipeModalClose} = useDisclosure()
-	const searchParams = useSearchParams()
-	const params = new URLSearchParams(searchParams.toString())
-	const router = useRouter()
+export const RecipeSearch = ({ cuisineTypes }: { cuisineTypes: string[] }) => {
+	const pathname = usePathname()
+	const params = new URLSearchParams(window.location.search)
+
+	const { replace } = useRouter()
+	const [isPending, startTransition] = useTransition()
+	const [cuisineTypesToFilter, setCuisineTypesToFilter] = useState<string[]>(params.get('cuisineTypes')?.split(',') || [])
 
 	const updateQuery = useDebouncedCallback((query: string) => {
+		const params = new URLSearchParams(window.location.search)
 		if (!query.length) {
 			params.delete('query')
 		} else {
 			params.set('query', query)
 		}
 
-		router.push("/recipes?" + params.toString())
+		startTransition(() => {
+			replace(`${pathname}?${params.toString()}`)
+		})
 	}, 300)
 
+
+	useEffect(() => {
+		const params = new URLSearchParams(window.location.search)
+
+		params.delete('cuisineTypes')
+		if (cuisineTypesToFilter.length === 1) {
+			params.set('cuisineTypes', cuisineTypesToFilter[0])
+		} else if(cuisineTypesToFilter.length > 1){
+			params.set('cuisineTypes', cuisineTypesToFilter.join(','))
+		}
+		startTransition(() => {
+			replace(`${pathname}?${params.toString()}`)
+		})
+	}, [cuisineTypesToFilter, pathname, replace, startTransition])
+
+	function addCuisineType(cuisineType: string) {
+		setCuisineTypesToFilter([...cuisineTypesToFilter, cuisineType])
+	}
+
+	function removeCuisineType(cuisineType: string) {
+		setCuisineTypesToFilter(cuisineTypesToFilter.filter((ct: string) => ct !== cuisineType))
+	}
+
     return (
-        <div className="mt-8 flex flex-col gap-y-4 px-8">
-			<div className="flex flex-1 gap-4">
+      <>
+			<div className="flex flex-col flex-1 gap-4">
 				<Input
 					aria-label="Search"
 					classNames={{
@@ -37,7 +66,13 @@ export const RecipeSearch = ({ children }: { children: React.ReactElement }) => 
 					labelPlacement="outside"
 					placeholder="Search..."
 					startContent={
-						<SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+						isPending ? (
+							<div className="relative w-5 h-5 flex items-center justify-center">
+							 <Spinner size="sm" className="pr-1 absolute" color="current" />
+							</div>
+						  )
+						  :
+						  <SearchIcon className="w-5 h-5 pr-1 text-base text-default-400 pointer-events-none flex-shrink-0" />
 					}
 					type="search"
 					autoComplete="off"
@@ -46,24 +81,41 @@ export const RecipeSearch = ({ children }: { children: React.ReactElement }) => 
 						updateQuery(e.target.value)
 					}}
 				/>
+				<ScrollShadow hideScrollBar orientation="horizontal" className="flex gap-2 max-w-full">
+				{ cuisineTypes.map((cuisineType: string, index: number) => {
+					const colorMapForIndex: { [key: number]: "primary" | "success" | "warning" | "danger" | "secondary" } = {
+						0: "primary",
+						1: "success",
+						2: "warning",
+						3: "danger",
+						4: "secondary",
+					}
+
+					const color = colorMapForIndex[index % Object.keys(colorMapForIndex).length]
+
+					const isActive = cuisineTypesToFilter.includes(cuisineType)
+
+					return (
+					<Chip
+						key={cuisineType}
+						aria-label="Cuisine Type"
+						color={ isActive ? color : "default"}
+						variant={isActive ? "solid" : "flat"}
+						isCloseable={isActive}
+						onClick={() => {
+							if (!isActive) {
+								addCuisineType(cuisineType)
+							}
+						}}
+						onClose={isActive ? () => {
+							removeCuisineType(cuisineType)
+						} : undefined}
+						>
+						{cuisineType}
+					</Chip>
+				)})}
+				</ScrollShadow>
 			</div>
-			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
-				{ children }
-				<Card
-					className="col-span-12 sm:col-span-3 h-[300px] group"
-					onPress={onAddRecipeModalOpen}
-					isPressable
-					isFooterBlurred>
-					<CardBody className="flex items-center justify-center">
-						<PlusIcon className="w-20 h-20 justify-center flex group-hover:scale-110 transition-transform" />
-					</CardBody>
-					<CardFooter className="z-10 bottom-0 flex-col !items-start">
-						<p className="text-tiny text-foreground-500 uppercase font-bold">Add</p>
-						<h4 className="font-medium text-large">New Recipe</h4>
-					</CardFooter>
-          		</Card>
-			</ul>
-			<AddRecipeModal isOpen={isAddRecipeModalOpen} onClose={onAddRecipeModalClose} />
-        </div>
+        </>
     )
 }
