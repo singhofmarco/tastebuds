@@ -51,7 +51,7 @@ export const RecipeSearch = ({children, savedRecipes}: {children: React.ReactNod
 						}
 						type="search"
 						autoComplete="off"
-						onChange={async (e) => {
+						onChange={(e) => {
 							setQuery(e.target.value)
 						}}
 					/>
