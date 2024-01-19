@@ -7,6 +7,7 @@ import AddRecipeModal from "./add-recipe-modal"
 import { useDisclosure } from "@nextui-org/modal"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
+import { useDebouncedCallback } from "use-debounce"
 
 export const RecipeSearch = ({ children }: { children: React.ReactElement }) => {
 	const {isOpen: isAddRecipeModalOpen, onOpen: onAddRecipeModalOpen, onClose: onAddRecipeModalClose} = useDisclosure()
@@ -14,7 +15,7 @@ export const RecipeSearch = ({ children }: { children: React.ReactElement }) => 
 	const params = new URLSearchParams(searchParams.toString())
 	const router = useRouter()
 
-	function updateQuery(query: string) {
+	const updateQuery = useDebouncedCallback((query: string) => {
 		if (!query.length) {
 			params.delete('query')
 		} else {
@@ -22,7 +23,7 @@ export const RecipeSearch = ({ children }: { children: React.ReactElement }) => 
 		}
 
 		router.push("/recipes?" + params.toString())
-	}
+	}, 300)
 
     return (
         <div className="mt-8 flex flex-col gap-y-4 px-8">
