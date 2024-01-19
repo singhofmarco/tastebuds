@@ -1,9 +1,10 @@
-import { title } from "@/components/primitives";
+import { subtitle, title } from "@/components/primitives";
 import { RecipeCard } from "@/components/recipe-card";
 import { RecipeSearch } from "@/components/recipe-search";
 import { Recipe } from "@prisma/client"
 import prisma from "../lib/prisma";
 import AddRecipeCard from "@/components/add-recipe-card";
+import AddRecipeButton from "@/components/add-recipe-button";
 
 export default async function RecipesPage({ searchParams }: { searchParams:  { [key: string]: string | string[] | undefined } }) {
 	const savedRecipes = await prisma.recipe.findMany({
@@ -32,8 +33,17 @@ export default async function RecipesPage({ searchParams }: { searchParams:  { [
 
 	return (
 		<div className="mt-8 flex flex-col gap-y-4 px-8">
-			<div className="text-center">
+			<div className="mb-4 flex justify-between">
+				<div>
 				<h1 className={title()}>Recipes</h1>
+				<h2 className={subtitle()}>You have { savedRecipes.length } saved.</h2>
+				</div>
+
+				<div className="self-center">
+					<AddRecipeButton>
+						New Recipe
+					</AddRecipeButton>
+				</div>
 			</div>
 			<RecipeSearch cuisineTypes={cuisineTypes} />
 			{filteredRecipes.length === 0 && (

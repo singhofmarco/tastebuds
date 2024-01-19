@@ -1,7 +1,7 @@
 import { title, subtitle } from "@/components/primitives";
 import { Image } from "@nextui-org/image";
 import { Button } from "@nextui-org/button";
-import { AiIcon } from "@/components/icons";
+import AddRecipeButton from "@/components/add-recipe-button";
 
 export default function Home() {
 	return (
@@ -24,12 +24,7 @@ export default function Home() {
 			</div>
 
 			<div className="max-w-[900px] gap-4 flex px-8">
-				<Button variant="solid" size="lg" radius="sm"
-					className="bg-gradient-to-tr from-pink-600 to-yellow-500 text-white"
-				 	endContent={<AiIcon />}
-				>
-					Create a new recipe
-				</Button>
+				<AddRecipeButton size="lg" />
 				<Button variant="ghost" radius="sm" color="default" size="lg">
 					Sign up
 				</Button>

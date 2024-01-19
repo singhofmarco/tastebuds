@@ -70,8 +70,13 @@ export default function AddRecipeModal({
     onClose();
   }
 
+  function handleOnClose() {
+    clearGeneratedRecipe();
+    onClose();
+  }
+
   return (
-    <Modal backdrop="blur" size="2xl" isOpen={isOpen} onClose={onClose} placement="top-center">
+    <Modal backdrop="blur" size="2xl" isOpen={isOpen} onClose={handleOnClose} placement="top-center">
       <ModalContent>
         {(onClose) => (
           <>
