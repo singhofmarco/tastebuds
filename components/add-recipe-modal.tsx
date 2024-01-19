@@ -16,6 +16,7 @@ import {
 import { Spinner } from "@nextui-org/spinner";
 import { useState } from "react";
 import { AiIcon, ClockIcon, GlobeIcon } from "./icons";
+import { makeStreamingJsonRequest, useJsonStreaming } from "http-streaming-request";
 
 export const config = {
   runtime: 'edge', // 'nodejs' is the default
@@ -28,7 +29,8 @@ export default function AddRecipeModal({
   isOpen: boolean;
   onClose: any;
 }) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [recipe, setRecipe] = useState<OpenAiRecipe | null>(null);
   const [query, setQuery] = useState<string>("");
   const [isQueryInvalid, setIsQueryInvalid] = useState<boolean>(false);
@@ -39,41 +41,43 @@ export default function AddRecipeModal({
       return
     }
 
-    setIsLoading(true);
-    const res = await fetch(`/api/recipes/generate?query=${query}`);
+    setIsGenerating(true);
 
-    const recipes = await res.json();
+    for await (const peopleSoFar of makeStreamingJsonRequest<OpenAiRecipe>({
+      url: `/api/recipes/generate?query=${query}`,
+      method: "GET",
+    })) {
+      setRecipe(peopleSoFar);
+    }
 
-    setRecipe(recipes.data);
-    setIsLoading(false);
+    setIsGenerating(false);
   }
 
   function clearGeneratedRecipe() {
     setRecipe(null);
     setQuery("");
-    setIsLoading(false);
   }
 
   async function handleSaveRecipe() {
     if (!recipe) return;
 
-    setIsLoading(true);
+    setIsSaving(true);
 
     await save(recipe)
 
-    setIsLoading(false);
+    setIsSaving(false);
 
     onClose();
   }
 
   return (
-    <Modal backdrop="blur" isOpen={isOpen} onClose={onClose} placement="top-center">
+    <Modal backdrop="blur" size="2xl" isOpen={isOpen} onClose={onClose} placement="top-center">
       <ModalContent>
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
                 {recipe && (
-                    <div>{recipe.title}</div>
+                    <div>{recipe?.title}</div>
                 )}
                 {!recipe && (
                     <div>Generate recipe</div>
@@ -94,7 +98,7 @@ export default function AddRecipeModal({
                     setQuery(e.target.value);
                     setIsQueryInvalid(false);
                 }}
-                isDisabled={isLoading}
+                isDisabled={isGenerating}
                 isInvalid={isQueryInvalid}
               />
               </form>
@@ -124,7 +128,7 @@ export default function AddRecipeModal({
                     </Chip>
                 </div>
                   </div>
-                  <p>{recipe.description}</p>
+                  <p>{recipe?.description}</p>
                   <Accordion
                     className="px-0"
                     variant="splitted"
@@ -134,10 +138,10 @@ export default function AddRecipeModal({
                       key="1"
                       aria-label="Ingredients"
                       title="Ingredients"
-                      subtitle={recipe.ingredients.length + " items"}
+                      subtitle={(recipe?.ingredients ? recipe?.ingredients?.length : "0") + (isGenerating ? "+" : "") + " ingredients"}
                     >
                       <ul className="list-disc pl-4">
-                        {recipe.ingredients.map((ingredient: string) => (
+                        {recipe?.ingredients?.map((ingredient: string) => (
                           <li key={ingredient}>{ingredient}</li>
                         ))}
                       </ul>
@@ -146,10 +150,10 @@ export default function AddRecipeModal({
                       key="2"
                       aria-label="Instructions"
                       title="Instructions"
-                      subtitle={recipe.steps.length + " steps"}
+                      subtitle={(recipe?.steps ? recipe?.steps?.length : "0") + (isGenerating ? "+" : "") + " steps"}
                     >
                       <ul className="list-decimal pl-4">
-                        {recipe.steps.map((step: string) => (
+                        {recipe?.steps?.map((step: string) => (
                           <li key={step}>{step}</li>
                         ))}
                       </ul>
@@ -160,27 +164,27 @@ export default function AddRecipeModal({
             </ModalBody>
 
             <ModalFooter>
-              {!recipe && (
+              {(!recipe || isGenerating) && (
                 <Button
                   color="primary"
                   onPress={handleGenerateRecipe}
-                  isDisabled={isLoading || !query.length}
-                  endContent={isLoading && <Spinner size="sm" color="white" />}
+                  isDisabled={isGenerating || !query.length}
+                  endContent={isGenerating && <Spinner size="sm" color="white" />}
                 >
                   Generate Recipe
                 </Button>
               )}
 
-              {recipe && (
+              {(recipe && !isGenerating) && (
                 <>
                   <Button color="primary" onPress={handleSaveRecipe}
-                       isDisabled={isLoading}
-                       endContent={isLoading && <Spinner size="sm" color="white" />}
+                       isDisabled={isSaving}
+                       endContent={isSaving && <Spinner size="sm" color="white" />}
                        >
                     Save
                   </Button>
                   <Button color="danger" onPress={clearGeneratedRecipe}
-                    isDisabled={isLoading}>
+                    isDisabled={isSaving}>
                     Generate Another
                   </Button>
                 </>
