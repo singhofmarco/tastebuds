@@ -2,7 +2,7 @@
 
 import { Input } from "@nextui-org/input"
 import { PlusIcon, SearchIcon } from "./icons"
-import { Card, CardFooter } from "@nextui-org/card"
+import { Card, CardBody, CardFooter } from "@nextui-org/card"
 import AddRecipeModal from "./add-recipe-modal"
 import { useDisclosure } from "@nextui-org/modal"
 import { useSearchParams } from "next/navigation"
@@ -54,8 +54,10 @@ export const RecipeSearch = ({ children }: { children: React.ReactElement }) => 
 					onPress={onAddRecipeModalOpen}
 					isPressable
 					isFooterBlurred>
-					<PlusIcon className="z-0 p-28 w-full h-full object-cover group-hover:scale-110 transition-transform" />
-					<CardFooter className="absolute z-10 bottom-0 flex-col !items-start">
+					<CardBody className="flex items-center justify-center">
+						<PlusIcon className="w-20 h-20 justify-center flex group-hover:scale-110 transition-transform" />
+					</CardBody>
+					<CardFooter className="z-10 bottom-0 flex-col !items-start">
 						<p className="text-tiny text-foreground-500 uppercase font-bold">Add</p>
 						<h4 className="font-medium text-large">New Recipe</h4>
 					</CardFooter>
