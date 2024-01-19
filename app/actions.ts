@@ -2,9 +2,11 @@
 
 import { OpenAiRecipe } from "@/types"
 import { PrismaClient, Recipe } from "@prisma/client"
-import { put } from "@vercel/blob"
+import { del, put } from "@vercel/blob"
+import { error } from "console"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { NextResponse } from "next/server"
 import OpenAI from "openai"
 import sharp from "sharp"
 
@@ -76,4 +78,27 @@ export async function generateImage(recipe: Recipe) {
     })
 
     revalidatePath("/recipes")
+}
+
+// delete recipe from database
+export async function deleteRecipe(recipe: Recipe) {
+    try {
+        if (recipe.image) await del(recipe.image)
+    } catch (error) {
+        console.log("Failed to delete image", error)
+    }
+
+    try {
+        await prisma.recipe.delete({
+            where: {
+                id: recipe.id
+            }
+        })
+    } catch (error) {
+        throw new Error("Failed to delete recipe")
+    }
+
+    revalidatePath("/recipes")
+
+    return redirect("/recipes")
 }

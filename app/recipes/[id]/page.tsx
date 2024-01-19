@@ -7,6 +7,7 @@ import RecipeImage from "@/components/recipe-image";
 import { notFound } from "next/navigation";
 import prisma from "@/app/lib/prisma";
 import { Recipe } from "@prisma/client";
+import RecipeDropdown from "@/components/recipe-dropdown";
 
 export async function generateStaticParams() {
     const recipes = await prisma.recipe.findMany()
@@ -43,28 +44,30 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
             </div>
 
             <div className="col-span-3 mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <h1 className={title()}>{recipe.title}</h1>
+                <div className="flex justify-between">
+                    <div>
+                        <h1 className={title()}>{recipe.title}</h1>
 
-
-
-              <div className="mt-4 flex items-center gap-4">
-                    <Chip
-                        aria-label="Cuisine Type"
-                        color="primary"
-                        variant="flat"
-                        startContent={<GlobeIcon />}
-                        >
-                        {recipe.cuisineType}
-                    </Chip>
-                    <Chip
-                        startContent={<ClockIcon />}
-                        color="success"
-                        variant="flat"
-                        >
-                        {recipe.totalTime}
-                    </Chip>
+                        <div className="mt-4 flex items-center gap-4">
+                            <Chip
+                                aria-label="Cuisine Type"
+                                color="primary"
+                                variant="flat"
+                                startContent={<GlobeIcon />}
+                                >
+                                {recipe.cuisineType}
+                            </Chip>
+                            <Chip
+                                startContent={<ClockIcon />}
+                                color="success"
+                                variant="flat"
+                                >
+                                {recipe.totalTime}
+                            </Chip>
+                        </div>
+                    </div>
+                    <RecipeDropdown className="ml-4" recipe={recipe} />
                 </div>
-
               <div className="mt-6 bg-foreground-50 border border-foreground-100 p-4 rounded-md shadow-sm">
                 <h3 className="sr-only">Description</h3>
 
