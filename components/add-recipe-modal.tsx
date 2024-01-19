@@ -81,6 +81,10 @@ export default function AddRecipeModal({
             </ModalHeader>
             <ModalBody>
                 {!recipe && (
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    handleGenerateRecipe();
+                  }}>
               <Input
                 autoFocus
                 label="What do you want to cook?"
@@ -93,6 +97,7 @@ export default function AddRecipeModal({
                 isDisabled={isLoading}
                 isInvalid={isQueryInvalid}
               />
+              </form>
                 )}
 
               {recipe && (
@@ -159,7 +164,7 @@ export default function AddRecipeModal({
                 <Button
                   color="primary"
                   onPress={handleGenerateRecipe}
-                  isDisabled={isLoading}
+                  isDisabled={isLoading || !query.length}
                   endContent={isLoading && <Spinner size="sm" color="white" />}
                 >
                   Generate Recipe
