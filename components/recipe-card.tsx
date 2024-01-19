@@ -16,7 +16,7 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 {recipe.image ? (
               <Image
                   alt="Card background"
-                  className="z-0 w-full h-full object-cover group-hover:scale-110 transition-transform"
+                  className="z-0 w-full h-full object-cover sm:group-hover:scale-110 transition-transform"
                   src={recipe.image}
                   width={500}
                   height={625}

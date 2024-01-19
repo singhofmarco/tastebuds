@@ -21,7 +21,7 @@ export default function AddRecipeCard() {
         isFooterBlurred
       >
         <CardBody className="flex items-center justify-center">
-          <PlusIcon className="w-20 h-20 justify-center flex group-hover:scale-110 transition-transform" />
+          <PlusIcon className="w-20 h-20 justify-center flex sm:group-hover:scale-110 transition-transform" />
         </CardBody>
         <CardFooter className="z-10 bottom-0 flex-col !items-start">
           <p className="text-tiny text-foreground-500 uppercase font-bold">
