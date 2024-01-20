@@ -15,7 +15,7 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
               isFooterBlurred>
                 {recipe.image ? (
               <Image
-                  alt="Card background"
+                  alt={"Recipe image for " + recipe.title}
                   className="z-0 w-full h-full object-cover sm:group-hover:scale-110 transition-transform"
                   src={recipe.image}
                   width={500}
