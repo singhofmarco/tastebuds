@@ -17,7 +17,7 @@ export default function RecipeDropdown({ recipe, className }: { recipe: Recipe, 
     <Dropdown>
       <DropdownTrigger>
         <Button
-          className={clsx(className, "flex items-center gap-2")}
+          className={clsx(className, "flex flex-shrink-0 items-center gap-2")}
           color="default"
           variant="bordered"
         >
