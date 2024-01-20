@@ -4,7 +4,7 @@ import { RecipeSearch } from "@/components/recipe-search";
 import { Recipe } from "@prisma/client"
 import prisma from "../lib/prisma";
 import AddRecipeCard from "@/components/add-recipe-card";
-import AddRecipeButton from "@/components/add-recipe-button";
+import EmptyView from "@/components/empty-view";
 
 export default async function RecipesPage({ searchParams }: { searchParams:  { [key: string]: string | string[] | undefined } }) {
 	const savedRecipes = await prisma.recipe.findMany({
@@ -43,16 +43,17 @@ export default async function RecipesPage({ searchParams }: { searchParams:  { [
 			</div>
 			<RecipeSearch cuisineTypes={cuisineTypes} />
 			{filteredRecipes.length === 0 && (
-				<div className="grid justify-center items-center h-full text-center">
-					<p className="text-default-400">No recipes found.</p>
-				</div>
+				<EmptyView />
 			)}
+
+			{filteredRecipes.length > 0 && (
 			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
 				{filteredRecipes.map((recipe: Recipe) => (
 					<RecipeCard key={recipe.title} recipe={recipe} />
 				))}
 				<AddRecipeCard />
 			</ul>
+			)}
 		</div>
 	);
 }

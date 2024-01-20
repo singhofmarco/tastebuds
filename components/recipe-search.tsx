@@ -2,7 +2,7 @@
 
 import { Input } from "@nextui-org/input"
 import { SearchIcon } from "./icons"
-import { usePathname } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { useDebouncedCallback } from "use-debounce"
 import { Chip } from "@nextui-org/chip"
@@ -12,11 +12,16 @@ import { Spinner } from "@nextui-org/spinner"
 
 export const RecipeSearch = ({ cuisineTypes }: { cuisineTypes: string[] }) => {
 	const pathname = usePathname()
-	const params = new URLSearchParams(window.location.search)
-
+	const searchParams = useSearchParams()
+	const [query, setQuery] = useState<string>(searchParams.get('query') || '')
 	const { replace } = useRouter()
 	const [isPending, startTransition] = useTransition()
-	const [cuisineTypesToFilter, setCuisineTypesToFilter] = useState<string[]>(params.get('cuisineTypes')?.split(',') || [])
+	const [cuisineTypesToFilter, setCuisineTypesToFilter] = useState<string[]>(searchParams.get('cuisineTypes')?.split(',') || [])
+
+	function handleQueryChange(query: string) {
+		setQuery(query)
+		updateQuery(query)
+	}
 
 	const updateQuery = useDebouncedCallback((query: string) => {
 		const params = new URLSearchParams(window.location.search)
@@ -31,27 +36,40 @@ export const RecipeSearch = ({ cuisineTypes }: { cuisineTypes: string[] }) => {
 		})
 	}, 300)
 
-
+	// update filters when query params change
 	useEffect(() => {
+		const query = searchParams.get('query') ?? ''
+		const cuisineTypes = searchParams.get('cuisineTypes')?.split(',') ?? []
+		setQuery(query)
+		setCuisineTypesToFilter(cuisineTypes)
+	}, [searchParams])
+
+	function createCuisineTypeParam(cuisineTypes: string[]) {
 		const params = new URLSearchParams(window.location.search)
-
-		params.delete('cuisineTypes')
-		if (cuisineTypesToFilter.length === 1) {
-			params.set('cuisineTypes', cuisineTypesToFilter[0])
-		} else if(cuisineTypesToFilter.length > 1){
-			params.set('cuisineTypes', cuisineTypesToFilter.join(','))
+		if (cuisineTypes.length === 1) {
+			params.set('cuisineTypes', cuisineTypes[0])
+		} else if(cuisineTypes.length > 1){
+			params.set('cuisineTypes', cuisineTypes.join(','))
+		} else {
+			params.delete('cuisineTypes')
 		}
-		startTransition(() => {
-			replace(`${pathname}?${params.toString()}`)
-		})
-	}, [cuisineTypesToFilter, pathname, replace, startTransition])
-
-	function addCuisineType(cuisineType: string) {
-		setCuisineTypesToFilter([...cuisineTypesToFilter, cuisineType])
+		return params.toString()
 	}
 
-	function removeCuisineType(cuisineType: string) {
-		setCuisineTypesToFilter(cuisineTypesToFilter.filter((ct: string) => ct !== cuisineType))
+	function toggleCuisineType(cuisineType: string) {
+		let newCuisineTypesFilter: string[] = []
+		if (cuisineTypesToFilter.includes(cuisineType)) {
+			newCuisineTypesFilter = cuisineTypesToFilter.filter((ct: string) => ct !== cuisineType)
+		} else {
+			newCuisineTypesFilter = [...cuisineTypesToFilter, cuisineType]
+		}
+
+		setCuisineTypesToFilter(newCuisineTypesFilter)
+
+		const params = createCuisineTypeParam(newCuisineTypesFilter)
+		startTransition(() => {
+			replace(`${pathname}?${params}`)
+		})
 	}
 
     return (
@@ -76,9 +94,9 @@ export const RecipeSearch = ({ cuisineTypes }: { cuisineTypes: string[] }) => {
 					}
 					type="search"
 					autoComplete="off"
-					defaultValue={params.get('query') || ''}
+					value={query}
 					onChange={(e) => {
-						updateQuery(e.target.value)
+						handleQueryChange(e.target.value)
 					}}
 				/>
 				<ScrollShadow hideScrollBar orientation="horizontal" className="flex gap-2 max-w-full">
@@ -101,14 +119,11 @@ export const RecipeSearch = ({ cuisineTypes }: { cuisineTypes: string[] }) => {
 						aria-label="Cuisine Type"
 						color={ isActive ? color : "default"}
 						variant={isActive ? "solid" : "flat"}
+						className="cursor-pointer hover:opacity-80"
 						isCloseable={isActive}
-						onClick={() => {
-							if (!isActive) {
-								addCuisineType(cuisineType)
-							}
-						}}
+						onClick={() => toggleCuisineType(cuisineType)}
 						onClose={isActive ? () => {
-							removeCuisineType(cuisineType)
+							toggleCuisineType(cuisineType)
 						} : undefined}
 						>
 						{cuisineType}
