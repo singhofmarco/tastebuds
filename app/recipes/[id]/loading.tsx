@@ -19,19 +19,7 @@ export default function Loading() {
 
       <div className="md:mt-8 lg:grid lg:grid-cols-5 lg:items-start lg:gap-x-8">
         <div className="col-span-2">
-          <Skeleton>
-            <div className="aspect-h-1 aspect-w-1 w-full">
-              <div className="max-h-full max-w-full object-cover object-center sm:rounded-lg">
-                <Image
-                  alt="Card background"
-                  className="z-0 w-full h-full object-cover sm:group-hover:scale-110 transition-transform"
-                  src=""
-                  width={1024}
-                  height={1024}
-                />
-              </div>
-            </div>
-          </Skeleton>
+            <Skeleton className="rounded-md aspect-square" />
         </div>
 
         <div className="col-span-3 mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
