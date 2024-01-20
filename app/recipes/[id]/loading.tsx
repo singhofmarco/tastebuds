@@ -38,7 +38,7 @@ export default function Loading() {
           <div className="flex justify-between">
             <div>
               <Skeleton>
-                <h1 className={title()}>Mediterranean Chicken Pasta</h1>
+                <h1 className={title()}>Delicious dish</h1>
               </Skeleton>
 
               <div className="mt-4 flex items-center gap-4">
@@ -61,7 +61,7 @@ export default function Loading() {
             </div>
 
             <Button
-              className="ml-4 flex items-center gap-2"
+              className="ml-4 flex items-center gap-2 flex-shrink-0"
               color="default"
               variant="faded"
               disabled
