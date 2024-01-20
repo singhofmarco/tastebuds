@@ -10,6 +10,9 @@ import { Skeleton } from "@nextui-org/skeleton";
 
 export default async function RecipesPage({ searchParams }: { searchParams:  { [key: string]: string | string[] | undefined } }) {
 	const savedRecipes = await prisma.recipe.findMany({
+		where: {
+			userId: 1 // TODO: get user id from session
+		},
 		orderBy: {
 			createdAt: 'desc'
 		}

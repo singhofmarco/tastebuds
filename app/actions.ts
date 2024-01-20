@@ -3,7 +3,6 @@
 import { OpenAiRecipe } from "@/types"
 import { PrismaClient, Recipe } from "@prisma/client"
 import { del, put } from "@vercel/blob"
-import { error } from "console"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
@@ -24,6 +23,7 @@ export async function save(recipe: OpenAiRecipe) {
             totalTime,
             cuisineType,
             image,
+            userId: 1 // TODO: replace with user authentication
         }
     })
 
@@ -82,6 +82,12 @@ export async function generateImage(recipe: Recipe) {
 
 // delete recipe from database
 export async function deleteRecipe(recipe: Recipe) {
+    // check if recipe belongs to user
+    // TODO: replace with user authentication
+    if (recipe.userId !== 1) {
+        return NextResponse.json({ error: "You are not authorized to delete this recipe" }, { status: 401 })
+    }
+
     try {
         if (recipe.image) await del(recipe.image)
     } catch (error) {
