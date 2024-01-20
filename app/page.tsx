@@ -14,19 +14,19 @@ export default function Home() {
 						  className="w-48 h-48 select-none" />
 			<div className="inline-block max-w-lg text-center justify-center">
 				<h1 className={title()}>Cook&nbsp;</h1>
-				<h1 className={title({ color: "yellow" })}>creative&nbsp;</h1>
+				<h1 className={title({ className: "text-primary" })}>creative&nbsp;</h1>
 				<br />
 				<h1 className={title()}>
 					meals with your friends, without the hassle.
 				</h1>
 				<h2 className={subtitle({ class: "mt-4" })}>
-					With Tastebuds, and <mark className="bg-gradient-to-br from-50% from-red-600/75 to-orange-600/75 rounded-sm px-1 shadow-md text-white">the power of AI</mark>, there&apos;s no need to put fun cooking nights on the back-burner.
+					With Tastebuds, and <span className="italic">the power of AI</span>, there&apos;s no need to put fun cooking nights on the back-burner.
 				</h2>
 			</div>
 
 			<div className="max-w-[900px] gap-4 flex px-8">
 				<AddRecipeButton size="lg" />
-				<Button variant="shadow" radius="md" color="default" size="lg" as={Link} href="/recipes">
+				<Button variant="shadow" radius="md" color="secondary" size="lg" as={Link} href="/recipes">
 					See Recipes
 				</Button>
 			</div>

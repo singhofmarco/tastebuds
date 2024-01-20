@@ -32,7 +32,7 @@ export default function EmptyView() {
       {filtersApplied ? (
         <Button
             variant="shadow"
-            color="primary"
+            color="secondary"
             onPress={handleRemoveFilters}
         >
             Remove filters

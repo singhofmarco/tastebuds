@@ -15,7 +15,7 @@ export default function AddRecipeButton({ startContent, size = "md", children, o
   return (
     <>
       <Button variant="shadow" size={size} radius="md"
-					className="bg-gradient-to-tr from-pink-600 to-yellow-500 text-white"
+          color="primary"
 				 	startContent={startContent ?? <AiIcon size={20} className="flex-shrink-0" />}
           onPress={() => {
             onAddRecipeModalOpen()

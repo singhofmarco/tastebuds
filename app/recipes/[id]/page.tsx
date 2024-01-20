@@ -51,7 +51,7 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
                         <div className="mt-4 flex items-center gap-4 select-none">
                             <Chip
                                 aria-label="Cuisine Type"
-                                color="primary"
+                                color="danger"
                                 variant="flat"
                                 startContent={<GlobeIcon />}
                                 >

@@ -85,7 +85,7 @@ export default function AddRecipeModal({
                     <div>{recipe?.title}</div>
                 )}
                 {!recipe && (
-                    <div>Generate recipe</div>
+                    <div>Generate Recipe</div>
                 )}
             </ModalHeader>
             <ModalBody>
@@ -186,9 +186,9 @@ export default function AddRecipeModal({
                        isDisabled={isSaving}
                        endContent={isSaving && <Spinner size="sm" color="white" />}
                        >
-                    Save
+                    Save Recipe
                   </Button>
-                  <Button color="danger" onPress={clearGeneratedRecipe}
+                  <Button color="secondary" onPress={clearGeneratedRecipe}
                     isDisabled={isSaving}>
                     Generate Another
                   </Button>
