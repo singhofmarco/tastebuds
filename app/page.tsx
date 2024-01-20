@@ -2,6 +2,7 @@ import { title, subtitle } from "@/components/primitives";
 import { Image } from "@nextui-org/image";
 import { Button } from "@nextui-org/button";
 import AddRecipeButton from "@/components/add-recipe-button";
+import Link from "next/link";
 
 export default function Home() {
 	return (
@@ -25,8 +26,8 @@ export default function Home() {
 
 			<div className="max-w-[900px] gap-4 flex px-8">
 				<AddRecipeButton size="lg" />
-				<Button variant="ghost" radius="sm" color="default" size="lg">
-					Sign up
+				<Button variant="shadow" radius="md" color="default" size="lg" as={Link} href="/recipes">
+					See Recipes
 				</Button>
 			</div>
 		</section>

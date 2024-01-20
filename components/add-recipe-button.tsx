@@ -22,7 +22,7 @@ export default function AddRecipeButton({ startContent, size = "md", children, o
             onClick?.()
           }}
 				>
-          {children ?? "Create a new recipe"}
+          {children ?? "Generate Recipe"}
       </Button>
       <AddRecipeModal
         isOpen={isAddRecipeModalOpen}
