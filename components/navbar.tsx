@@ -28,6 +28,7 @@ export const Navbar = () => {
 
 	return (
 		<NextUINavbar
+			className="select-none"
 			maxWidth="xl"
 			position="sticky"
 			isMenuOpen={isMenuOpen}
@@ -99,7 +100,7 @@ export const Navbar = () => {
 				<NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
 			</NavbarContent>
 
-			<NavbarMenu>
+			<NavbarMenu className="select-none">
 				<div className="mx-4 mt-2 flex flex-col gap-2">
 					{siteConfig.navMenuItems.map((item, index) => (
 						<NavbarMenuItem key={`${item}-${index}`}>

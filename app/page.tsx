@@ -10,7 +10,7 @@ export default function Home() {
 						 alt="Tastebuds"
 						 width={680}
 						 height={823}
-						  className="w-48 h-48" />
+						  className="w-48 h-48 select-none" />
 			<div className="inline-block max-w-lg text-center justify-center">
 				<h1 className={title()}>Cook&nbsp;</h1>
 				<h1 className={title({ color: "yellow" })}>creative&nbsp;</h1>

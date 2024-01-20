@@ -10,7 +10,7 @@ import {
 
 export default function UserDropdown({ className }: { className?: string }) {
   return (
-    <Dropdown>
+    <Dropdown className="select-none">
       <DropdownTrigger>
         <Avatar
           as="button"

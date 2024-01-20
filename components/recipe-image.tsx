@@ -12,7 +12,7 @@ export default function RecipeImage({ recipe }: { recipe: Recipe }) {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   return (
-    <>
+    <div className="select-none">
       {recipe.image ? (
         <div className="aspect-h-1 aspect-w-1 w-full">
           <Image
@@ -44,6 +44,6 @@ export default function RecipeImage({ recipe }: { recipe: Recipe }) {
           </Button>
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -77,7 +77,7 @@ export default function AddRecipeModal({
 
   return (
     <Modal backdrop="blur" size="2xl" isOpen={isOpen} onClose={handleOnClose} placement="top-center">
-      <ModalContent>
+      <ModalContent className="select-none">
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">

@@ -78,7 +78,7 @@ export const RecipeSearch = ({ cuisineTypes, disabled }: { cuisineTypes?: string
 				<Input
 					aria-label="Search"
 					classNames={{
-						inputWrapper: "bg-default-100",
+						inputWrapper: "bg-default-100 select-none",
 						input: "text-sm",
 					}}
 					disabled={disabled}
@@ -120,7 +120,7 @@ export const RecipeSearch = ({ cuisineTypes, disabled }: { cuisineTypes?: string
 						aria-label="Cuisine Type"
 						color={ isActive ? color : "default"}
 						variant={isActive ? "solid" : "flat"}
-						className="cursor-pointer hover:opacity-80"
+						className="cursor-pointer hover:opacity-80 select-none"
 						isCloseable={isActive}
 						onClick={() => toggleCuisineType(cuisineType)}
 						onClose={isActive ? () => {

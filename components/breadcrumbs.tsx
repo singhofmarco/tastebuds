@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 export default function Breadcrumbs({children, className}: {children: React.ReactNode, className?: string}) {
     return (
-        <nav className={clsx(className, "flex")} aria-label="Breadcrumb">
+        <nav className={clsx(className, "flex select-none")} aria-label="Breadcrumb">
             <ol role="list" className="flex items-center space-x-4">
                 <li>
                 <div>

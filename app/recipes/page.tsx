@@ -36,7 +36,7 @@ export default async function RecipesPage({ searchParams }: { searchParams:  { [
 	return (
 		<div className="flex flex-col gap-y-4">
 			<div className="mb-4 flex justify-between">
-				<div>
+				<div className="select-none">
 					<h1 className={title()}>Recipes</h1>
 					<h2 className={subtitle()}>You have { savedRecipes.length } saved.</h2>
 				</div>

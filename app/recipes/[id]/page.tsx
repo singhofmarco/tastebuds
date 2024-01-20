@@ -48,7 +48,7 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
                     <div>
                         <h1 className={title()}>{recipe.title}</h1>
 
-                        <div className="mt-4 flex items-center gap-4">
+                        <div className="mt-4 flex items-center gap-4 select-none">
                             <Chip
                                 aria-label="Cuisine Type"
                                 color="primary"
@@ -66,7 +66,7 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
                             </Chip>
                         </div>
                     </div>
-                    <RecipeDropdown className="ml-4" recipe={recipe} />
+                    <RecipeDropdown className="ml-4 select-none" recipe={recipe} />
                 </div>
               <div className="mt-6 bg-foreground-50 border border-foreground-100 p-4 rounded-md shadow-sm">
                 <h3 className="sr-only">Description</h3>

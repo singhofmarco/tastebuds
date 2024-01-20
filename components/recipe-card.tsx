@@ -11,7 +11,7 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           className="col-span-12 sm:col-span-3 h-[300px]"
         >
           <Card
-              className="h-full group"
+              className="h-full group select-none"
               isFooterBlurred>
                 {recipe.image ? (
               <Image
