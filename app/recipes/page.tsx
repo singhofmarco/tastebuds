@@ -34,7 +34,7 @@ export default async function RecipesPage({ searchParams }: { searchParams:  { [
 		.filter((cuisineType: string, index: number, self: string[]) => self.indexOf(cuisineType) === index)
 
 	return (
-		<div className="mt-8 flex flex-col gap-y-4 px-8">
+		<div className="flex flex-col gap-y-4">
 			<div className="mb-4 flex justify-between">
 				<div>
 					<h1 className={title()}>Recipes</h1>

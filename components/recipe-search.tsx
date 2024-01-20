@@ -10,7 +10,7 @@ import { ScrollShadow } from "@nextui-org/scroll-shadow"
 import { useEffect, useState, useTransition } from "react"
 import { Spinner } from "@nextui-org/spinner"
 
-export const RecipeSearch = ({ cuisineTypes }: { cuisineTypes: string[] }) => {
+export const RecipeSearch = ({ cuisineTypes, disabled }: { cuisineTypes?: string[], disabled?: boolean }) => {
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
 	const [query, setQuery] = useState<string>(searchParams.get('query') || '')
@@ -81,6 +81,7 @@ export const RecipeSearch = ({ cuisineTypes }: { cuisineTypes: string[] }) => {
 						inputWrapper: "bg-default-100",
 						input: "text-sm",
 					}}
+					disabled={disabled}
 					labelPlacement="outside"
 					placeholder="Search..."
 					startContent={
@@ -100,7 +101,7 @@ export const RecipeSearch = ({ cuisineTypes }: { cuisineTypes: string[] }) => {
 					}}
 				/>
 				<ScrollShadow hideScrollBar orientation="horizontal" className="flex gap-2 max-w-full">
-				{ cuisineTypes.map((cuisineType: string, index: number) => {
+				{ cuisineTypes?.map((cuisineType: string, index: number) => {
 					const colorMapForIndex: { [key: number]: "primary" | "success" | "warning" | "danger" | "secondary" } = {
 						0: "primary",
 						1: "success",
