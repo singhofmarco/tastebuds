@@ -5,6 +5,8 @@ import { Recipe } from "@prisma/client"
 import prisma from "../lib/prisma";
 import AddRecipeCard from "@/components/add-recipe-card";
 import EmptyView from "@/components/empty-view";
+import { Suspense } from "react";
+import { Skeleton } from "@nextui-org/skeleton";
 
 export default async function RecipesPage({ searchParams }: { searchParams:  { [key: string]: string | string[] | undefined } }) {
 	const savedRecipes = await prisma.recipe.findMany({
@@ -49,7 +51,9 @@ export default async function RecipesPage({ searchParams }: { searchParams:  { [
 			{filteredRecipes.length > 0 && (
 			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
 				{filteredRecipes.map((recipe: Recipe) => (
-					<RecipeCard key={recipe.title} recipe={recipe} />
+					<Suspense fallback={<Skeleton className="col-span-12 sm:col-span-3 h-[300px] rounded-lg" />} key={recipe.title}>
+						<RecipeCard recipe={recipe} />
+					</Suspense>
 				))}
 				<AddRecipeCard />
 			</ul>
