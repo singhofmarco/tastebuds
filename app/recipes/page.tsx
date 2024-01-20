@@ -35,15 +35,11 @@ export default async function RecipesPage({ searchParams }: { searchParams:  { [
 		<div className="mt-8 flex flex-col gap-y-4 px-8">
 			<div className="mb-4 flex justify-between">
 				<div>
-				<h1 className={title()}>Recipes</h1>
-				<h2 className={subtitle()}>You have { savedRecipes.length } saved.</h2>
+					<h1 className={title()}>Recipes</h1>
+					<h2 className={subtitle()}>You have { savedRecipes.length } saved.</h2>
 				</div>
 
-				<div className="self-center">
-					<AddRecipeButton>
-						New Recipe
-					</AddRecipeButton>
-				</div>
+				{ /* TODO: switch to list mode */ }
 			</div>
 			<RecipeSearch cuisineTypes={cuisineTypes} />
 			{filteredRecipes.length === 0 && (

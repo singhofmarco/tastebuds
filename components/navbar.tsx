@@ -1,3 +1,5 @@
+"use client"
+
 import {
 	Navbar as NextUINavbar,
 	NavbarContent,
@@ -8,32 +10,42 @@ import {
 	NavbarMenuItem,
 } from "@nextui-org/navbar";
 import { Link } from "@nextui-org/link";
-
 import { link as linkStyles } from "@nextui-org/theme";
-
 import { siteConfig } from "@/config/site";
 import NextLink from "next/link";
 import clsx from "clsx";
-
 import { ThemeSwitch } from "@/components/theme-switch";
-
 import Image from "next/image";
+import { User } from "@nextui-org/user";
+import UserDropdown from "./user-dropdown";
+import { Divider } from "@nextui-org/divider";
+import AddRecipeButton from "./add-recipe-button";
+import { PlusIcon } from "./icons";
+import { useState } from "react";
 
 export const Navbar = () => {
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 	return (
-		<NextUINavbar maxWidth="xl" position="sticky">
+		<NextUINavbar
+			maxWidth="xl"
+			position="sticky"
+			isMenuOpen={isMenuOpen}
+			onMenuOpenChange={setIsMenuOpen}
+		>
+			<NavbarBrand className="max-w-fit">
+				<NextLink className="flex justify-start items-center gap-2" href="/"
+					onClick={() => setIsMenuOpen(false)}>
+					<Image src="/logo.svg"
+						alt="Tastebuds"
+						width={680}
+						height={823}
+						className="w-10 h-10" />
+					<p className="font-bold text-inherit tracking-tight">Tastebuds</p>
+				</NextLink>
+			</NavbarBrand>
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-				<NavbarBrand as="li" className="gap-3 max-w-fit">
-					<NextLink className="flex justify-start items-center gap-4	" href="/">
-						<Image src="/logo.svg"
-						 alt="Tastebuds"
-						 width={680}
-						 height={823}
-						  className="w-10 h-10" />
-						<p className="font-bold text-inherit">Tastebuds</p>
-					</NextLink>
-				</NavbarBrand>
-				<ul className="hidden sm:flex gap-4 justify-start ml-2">
+				<ul className="hidden sm:flex gap-4 justify-start ml-6">
 					{siteConfig.navItems.map((item) => (
 						<NavbarItem key={item.href}>
 							<NextLink
@@ -43,6 +55,7 @@ export const Navbar = () => {
 								)}
 								color="foreground"
 								href={item.href}
+								onClick={() => setIsMenuOpen(false)}
 							>
 								{item.label}
 							</NextLink>
@@ -55,14 +68,35 @@ export const Navbar = () => {
 				className="hidden sm:flex basis-1/5 sm:basis-full"
 				justify="end"
 			>
-				<NavbarItem className="hidden sm:flex gap-2">
+				<div className="hidden sm:flex gap-6">
+					<NavbarItem>
+						<AddRecipeButton
+							size="sm"
+							startContent={<PlusIcon size={20} />}
+							onClick={() => setIsMenuOpen(false)}
+						>
+							New Recipe
+						</AddRecipeButton>
+					</NavbarItem>
+
 					<ThemeSwitch />
-				</NavbarItem>
+
+					<UserDropdown />
+				</div>
 			</NavbarContent>
 
 			<NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-				<ThemeSwitch />
-				<NavbarMenuToggle />
+				<NavbarItem>
+					<AddRecipeButton
+						size="sm"
+						startContent={<PlusIcon size={20} />}
+						onClick={() => setIsMenuOpen(false)}
+					>
+						Recipe
+					</AddRecipeButton>
+				</NavbarItem>
+
+				<NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
 			</NavbarContent>
 
 			<NavbarMenu>
@@ -72,12 +106,54 @@ export const Navbar = () => {
 							<Link
 								color="foreground"
 								href={item.href}
+								onClick={() => setIsMenuOpen(false)}
 								size="lg"
 							>
 								{item.label}
 							</Link>
 						</NavbarMenuItem>
 					))}
+
+					<Divider className="mt-2 mb-4" />
+
+					<User
+						className="self-start gap-4 text-foreground-600"
+						name="Marco Singhof"
+						avatarProps={{
+							src: "https://avatars.githubusercontent.com/u/6352336?v=4",
+							isBordered: true,
+							size: "sm",
+						}}
+					/>
+					<div className="ml-12 flex flex-col gap-2">
+					<NavbarMenuItem>
+						<Link
+							color="foreground"
+							href="/team-settings"
+							size="sm"
+						>
+							Team
+						</Link>
+					</NavbarMenuItem>
+					<NavbarMenuItem>
+						<Link
+							color="foreground"
+							href="/settings"
+							size="sm"
+						>
+							Settings
+						</Link>
+					</NavbarMenuItem>
+					<NavbarMenuItem>
+						<Link
+							color="danger"
+							href="/logout"
+							size="sm"
+						>
+							Log out
+						</Link>
+					</NavbarMenuItem>
+					</div>
 				</div>
 			</NavbarMenu>
 		</NextUINavbar>
