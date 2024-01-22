@@ -5,10 +5,8 @@ import { PrismaClient, Recipe } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
-import { S3Client, PutObjectCommand, PutObjectCommandInput, DeleteObjectCommand, DeleteObjectCommandInput } from "@aws-sdk/client-s3"
-import { v4 as uuidv4 } from "uuid"
-import OpenAI from "openai"
-import sharp from "sharp"
+import { S3Client, DeleteObjectCommand, DeleteObjectCommandInput } from "@aws-sdk/client-s3"
+import { Client as QstashClient } from "@upstash/qstash"
 
 const s3Client = new S3Client({
     credentials: {
@@ -32,7 +30,7 @@ export async function save(recipe: OpenAiRecipe) {
             totalTime,
             cuisineType,
             image,
-            userId: 1 // TODO: replace with user authentication
+            userId: 1, // TODO: replace with user authentication
         }
     })
 
@@ -44,66 +42,42 @@ export async function save(recipe: OpenAiRecipe) {
 }
 
 export async function generateImage(recipe: Recipe) {
-    const openai = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY
-    })
+    const DALL_E = "https://api.openai.com/v1/images/generations";
 
-    // generate image using OpenAI's DALL-E 3 model
-    const response = await openai.images.generate({
-        model: "dall-e-3",
-        prompt: "Create a realistic image of: " + recipe.title,
-        n: 1,
-        size: "1024x1024",
-        response_format: "b64_json"
-    })
+    if (!process.env.QSTASH_TOKEN) {
+        throw new Error("Qstash token is not set")
+    }
 
-    const image_b64 = response.data[0].b64_json
-
-    if (!image_b64) {
+    const client = new QstashClient({ token: process.env.QSTASH_TOKEN });
+    const res = await client.publishJSON({
+        url: DALL_E,
+        body: {
+            model: "dall-e-3",
+            prompt: "Create a realistic image of: " + recipe.title,
+            n: 1,
+            size: "1024x1024",
+            response_format: "url"
+          },
+        headers: {
+            "Content-Type": "application/json",
+            "Upstash-Forward-Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        callback: `${process.env.CALLBACK_BASE_URL}/api/recipes/image/callback`,
+        method: "POST",
+    }).catch((error) => {
         throw new Error("Failed to generate image")
-    }
+    })
 
-    // compress image
-    const uncompressedImage = Buffer.from(image_b64, "base64")
-    const compressedImage = await sharp(uncompressedImage)
-        .jpeg({ mozjpeg: true })
-        .toBuffer()
-
-    // upload image to S3 bucket
-    if (!process.env.AWS_BUCKET_NAME || !process.env.AWS_REGION) {
-        throw new Error("AWS bucket config is not set")
-    }
-
-    const bucketName = process.env.AWS_BUCKET_NAME
-    const key = uuidv4() + '.jpeg'
-
-    try {
-        const params: PutObjectCommandInput = {
-            Bucket: bucketName,
-            Body: compressedImage,
-            Key: key,
-            ContentType: 'image/jpeg',
-            ACL: 'public-read',
-        }
-
-        await s3Client.send(new PutObjectCommand(params))
-      } catch (error: any) {
-        return Response.json({ error: error.message })
-      }
-
-      const url = `https://${bucketName}.s3.amazonaws.com/${key}`
-
-    // update recipe with image URL
     await prisma.recipe.update({
         where: {
             id: recipe.id
         },
         data: {
-            image: url
+            qStashMessageId: res.messageId
         }
     })
 
-    revalidatePath("/recipes")
+    revalidatePath(`/recipes/${recipe.id}`)
 }
 
 // delete recipe from database

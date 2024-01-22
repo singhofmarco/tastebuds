@@ -11,5 +11,16 @@ const prisma = new PrismaClient().$extends({
 		},
 	  },
 })
+.$extends({
+	result: {
+		recipe: {
+			isGeneratingImage: {
+				compute(recipe) {
+					return recipe.qStashMessageId !== null
+				},
+			},
+		}
+	}
+})
 
 export default prisma

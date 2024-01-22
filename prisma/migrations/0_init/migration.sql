@@ -7,6 +7,7 @@ CREATE TABLE "Recipe" (
     "description" TEXT,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "image" TEXT,
+    "isImageGenerating" BOOLEAN NOT NULL DEFAULT false,
     "userId" INTEGER,
     "ingredients" JSONB NOT NULL,
     "steps" JSONB NOT NULL,

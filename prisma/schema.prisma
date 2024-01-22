@@ -9,20 +9,21 @@ datasource db {
 }
 
 model Recipe {
-  id          Int              @id @default(autoincrement())
-  title       String           @db.VarChar(255)
-  createdAt   DateTime         @default(now()) @db.Timestamp(6)
-  updatedAt   DateTime         @default(now()) @db.Timestamp(6)
-  description String?
-  published   Boolean          @default(false)
-  image       String?           @db.Text
-  userId      Int?
-  user        User?             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  ingredients Json
-  steps       Json
-  totalTime   String
-  cuisineType String
-  teams       TeamsOnRecipes[]
+  id                Int              @id @default(autoincrement())
+  title             String           @db.VarChar(255)
+  createdAt         DateTime         @default(now()) @db.Timestamp(6)
+  updatedAt         DateTime         @default(now()) @db.Timestamp(6)
+  description       String?
+  published         Boolean          @default(false)
+  image             String?          @db.Text
+  qStashMessageId   String?          @db.Text
+  userId            Int?
+  user              User?            @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ingredients       Json
+  steps             Json
+  totalTime         String
+  cuisineType       String
+  teams             TeamsOnRecipes[]
 }
 
 model Ingredient {
