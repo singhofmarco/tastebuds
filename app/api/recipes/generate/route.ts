@@ -10,8 +10,12 @@ const openai = new OpenAI({
     maxRetries: 0,
 })
 
-export async function GET(request: Request) {
-    const query = request.url.split('?query=')[1]
+export async function POST(request: Request) {
+    const { query } = await request.json()
+
+    if (!query) {
+        return NextResponse.json({ error: "Missing query" }, { status: 400 })
+    }
 
     try {
         const response = await openai.chat.completions.create({

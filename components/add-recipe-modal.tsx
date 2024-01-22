@@ -34,6 +34,7 @@ export default function AddRecipeModal({
   const [recipe, setRecipe] = useState<OpenAiRecipe | null>(null);
   const [query, setQuery] = useState<string>("");
   const [isQueryInvalid, setIsQueryInvalid] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleGenerateRecipe() {
     if (!query.length) {
@@ -43,11 +44,19 @@ export default function AddRecipeModal({
 
     setIsGenerating(true);
 
-    for await (const recipeResponse of makeStreamingJsonRequest<OpenAiRecipe>({
-      url: `/api/recipes/generate?query=${query}`,
-      method: "GET",
-    })) {
-      setRecipe(recipeResponse);
+    try {
+      for await (const recipeResponse of makeStreamingJsonRequest<OpenAiRecipe>({
+        url: '/api/recipes/generate',
+        payload: {
+          query,
+        },
+        method: "POST",
+      })) {
+        setRecipe(recipeResponse);
+      }
+    } catch (e: any) {
+      setError("Something went wrong. Please try again.")
+      setIsQueryInvalid(true)
     }
 
     setIsGenerating(false);
@@ -72,6 +81,8 @@ export default function AddRecipeModal({
 
   function handleOnClose() {
     clearGeneratedRecipe();
+    setIsQueryInvalid(false);
+    setQuery("");
     onClose();
   }
 
@@ -105,6 +116,7 @@ export default function AddRecipeModal({
                 }}
                 isDisabled={isGenerating}
                 isInvalid={isQueryInvalid}
+                errorMessage={isQueryInvalid ? error : undefined}
               />
               </form>
                 )}
