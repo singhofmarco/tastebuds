@@ -8,17 +8,6 @@ const nextConfig = {
           port: '',
           pathname: '/**',
         },
-        {
-          protocol: 'https',
-          hostname: 'oaidalleapiprodscus.blob.core.windows.net',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: '5d5c4pjklv5h18be.public.blob.vercel-storage.com',
-          port: '',
-        },
       ]
     },
     experimental: {
