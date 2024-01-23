@@ -17,6 +17,7 @@ import { Spinner } from "@nextui-org/spinner";
 import { useState } from "react";
 import { AiIcon, ClockIcon, GlobeIcon } from "./icons";
 import { makeStreamingJsonRequest, useJsonStreaming } from "http-streaming-request";
+import SaveRecipeButton from "./save-recipe-button";
 
 export const config = {
   runtime: 'edge', // 'nodejs' is the default
@@ -67,16 +68,19 @@ export default function AddRecipeModal({
     setQuery("");
   }
 
-  async function handleSaveRecipe() {
+  async function handleSaveRecipe(shouldGenerateImage: boolean) {
     if (!recipe) return;
 
     setIsSaving(true);
 
-    await save(recipe)
-
-    setIsSaving(false);
-
-    onClose();
+    await save(recipe, shouldGenerateImage)
+      .then(() => {
+        clearGeneratedRecipe()
+        onClose()
+      })
+      .finally(() => {
+        setIsSaving(false)
+      })
   }
 
   function handleOnClose() {
@@ -188,19 +192,14 @@ export default function AddRecipeModal({
                   isDisabled={isGenerating || !query.length}
                   endContent={isGenerating && <Spinner size="sm" color="white" />}
                 >
-                  Generate Recipe
+                  { isGenerating ? "Generating" : "Generate Recipe" }
                 </Button>
               )}
 
               {(recipe && !isGenerating) && (
                 <>
-                  <Button color="primary" onPress={handleSaveRecipe}
-                       isDisabled={isSaving}
-                       endContent={isSaving && <Spinner size="sm" color="white" />}
-                       >
-                    Save Recipe
-                  </Button>
-                  <Button color="secondary" onPress={clearGeneratedRecipe}
+                  <SaveRecipeButton handleSaveRecipe={handleSaveRecipe} isSaving={isSaving} />
+                  <Button variant="flat" color="default" onPress={clearGeneratedRecipe}
                     isDisabled={isSaving}>
                     Generate Another
                   </Button>

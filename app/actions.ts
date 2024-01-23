@@ -18,7 +18,7 @@ const s3Client = new S3Client({
 
 const prisma = new PrismaClient()
 
-export async function save(recipe: OpenAiRecipe) {
+export async function save(recipe: OpenAiRecipe, shouldGenerateImage: boolean) {
     const { title, description, image, ingredients, steps, totalTime, cuisineType } = recipe
 
     const storedRecipe = await prisma.recipe.create({
@@ -36,7 +36,9 @@ export async function save(recipe: OpenAiRecipe) {
 
     revalidatePath("/recipes")
 
-    await generateImage(storedRecipe.id, title)
+    if (shouldGenerateImage) {
+        await generateImage(storedRecipe.id, title)
+    }
 
     redirect("/recipes/" + storedRecipe.id)
 }
