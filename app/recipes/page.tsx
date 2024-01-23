@@ -54,7 +54,10 @@ export default async function RecipesPage({ searchParams }: { searchParams:  { [
 			{filteredRecipes.length > 0 && (
 			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
 				{filteredRecipes.map((recipe: Recipe) => (
-					<Suspense fallback={<Skeleton className="col-span-12 sm:col-span-3 h-[300px] rounded-lg" />} key={recipe.title}>
+					<Suspense
+						key={recipe.id}
+						fallback={<Skeleton className="col-span-12 sm:col-span-3 h-[300px] rounded-lg" />}
+					>
 						<RecipeCard recipe={recipe} />
 					</Suspense>
 				))}
