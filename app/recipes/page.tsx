@@ -2,7 +2,7 @@ import { subtitle, title } from "@/components/primitives";
 import { RecipeCard } from "@/components/recipe-card";
 import { RecipeSearch } from "@/components/recipe-search";
 import { Recipe } from "@prisma/client"
-import prisma from "../lib/prisma";
+import prisma from "@/lib/prisma";
 import AddRecipeCard from "@/components/add-recipe-card";
 import EmptyView from "@/components/empty-view";
 import { Suspense } from "react";

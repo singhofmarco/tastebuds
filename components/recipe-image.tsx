@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
 import { generateImage } from "@/app/actions";
 import { useRouter } from "next/navigation";
-import { useInterval } from "@/app/lib/use-interval";
+import { useInterval } from "@/lib/use-interval";
 
 export default function RecipeImage({
   recipeId,

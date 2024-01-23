@@ -5,7 +5,7 @@ import Breadcrumbs from "@/components/breadcrumbs";
 import BreadcrumbItem from "@/components/breadcrumb-item";
 import RecipeImage from "@/components/recipe-image";
 import { notFound } from "next/navigation";
-import prisma from "@/app/lib/prisma";
+import prisma from "@/lib/prisma";
 import { Recipe } from "@prisma/client";
 import RecipeDropdown from "@/components/recipe-dropdown";
 

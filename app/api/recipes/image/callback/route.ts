@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 import { verifySignatureAppRouter } from "@upstash/qstash/dist/nextjs"
-import prisma from "@/app/lib/prisma";
+import prisma from "@/lib/prisma";
 
 const s3Client = new S3Client({
   credentials: {
