@@ -64,7 +64,7 @@ export async function generateImage(recipeId: number, title: string) {
             "Content-Type": "application/json",
             "Upstash-Forward-Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
         },
-        callback: `${process.env.CALLBACK_BASE_URL}/api/recipes/image/callback`,
+        callback: `${process.env.NODE_ENV !== "production" ? process.env.CALLBACK_BASE_URL : process.env.VERCEL_URL}/api/recipes/image/callback`,
         method: "POST",
     }).catch((error) => {
         throw new Error("Failed to generate image")
