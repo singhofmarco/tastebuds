@@ -8,7 +8,7 @@ import EmptyView from "@/components/empty-view";
 import { Suspense } from "react";
 import { Skeleton } from "@nextui-org/skeleton";
 
-export default async function RecipesPage({ searchParams }: { searchParams:  { [key: string]: string | string[] | undefined } }) {
+export default async function RecipesPage({ searchParams }: { searchParams: { query?: string, cuisineTypes?: string[] } }) {
 	const savedRecipes = await prisma.recipe.findMany({
 		where: {
 			userId: 1 // TODO: get user id from session
