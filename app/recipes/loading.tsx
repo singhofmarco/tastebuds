@@ -1,6 +1,7 @@
 import { subtitle, title } from "@/components/primitives";
 import { RecipeSearch } from "@/components/recipe-search";
 import { Spinner } from "@nextui-org/spinner";
+import { Suspense } from "react";
 
 export default function Loading() {
     return (
@@ -11,7 +12,9 @@ export default function Loading() {
 					<h2 className={subtitle()}>Loading your recipes...</h2>
 				</div>
 			</div>
-			<RecipeSearch disabled />
+			<Suspense>
+				<RecipeSearch disabled />
+			</Suspense>
 
 			<Spinner className="mt-8" />
 		</div>
