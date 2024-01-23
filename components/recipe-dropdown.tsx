@@ -9,10 +9,9 @@ import {
 } from "@nextui-org/dropdown";
 import { GearIcon } from "./icons";
 import { deleteRecipe } from "@/app/actions";
-import { Recipe } from "@prisma/client";
 import clsx from "clsx";
 
-export default function RecipeDropdown({ recipe, className }: { recipe: Recipe, className?: string }) {
+export default function RecipeDropdown({ recipeId, className }: { recipeId: number, className?: string }) {
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -32,7 +31,7 @@ export default function RecipeDropdown({ recipe, className }: { recipe: Recipe, 
             color="danger"
             variant="solid"
             onClick={async () => {
-                await deleteRecipe(recipe).catch(() => {
+                await deleteRecipe(recipeId).catch(() => {
                     alert("Unable to delete recipe.")
                 })
             }}

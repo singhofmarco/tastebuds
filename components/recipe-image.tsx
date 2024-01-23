@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { AiIcon } from "./icons";
 import { Button } from "@nextui-org/button";
-import { Recipe } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
 import { generateImage } from "@/app/actions";
@@ -11,16 +10,19 @@ import { useRouter } from "next/navigation";
 import { useInterval } from "@/app/lib/use-interval";
 
 export default function RecipeImage({
-  recipe,
+  recipeId,
+  title,
+  image,
+  isGeneratingImage
 }: {
-  recipe: Recipe & { isGeneratingImage: boolean };
+  recipeId: number, title: string, image: string | null, isGeneratingImage: boolean
 }) {
   const router = useRouter()
-  const [isGenerating, setIsGenerating] = useState<boolean>(recipe.isGeneratingImage)
+  const [isGenerating, setIsGenerating] = useState<boolean>(isGeneratingImage)
 
   useEffect(() => {
-    setIsGenerating(recipe.isGeneratingImage)
-  }, [recipe.isGeneratingImage])
+    setIsGenerating(isGeneratingImage)
+  }, [isGeneratingImage])
 
   useInterval(
     () => {
@@ -32,17 +34,17 @@ export default function RecipeImage({
   return (
     <div className="select-none">
       <div className="aspect-square w-full">
-        {recipe.image && !recipe.isGeneratingImage ? (
+        {image && !isGeneratingImage ? (
           <Image
             className="h-full w-full object-cover object-center sm:rounded-lg shadow-lg"
-            src={recipe.image}
-            alt={recipe.title}
+            src={image}
+            alt={title}
             width={1024}
             height={1024}
           />
         ) : (
           <div className="relative w-full h-full p-48 shadow-md rounded-lg border flex justify-center items-center">
-            {recipe.isGeneratingImage || isGenerating ? (
+            {isGeneratingImage || isGenerating ? (
               <div className="absolute inset-0 flex flex-col gap-4 justify-center items-center">
                 <Spinner color="primary" size="lg" />
                 <span className="text-foreground-400">Generating...</span>
@@ -58,7 +60,7 @@ export default function RecipeImage({
                   size="lg"
                   onPress={() => {
                     setIsGenerating(true);
-                    generateImage(recipe);
+                    generateImage(recipeId, title);
                   }}
                 >
                   Generate Image

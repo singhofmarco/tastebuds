@@ -40,7 +40,7 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
 
         <div className="md:mt-8 lg:grid lg:grid-cols-5 lg:items-start lg:gap-x-8">
             <div className="col-span-2">
-                  <RecipeImage recipe={recipe} />
+                  <RecipeImage recipeId={recipe.id} image={recipe.image} title={recipe.title} isGeneratingImage={recipe.isGeneratingImage} />
             </div>
 
             <div className="col-span-3 mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
@@ -66,7 +66,7 @@ export default async function RecipeDetailPage({ params }: { params: { id: strin
                             </Chip>
                         </div>
                     </div>
-                    <RecipeDropdown className="ml-4 select-none" recipe={recipe} />
+                    <RecipeDropdown className="ml-4 select-none" recipeId={recipe.id} />
                 </div>
               <div className="mt-6 bg-foreground-50 border border-foreground-100 p-4 rounded-md shadow-sm">
                 <h3 className="sr-only">Description</h3>

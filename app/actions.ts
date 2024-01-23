@@ -36,12 +36,12 @@ export async function save(recipe: OpenAiRecipe) {
 
     revalidatePath("/recipes")
 
-    await generateImage(storedRecipe)
+    await generateImage(storedRecipe.id, title)
 
     redirect("/recipes/" + storedRecipe.id)
 }
 
-export async function generateImage(recipe: Recipe) {
+export async function generateImage(recipeId: number, title: string) {
     const DALL_E = "https://api.openai.com/v1/images/generations";
 
     if (!process.env.QSTASH_TOKEN) {
@@ -53,7 +53,7 @@ export async function generateImage(recipe: Recipe) {
         url: DALL_E,
         body: {
             model: "dall-e-3",
-            prompt: "Create a realistic image of: " + recipe.title,
+            prompt: "Create a realistic image of: " + title,
             n: 1,
             size: "1024x1024",
             response_format: "url"
@@ -70,18 +70,28 @@ export async function generateImage(recipe: Recipe) {
 
     await prisma.recipe.update({
         where: {
-            id: recipe.id
+            id: recipeId
         },
         data: {
             qStashMessageId: res.messageId
         }
     })
 
-    revalidatePath(`/recipes/${recipe.id}`)
+    revalidatePath(`/recipes/${recipeId}`)
 }
 
 // delete recipe from database
-export async function deleteRecipe(recipe: Recipe) {
+export async function deleteRecipe(recipeId: number) {
+    const recipe = await prisma.recipe.findUnique({
+        where: {
+            id: recipeId
+        }
+    })
+
+    if (!recipe) {
+        return NextResponse.json({ error: "Recipe not found" }, { status: 404 })
+    }
+
     // check if recipe belongs to user
     // TODO: replace with user authentication
     if (recipe.userId !== 1) {
