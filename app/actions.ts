@@ -67,7 +67,7 @@ export async function generateImage(recipeId: number, title: string) {
         callback: `${process.env.NODE_ENV !== "production" ? process.env.CALLBACK_BASE_URL : ("https://" + process.env.VERCEL_URL)}/api/recipes/image/callback`,
         method: "POST",
     }).catch((error) => {
-        throw new Error("Failed to generate image")
+        throw new Error("Failed to generate image", error)
     })
 
     await prisma.recipe.update({
