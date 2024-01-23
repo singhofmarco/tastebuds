@@ -43,7 +43,7 @@ export default function RecipeImage({
             height={1024}
           />
         ) : (
-          <div className="relative w-full h-full p-48 shadow-md rounded-lg border flex justify-center items-center">
+          <div className="relative w-full h-full shadow-md rounded-lg border flex justify-center items-center">
             {isGeneratingImage || isGenerating ? (
               <div className="absolute inset-0 flex flex-col gap-4 justify-center items-center">
                 <Spinner color="primary" size="lg" />
