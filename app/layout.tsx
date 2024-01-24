@@ -4,6 +4,7 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
 import { Navbar } from "@/components/navbar";
+import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import clsx from "clsx";
 
@@ -54,6 +55,7 @@ export default function RootLayout({
 						</main>
 					</div>
 				</Providers>
+				<Analytics />
 				<SpeedInsights />
 			</body>
 		</html>
