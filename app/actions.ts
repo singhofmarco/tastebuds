@@ -1,12 +1,18 @@
 'use server'
 
 import { OpenAiRecipe } from "@/types"
-import { PrismaClient, Recipe } from "@prisma/client"
+import { PrismaClient } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
 import { S3Client, DeleteObjectCommand, DeleteObjectCommandInput } from "@aws-sdk/client-s3"
 import { Client as QstashClient } from "@upstash/qstash"
+import { lucia, validateRequest } from "@/auth"
+import { z } from "zod"
+import { Argon2id } from "oslo/password"
+import { cookies } from "next/headers"
+import { generateId } from "lucia"
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 
 const s3Client = new S3Client({
     credentials: {
@@ -19,6 +25,8 @@ const s3Client = new S3Client({
 const prisma = new PrismaClient()
 
 export async function save(recipe: OpenAiRecipe, shouldGenerateImage: boolean) {
+    const { user } = await checkIfUserAuthenticated()
+
     const { title, description, image, ingredients, steps, totalTime, cuisineType } = recipe
 
     const storedRecipe = await prisma.recipe.create({
@@ -30,7 +38,7 @@ export async function save(recipe: OpenAiRecipe, shouldGenerateImage: boolean) {
             totalTime,
             cuisineType,
             image,
-            userId: 1, // TODO: replace with user authentication
+            userId: user.id,
         }
     })
 
@@ -84,6 +92,8 @@ export async function generateImage(recipeId: number, title: string) {
 
 // delete recipe from database
 export async function deleteRecipe(recipeId: number) {
+    const { user } = await checkIfUserAuthenticated()
+
     const recipe = await prisma.recipe.findUnique({
         where: {
             id: recipeId
@@ -95,8 +105,7 @@ export async function deleteRecipe(recipeId: number) {
     }
 
     // check if recipe belongs to user
-    // TODO: replace with user authentication
-    if (recipe.userId !== 1) {
+    if (recipe.userId !== user.id) {
         return NextResponse.json({ error: "You are not authorized to delete this recipe" }, { status: 401 })
     }
 
@@ -132,4 +141,155 @@ export async function deleteRecipe(recipeId: number) {
     revalidatePath("/recipes")
 
     return redirect("/recipes")
+}
+
+const signInSchema = z.object({
+    email: z.string({
+        required_error: "Email is required",
+      invalid_type_error: 'Invalid email address',
+    }).email({ message: "Invalid email address" }),
+    password: z.string({
+      invalid_type_error: 'Invalid password',
+    }),
+  })
+
+  export async function signIn(prevState: any, formData: FormData): Promise<{errors: { email?: string[] | undefined, password?: string[] | undefined }}> {
+    const validatedFields = signInSchema.safeParse({
+      email: formData.get('email'),
+      password: formData.get('password'),
+    })
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+      }
+    }
+
+    const existingUser = await prisma?.user.findUnique({
+      where: {
+        email: validatedFields.data.email.toLowerCase(),
+      },
+    });
+
+    if (!existingUser) {
+      return {
+        errors: {
+            password: ["Incorrect email or password"],
+        },
+      };
+    }
+
+    const validPassword = await new Argon2id().verify(
+      existingUser.hashedPassword,
+      validatedFields.data.password
+    );
+    if (!validPassword) {
+      return {
+        errors: {
+            password: ["Incorrect email or password"],
+        },
+      };
+    }
+
+    const session = await lucia.createSession(existingUser.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+    return redirect("/");
+  }
+
+  const UNIQUE_CONSTRAINT_ERROR_CODE = "P2002";
+
+  const signUpSchema = z.object({
+    name: z.string({
+        required_error: "Name is required",
+      invalid_type_error: 'Invalid name',
+    }),
+    email: z.string({
+        required_error: "Email is required",
+      invalid_type_error: 'Invalid email address',
+    }).email({ message: "Invalid email address" }),
+    password: z.string({
+      invalid_type_error: 'Invalid password',
+    }),
+  })
+
+export async function signUp(prevState: any, formData: FormData): Promise<{errors: { name?: string[] | undefined, email?: string[] | undefined, password?: string[] | undefined }}>  {
+
+    const validatedFields = signUpSchema.safeParse({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+      })
+
+      if (!validatedFields.success) {
+        return {
+          errors: validatedFields.error.flatten().fieldErrors,
+        }
+      }
+
+  const hashedPassword = await new Argon2id().hash(validatedFields.data.password);
+  const userId = generateId(15);
+
+  try {
+    await prisma?.user.create({
+      data: {
+        id: userId,
+        email: validatedFields.data.email,
+        name: validatedFields.data.name,
+        hashedPassword: hashedPassword,
+      },
+    });
+
+    const session = await lucia.createSession(userId, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+    return redirect("/");
+  } catch (e) {
+    // If the error thrown from Prisma Client is a Unique Constraint Error,
+    // this means that an existing user already has the same email address
+    if (
+        e instanceof PrismaClientKnownRequestError &&
+        e.code === UNIQUE_CONSTRAINT_ERROR_CODE &&
+        (e.meta?.target as string[]).includes("email")
+    ) {
+        return {
+            errors: {
+                    email: ["Email is already taken"],
+            },
+        };
+    }
+    console.log(e);
+    return {
+      errors: {
+            email: ["Something went wrong"],
+      },
+    };
+  }
+}
+
+export async function signOut(): Promise<{error: string}> {
+	const { session } = await checkIfUserAuthenticated()
+
+	await lucia.invalidateSession(session.id);
+
+	const sessionCookie = lucia.createBlankSessionCookie();
+	cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+	return redirect("/auth/signin");
+}
+
+async function checkIfUserAuthenticated() {
+    const { session, user } = await validateRequest();
+	if (!session) {
+		return redirect("/auth/signin");
+	}
+
+    return { session, user}
 }

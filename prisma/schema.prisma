@@ -17,7 +17,7 @@ model Recipe {
   published         Boolean          @default(false)
   image             String?          @db.Text
   qStashMessageId   String?          @db.Text
-  userId            Int?
+  userId            String?
   user              User?            @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ingredients       Json
   steps             Json
@@ -51,10 +51,21 @@ model TeamsOnRecipes {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String   @db.VarChar(255)
-  email    String   @unique @db.VarChar(255)
-  password String   @db.VarChar(255)
-  recipes  Recipe[]
-  teams    Team[]
+  id              String    @id @unique
+  sessions        Session[]
+
+  email           String    @db.Text @unique
+  hashedPassword String    @db.Text
+  name            String    @db.Text
+  recipes         Recipe[]
+  teams           Team[]
+}
+
+model Session {
+  id             String @id @unique
+  userId        String
+  expiresAt     DateTime
+  user           User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@index([userId])
 }

@@ -7,11 +7,19 @@ import AddRecipeCard from "@/components/add-recipe-card";
 import EmptyView from "@/components/empty-view";
 import { Suspense } from "react";
 import { Skeleton } from "@nextui-org/skeleton";
+import { validateRequest } from "@/auth";
+import { redirect } from "next/navigation";
 
 export default async function RecipesPage({ searchParams }: { searchParams: { query?: string, cuisineTypes?: string[] } }) {
+	const { user } = await validateRequest()
+
+	if (!user) {
+		return redirect('/auth/signin')
+	}
+
 	const savedRecipes = await prisma.recipe.findMany({
 		where: {
-			userId: 1 // TODO: get user id from session
+			userId: user.id
 		},
 		orderBy: {
 			createdAt: 'desc'

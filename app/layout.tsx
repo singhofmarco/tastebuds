@@ -7,6 +7,7 @@ import { Navbar } from "@/components/navbar";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import clsx from "clsx";
+import { validateRequest } from "@/auth";
 
 export const metadata: Metadata = {
 	title: {
@@ -33,11 +34,13 @@ export const viewport: Viewport = {
 	]
 }
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const { user } = await validateRequest()
+
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head />
@@ -49,7 +52,7 @@ export default function RootLayout({
 			>
 				<Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
 					<div className="relative flex flex-col h-screen">
-						<Navbar />
+						<Navbar user={user} />
 						<main className="container mx-auto max-w-7xl py-8 sm:py-12 flex-grow">
 							{children}
 						</main>

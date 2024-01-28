@@ -21,9 +21,11 @@ import UserDropdown from "./user-dropdown";
 import { Divider } from "@nextui-org/divider";
 import AddRecipeButton from "./add-recipe-button";
 import { PlusIcon } from "./icons";
-import { useState } from "react";
+import React, { useState } from "react";
+import { User as UserType } from "lucia";
+import { signOut } from "@/app/actions";
 
-export const Navbar = () => {
+export const Navbar = ({ user }: { user: UserType | null }) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	return (
@@ -82,7 +84,17 @@ export const Navbar = () => {
 
 					<ThemeSwitch />
 
-					<UserDropdown />
+					{user ? (
+						<UserDropdown user={user} />
+					) : (
+						<Link
+							color="foreground"
+							href="/auth/signin"
+							size="sm"
+						>
+							Sign in
+						</Link>
+					)}
 				</div>
 			</NavbarContent>
 
@@ -117,11 +129,14 @@ export const Navbar = () => {
 
 					<Divider className="mt-2 mb-4" />
 
+					{user ? (
+<>
 					<User
 						className="self-start gap-4 text-foreground-600"
-						name="Marco Singhof"
+						name={user.name}
 						avatarProps={{
-							src: "https://avatars.githubusercontent.com/u/6352336?v=4",
+							fallback: user.name.charAt(0),
+							src: undefined,
 							isBordered: true,
 							size: "sm",
 						}}
@@ -148,13 +163,29 @@ export const Navbar = () => {
 					<NavbarMenuItem>
 						<Link
 							color="danger"
-							href="/logout"
 							size="sm"
+							onPress={() => {
+								signOut()
+								setIsMenuOpen(false)
+							}}
 						>
-							Log out
+							Sign out
 						</Link>
 					</NavbarMenuItem>
 					</div>
+					</>
+					) : (
+						<NavbarMenuItem>
+							<Link
+								color="foreground"
+								href="/auth/signin"
+								size="sm"
+								onClick={() => setIsMenuOpen(false)}
+							>
+								Sign in
+							</Link>
+						</NavbarMenuItem>
+					)}
 				</div>
 			</NavbarMenu>
 		</NextUINavbar>
