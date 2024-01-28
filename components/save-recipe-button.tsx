@@ -1,13 +1,13 @@
-import { Button, ButtonGroup } from "@nextui-org/button"
+import { Button, ButtonGroup } from '@nextui-org/button'
 import {
   Dropdown,
   DropdownTrigger,
   DropdownItem,
   DropdownMenu,
-} from "@nextui-org/dropdown"
-import { Spinner } from "@nextui-org/spinner"
-import type { Selection } from "@react-types/shared"
-import { useState } from "react"
+} from '@nextui-org/dropdown'
+import { Spinner } from '@nextui-org/spinner'
+import type { Selection } from '@react-types/shared'
+import { useState } from 'react'
 
 export default function SaveRecipeButton({
   handleSaveRecipe,
@@ -16,30 +16,30 @@ export default function SaveRecipeButton({
   handleSaveRecipe: (shouldGenerateImage: boolean) => void
   isSaving: boolean
 }) {
-  const [selectedOption, setSelectedOption] = useState("image")
+  const [selectedOption, setSelectedOption] = useState('image')
 
   const descriptionsMap = {
     image:
-      "Save the recipe and generate an image for it. This may take a few seconds.",
+      'Save the recipe and generate an image for it. This may take a few seconds.',
     saveOnly:
-      "Save the recipe without generating an image. You can generate an image later.",
+      'Save the recipe without generating an image. You can generate an image later.',
   }
 
   const labelsMap = {
-    image: "Save & Generate Image",
-    saveOnly: "Save only",
+    image: 'Save & Generate Image',
+    saveOnly: 'Save only',
   }
 
   return (
     <ButtonGroup variant="flat">
       <Button
-        onPress={() => handleSaveRecipe(selectedOption === "image")}
+        onPress={() => handleSaveRecipe(selectedOption === 'image')}
         color="primary"
         isDisabled={isSaving}
         endContent={isSaving && <Spinner size="sm" color="white" />}
       >
         {isSaving
-          ? "Saving"
+          ? 'Saving'
           : labelsMap[selectedOption as keyof typeof labelsMap]}
       </Button>
       <Dropdown placement="bottom-end">
@@ -71,14 +71,14 @@ export default function SaveRecipeButton({
           }}
           className="max-w-[300px]"
         >
-          <DropdownItem key="image" description={descriptionsMap["image"]}>
-            {labelsMap["image"]}
+          <DropdownItem key="image" description={descriptionsMap['image']}>
+            {labelsMap['image']}
           </DropdownItem>
           <DropdownItem
             key="saveOnly"
-            description={descriptionsMap["saveOnly"]}
+            description={descriptionsMap['saveOnly']}
           >
-            {labelsMap["saveOnly"]}
+            {labelsMap['saveOnly']}
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

@@ -1,22 +1,28 @@
-"use client"
+'use client'
 
-import { Button } from "@nextui-org/button";
+import { Button } from '@nextui-org/button'
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/dropdown";
-import { GearIcon } from "./icons";
-import { deleteRecipe } from "@/app/actions";
-import clsx from "clsx";
+} from '@nextui-org/dropdown'
+import { GearIcon } from './icons'
+import { deleteRecipe } from '@/app/actions'
+import clsx from 'clsx'
 
-export default function RecipeDropdown({ recipeId, className }: { recipeId: number, className?: string }) {
+export default function RecipeDropdown({
+  recipeId,
+  className,
+}: {
+  recipeId: number
+  className?: string
+}) {
   return (
     <Dropdown>
       <DropdownTrigger>
         <Button
-          className={clsx(className, "flex flex-shrink-0 items-center gap-2")}
+          className={clsx(className, 'flex flex-shrink-0 items-center gap-2')}
           color="default"
           variant="bordered"
         >
@@ -26,19 +32,19 @@ export default function RecipeDropdown({ recipeId, className }: { recipeId: numb
       </DropdownTrigger>
       <DropdownMenu aria-label="Actions">
         <DropdownItem
-            key="delete"
-            className="text-danger"
-            color="danger"
-            variant="solid"
-            onClick={async () => {
-                await deleteRecipe(recipeId).catch(() => {
-                    alert("Unable to delete recipe.")
-                })
-            }}
+          key="delete"
+          className="text-danger"
+          color="danger"
+          variant="solid"
+          onClick={async () => {
+            await deleteRecipe(recipeId).catch(() => {
+              alert('Unable to delete recipe.')
+            })
+          }}
         >
-            Delete
+          Delete
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
-  );
+  )
 }

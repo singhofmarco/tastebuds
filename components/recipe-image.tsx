@@ -1,21 +1,24 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import { AiIcon } from "./icons";
-import { Button } from "@nextui-org/button";
-import { useEffect, useState } from "react";
-import { Spinner } from "@nextui-org/spinner";
-import { generateImage } from "@/app/actions";
-import { useRouter } from "next/navigation";
-import { useInterval } from "@/lib/use-interval";
+import Image from 'next/image'
+import { AiIcon } from './icons'
+import { Button } from '@nextui-org/button'
+import { useEffect, useState } from 'react'
+import { Spinner } from '@nextui-org/spinner'
+import { generateImage } from '@/app/actions'
+import { useRouter } from 'next/navigation'
+import { useInterval } from '@/lib/use-interval'
 
 export default function RecipeImage({
   recipeId,
   title,
   image,
-  isGeneratingImage
+  isGeneratingImage,
 }: {
-  recipeId: number, title: string, image: string | null, isGeneratingImage: boolean
+  recipeId: number
+  title: string
+  image: string | null
+  isGeneratingImage: boolean
 }) {
   const router = useRouter()
   const [isGenerating, setIsGenerating] = useState<boolean>(isGeneratingImage)
@@ -59,8 +62,8 @@ export default function RecipeImage({
                   radius="sm"
                   size="lg"
                   onPress={() => {
-                    setIsGenerating(true);
-                    generateImage(recipeId, title);
+                    setIsGenerating(true)
+                    generateImage(recipeId, title)
                   }}
                 >
                   Generate Image
@@ -71,5 +74,5 @@ export default function RecipeImage({
         )}
       </div>
     </div>
-  );
+  )
 }

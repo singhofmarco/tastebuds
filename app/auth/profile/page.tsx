@@ -1,10 +1,10 @@
-import { validateRequest } from "@/auth";
-import { redirect } from "next/navigation";
-import { signOut } from "@/app/actions";
+import { validateRequest } from '@/auth'
+import { redirect } from 'next/navigation'
+import { signOut } from '@/app/actions'
 
 export default async function Profiel() {
-  const { user } = await validateRequest();
-  if (!user) redirect("/auth/signin");
+  const { user } = await validateRequest()
+  if (!user) redirect('/auth/signin')
 
   return (
     <>
@@ -15,5 +15,5 @@ export default async function Profiel() {
         <input type="submit" value="Sign out" />
       </form>
     </>
-  );
+  )
 }

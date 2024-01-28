@@ -1,41 +1,44 @@
-"use client";
+'use client'
 
-import { save } from "@/app/actions";
-import { OpenAiRecipe } from "@/types";
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { Button } from "@nextui-org/button";
-import { Chip } from "@nextui-org/chip";
-import { Input } from "@nextui-org/input";
+import { save } from '@/app/actions'
+import { OpenAiRecipe } from '@/types'
+import { Accordion, AccordionItem } from '@nextui-org/accordion'
+import { Button } from '@nextui-org/button'
+import { Chip } from '@nextui-org/chip'
+import { Input } from '@nextui-org/input'
 import {
   Modal,
   ModalContent,
   ModalBody,
   ModalHeader,
   ModalFooter,
-} from "@nextui-org/modal";
-import { Spinner } from "@nextui-org/spinner";
-import { useState } from "react";
-import { AiIcon, ClockIcon, GlobeIcon } from "./icons";
-import { makeStreamingJsonRequest, useJsonStreaming } from "http-streaming-request";
-import SaveRecipeButton from "./save-recipe-button";
+} from '@nextui-org/modal'
+import { Spinner } from '@nextui-org/spinner'
+import { useState } from 'react'
+import { AiIcon, ClockIcon, GlobeIcon } from './icons'
+import {
+  makeStreamingJsonRequest,
+  useJsonStreaming,
+} from 'http-streaming-request'
+import SaveRecipeButton from './save-recipe-button'
 
 export const config = {
   runtime: 'edge', // 'nodejs' is the default
-};
+}
 
 export default function AddRecipeModal({
   isOpen,
   onClose,
 }: {
-  isOpen: boolean;
-  onClose: any;
+  isOpen: boolean
+  onClose: any
 }) {
-  const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [recipe, setRecipe] = useState<OpenAiRecipe | null>(null);
-  const [query, setQuery] = useState<string>("");
-  const [isQueryInvalid, setIsQueryInvalid] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [recipe, setRecipe] = useState<OpenAiRecipe | null>(null)
+  const [query, setQuery] = useState<string>('')
+  const [isQueryInvalid, setIsQueryInvalid] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function handleGenerateRecipe() {
     if (!query.length) {
@@ -43,35 +46,37 @@ export default function AddRecipeModal({
       return
     }
 
-    setIsGenerating(true);
+    setIsGenerating(true)
 
     try {
-      for await (const recipeResponse of makeStreamingJsonRequest<OpenAiRecipe>({
-        url: '/api/recipes/generate',
-        payload: {
-          query,
-        },
-        method: "POST",
-      })) {
-        setRecipe(recipeResponse);
+      for await (const recipeResponse of makeStreamingJsonRequest<OpenAiRecipe>(
+        {
+          url: '/api/recipes/generate',
+          payload: {
+            query,
+          },
+          method: 'POST',
+        }
+      )) {
+        setRecipe(recipeResponse)
       }
     } catch (e: any) {
-      setError("Something went wrong. Please try again.")
+      setError('Something went wrong. Please try again.')
       setIsQueryInvalid(true)
     }
 
-    setIsGenerating(false);
+    setIsGenerating(false)
   }
 
   function clearGeneratedRecipe() {
-    setRecipe(null);
-    setQuery("");
+    setRecipe(null)
+    setQuery('')
   }
 
   async function handleSaveRecipe(shouldGenerateImage: boolean) {
-    if (!recipe) return;
+    if (!recipe) return
 
-    setIsSaving(true);
+    setIsSaving(true)
 
     await save(recipe, shouldGenerateImage)
       .then(() => {
@@ -84,82 +89,92 @@ export default function AddRecipeModal({
   }
 
   function handleOnClose() {
-    clearGeneratedRecipe();
-    setIsQueryInvalid(false);
-    setQuery("");
-    onClose();
+    clearGeneratedRecipe()
+    setIsQueryInvalid(false)
+    setQuery('')
+    onClose()
   }
 
   return (
-    <Modal backdrop="blur" size="2xl" isOpen={isOpen} onClose={handleOnClose} placement="top-center">
+    <Modal
+      backdrop="blur"
+      size="2xl"
+      isOpen={isOpen}
+      onClose={handleOnClose}
+      placement="top-center"
+    >
       <ModalContent className="select-none">
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-                {recipe && (
-                    <div>{recipe?.title}</div>
-                )}
-                {!recipe && (
-                    <div>Generate Recipe</div>
-                )}
+              {recipe && <div>{recipe?.title}</div>}
+              {!recipe && <div>Generate Recipe</div>}
             </ModalHeader>
             <ModalBody>
-                {!recipe && (
-                  <form onSubmit={(e) => {
-                    e.preventDefault();
-                    handleGenerateRecipe();
-                  }}>
-              <Input
-                autoFocus
-                label="What do you want to cook?"
-                placeholder="e.g. Chicken Parmesan"
-                variant="bordered"
-                onChange={(e) => {
-                    setQuery(e.target.value);
-                    setIsQueryInvalid(false);
-                }}
-                isDisabled={isGenerating}
-                isInvalid={isQueryInvalid}
-                errorMessage={isQueryInvalid ? error : undefined}
-              />
-              </form>
-                )}
+              {!recipe && (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    handleGenerateRecipe()
+                  }}
+                >
+                  <Input
+                    autoFocus
+                    label="What do you want to cook?"
+                    placeholder="e.g. Chicken Parmesan"
+                    variant="bordered"
+                    onChange={(e) => {
+                      setQuery(e.target.value)
+                      setIsQueryInvalid(false)
+                    }}
+                    isDisabled={isGenerating}
+                    isInvalid={isQueryInvalid}
+                    errorMessage={isQueryInvalid ? error : undefined}
+                  />
+                </form>
+              )}
 
               {recipe && (
                 <>
                   <div className="flex gap-4 items-start">
                     <div className="w-24 h-24 shadow-md rounded-sm bg-foreground-100 flex justify-center items-center">
-                        <AiIcon className="w-8 h-8 text-foreground" />
+                      <AiIcon className="w-8 h-8 text-foreground" />
                     </div>
                     <div className="flex flex-col gap-y-2">
-                    <Chip
+                      <Chip
                         aria-label="Cuisine Type"
                         color="primary"
                         variant="flat"
                         startContent={<GlobeIcon />}
-                        >
+                      >
                         {recipe?.cuisineType}
-                    </Chip>
-                    <Chip
+                      </Chip>
+                      <Chip
                         startContent={<ClockIcon />}
                         color="success"
                         variant="flat"
-                        >
+                      >
                         {recipe?.totalTime}
-                    </Chip>
-                </div>
+                      </Chip>
+                    </div>
                   </div>
                   <p>{recipe?.description}</p>
                   <Accordion
                     className="px-0"
                     variant="splitted"
-                    defaultExpandedKeys={["1"]}
+                    defaultExpandedKeys={['1']}
                   >
                     <AccordionItem
                       key="1"
                       aria-label="Ingredients"
                       title="Ingredients"
-                      subtitle={(recipe?.ingredients ? recipe?.ingredients?.length : "0") + (isGenerating ? "+" : "") + " ingredients"}
+                      subtitle={
+                        (recipe?.ingredients
+                          ? recipe?.ingredients?.length
+                          : '0') +
+                        (isGenerating ? '+' : '') +
+                        ' ingredients'
+                      }
                     >
                       <ul className="list-disc pl-4">
                         {recipe?.ingredients?.map((ingredient: string) => (
@@ -171,7 +186,11 @@ export default function AddRecipeModal({
                       key="2"
                       aria-label="Instructions"
                       title="Instructions"
-                      subtitle={(recipe?.steps ? recipe?.steps?.length : "0") + (isGenerating ? "+" : "") + " steps"}
+                      subtitle={
+                        (recipe?.steps ? recipe?.steps?.length : '0') +
+                        (isGenerating ? '+' : '') +
+                        ' steps'
+                      }
                     >
                       <ul className="list-decimal pl-4">
                         {recipe?.steps?.map((step: string) => (
@@ -190,17 +209,26 @@ export default function AddRecipeModal({
                   color="primary"
                   onPress={handleGenerateRecipe}
                   isDisabled={isGenerating || !query.length}
-                  endContent={isGenerating && <Spinner size="sm" color="white" />}
+                  endContent={
+                    isGenerating && <Spinner size="sm" color="white" />
+                  }
                 >
-                  { isGenerating ? "Generating" : "Generate Recipe" }
+                  {isGenerating ? 'Generating' : 'Generate Recipe'}
                 </Button>
               )}
 
-              {(recipe && !isGenerating) && (
+              {recipe && !isGenerating && (
                 <>
-                  <SaveRecipeButton handleSaveRecipe={handleSaveRecipe} isSaving={isSaving} />
-                  <Button variant="flat" color="default" onPress={clearGeneratedRecipe}
-                    isDisabled={isSaving}>
+                  <SaveRecipeButton
+                    handleSaveRecipe={handleSaveRecipe}
+                    isSaving={isSaving}
+                  />
+                  <Button
+                    variant="flat"
+                    color="default"
+                    onPress={clearGeneratedRecipe}
+                    isDisabled={isSaving}
+                  >
                     Generate Another
                   </Button>
                 </>
@@ -210,5 +238,5 @@ export default function AddRecipeModal({
         )}
       </ModalContent>
     </Modal>
-  );
+  )
 }

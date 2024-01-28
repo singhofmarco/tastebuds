@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint-staged": "lint-staged",
+    "lint-fix": "next lint --fix && prettier --write .",
     "prepare": "husky"
   },
   "dependencies": {

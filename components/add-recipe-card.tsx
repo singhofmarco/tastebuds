@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { Card, CardBody, CardFooter } from "@nextui-org/card";
-import { PlusIcon } from "./icons";
-import AddRecipeModal from "./add-recipe-modal";
-import { useDisclosure } from "@nextui-org/modal";
+import { Card, CardBody, CardFooter } from '@nextui-org/card'
+import { PlusIcon } from './icons'
+import AddRecipeModal from './add-recipe-modal'
+import { useDisclosure } from '@nextui-org/modal'
 
 export default function AddRecipeCard() {
   const {
@@ -35,5 +35,5 @@ export default function AddRecipeCard() {
         onClose={onAddRecipeModalClose}
       />
     </>
-  );
+  )
 }

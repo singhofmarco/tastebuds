@@ -1,11 +1,11 @@
-import Breadcrumbs from "@/components/breadcrumbs";
-import BreadcrumbItem from "@/components/breadcrumb-item";
-import { subtitle, title } from "@/components/primitives";
-import Image from "next/image";
-import { Skeleton } from "@nextui-org/skeleton";
-import { Chip } from "@nextui-org/chip";
-import { ClockIcon, GearIcon, GlobeIcon } from "@/components/icons";
-import { Button } from "@nextui-org/button";
+import Breadcrumbs from '@/components/breadcrumbs'
+import BreadcrumbItem from '@/components/breadcrumb-item'
+import { subtitle, title } from '@/components/primitives'
+import Image from 'next/image'
+import { Skeleton } from '@nextui-org/skeleton'
+import { Chip } from '@nextui-org/chip'
+import { ClockIcon, GearIcon, GlobeIcon } from '@/components/icons'
+import { Button } from '@nextui-org/button'
 
 export default function Loading() {
   return (
@@ -19,7 +19,7 @@ export default function Loading() {
 
       <div className="md:mt-8 lg:grid lg:grid-cols-5 lg:items-start lg:gap-x-8">
         <div className="col-span-2">
-            <Skeleton className="rounded-md aspect-square" />
+          <Skeleton className="rounded-md aspect-square" />
         </div>
 
         <div className="col-span-3 mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
@@ -99,5 +99,5 @@ export default function Loading() {
         </div>
       </div>
     </>
-  );
+  )
 }
