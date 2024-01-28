@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.496.0",
@@ -64,7 +65,11 @@
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.6",
+    "lint-staged": "^15.2.0",
     "postcss": "^8.4.33",
+    "prettier": "^3.2.4",
     "prisma": "^5.7.1",
     "tailwind-variants": "^0.1.20",
     "tailwindcss": "^3.4.1",
