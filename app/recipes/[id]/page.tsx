@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { Recipe } from '@prisma/client'
 import RecipeDropdown from '@/components/recipe-dropdown'
+import Ingredients from '@/components/ingredients'
 
 export async function generateStaticParams() {
   const recipes = await prisma.recipe.findMany()
@@ -26,16 +27,15 @@ export default async function RecipeDetailPage({
     where: {
       id: Number(params.id),
     },
+    include: {
+      ingredients: true,
+    },
   })
 
   if (!recipe) {
     notFound()
   }
 
-  const ingredients =
-    recipe.ingredients && recipe.ingredients instanceof Object
-      ? recipe.ingredients
-      : JSON.parse(recipe.ingredients?.toString() || '[]')
   const steps =
     recipe.steps && recipe.steps instanceof Object
       ? recipe.steps
@@ -96,19 +96,10 @@ export default async function RecipeDetailPage({
               Additional details
             </h2>
 
-            <div>
-              <h3 className={subtitle()}>Ingredients</h3>
-
-              <div className="mt-4">
-                <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                  {ingredients?.map((ingredient: string) => (
-                    <li key={ingredient} className="text-gray-400">
-                      <span className="text-foreground">{ingredient}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <Ingredients
+              ingredients={recipe.ingredients}
+              portions={recipe.portions}
+            />
 
             <div className="mt-10">
               <h2 className={subtitle()}>Steps</h2>

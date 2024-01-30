@@ -39,6 +39,7 @@ export async function save(recipe: OpenAiRecipe, shouldGenerateImage: boolean) {
     steps,
     totalTime,
     cuisineType,
+    portions,
   } = recipe
 
   const storedRecipe = await prisma.recipe.create({
@@ -46,11 +47,18 @@ export async function save(recipe: OpenAiRecipe, shouldGenerateImage: boolean) {
       title,
       description,
       steps,
-      ingredients,
       totalTime,
       cuisineType,
       image,
       userId: user.id,
+      portions,
+      ingredients: {
+        create: ingredients.map((ingredient) => ({
+          name: ingredient.name,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+        })),
+      },
     },
   })
 

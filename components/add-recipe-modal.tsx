@@ -1,7 +1,7 @@
 'use client'
 
 import { save } from '@/app/actions'
-import { OpenAiRecipe } from '@/types'
+import { OpenAiIngredient, OpenAiRecipe } from '@/types'
 import { Accordion, AccordionItem } from '@nextui-org/accordion'
 import { Button } from '@nextui-org/button'
 import { Chip } from '@nextui-org/chip'
@@ -166,8 +166,8 @@ export default function AddRecipeModal({
                   >
                     <AccordionItem
                       key="1"
-                      aria-label="Ingredients"
-                      title="Ingredients"
+                      aria-label={`Ingredients for ${recipe.portions} people`}
+                      title={`Ingredients for ${recipe.portions} people`}
                       subtitle={
                         (recipe?.ingredients
                           ? recipe?.ingredients?.length
@@ -177,9 +177,14 @@ export default function AddRecipeModal({
                       }
                     >
                       <ul className="list-disc pl-4">
-                        {recipe?.ingredients?.map((ingredient: string) => (
-                          <li key={ingredient}>{ingredient}</li>
-                        ))}
+                        {recipe?.ingredients?.map(
+                          (ingredient: OpenAiIngredient) => (
+                            <li key={ingredient.name}>
+                              {ingredient.name} ({ingredient.quantity}{' '}
+                              {ingredient.unit})
+                            </li>
+                          )
+                        )}
                       </ul>
                     </AccordionItem>
                     <AccordionItem
