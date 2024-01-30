@@ -50,9 +50,12 @@ export default async function RootLayout({
           fontSans.variable
         )}
       >
-        <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
+        <Providers
+          user={user}
+          themeProps={{ attribute: 'class', defaultTheme: 'dark' }}
+        >
           <div className="relative flex flex-col h-screen">
-            <Navbar user={user} />
+            <Navbar />
             <main className="container mx-auto max-w-7xl py-8 sm:py-12 flex-grow">
               {children}
             </main>

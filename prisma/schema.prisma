@@ -60,6 +60,7 @@ model User {
   email           String    @db.Text @unique
   hashedPassword  String    @db.Text
   name            String    @db.Text
+  diet            String    @db.Text @default("Omnivore")
   recipes         Recipe[]
   teams           Team[]
 }

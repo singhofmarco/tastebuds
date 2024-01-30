@@ -14,17 +14,11 @@ import {
   ModalFooter,
 } from '@nextui-org/modal'
 import { Spinner } from '@nextui-org/spinner'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { AiIcon, ClockIcon, GlobeIcon } from './icons'
-import {
-  makeStreamingJsonRequest,
-  useJsonStreaming,
-} from 'http-streaming-request'
+import { makeStreamingJsonRequest } from 'http-streaming-request'
 import SaveRecipeButton from './save-recipe-button'
-
-export const config = {
-  runtime: 'edge', // 'nodejs' is the default
-}
+import { UserContext } from '@/app/providers'
 
 export default function AddRecipeModal({
   isOpen,
@@ -40,6 +34,8 @@ export default function AddRecipeModal({
   const [isQueryInvalid, setIsQueryInvalid] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
+  const user = useContext(UserContext)
+
   async function handleGenerateRecipe() {
     if (!query.length) {
       setIsQueryInvalid(true)
@@ -54,6 +50,7 @@ export default function AddRecipeModal({
           url: '/api/recipes/generate',
           payload: {
             query,
+            diet: user?.diet,
           },
           method: 'POST',
         }

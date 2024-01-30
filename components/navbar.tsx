@@ -21,12 +21,14 @@ import UserDropdown from './user-dropdown'
 import { Divider } from '@nextui-org/divider'
 import AddRecipeButton from './add-recipe-button'
 import { PlusIcon } from './icons'
-import React, { useState } from 'react'
-import { User as UserType } from 'lucia'
+import React, { useContext, useState } from 'react'
 import { signOut } from '@/app/actions'
+import { UserContext } from '@/app/providers'
 
-export const Navbar = ({ user }: { user: UserType | null }) => {
+export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const user = useContext(UserContext)
 
   return (
     <NextUINavbar
@@ -90,7 +92,7 @@ export const Navbar = ({ user }: { user: UserType | null }) => {
           <ThemeSwitch />
 
           {user ? (
-            <UserDropdown user={user} />
+            <UserDropdown />
           ) : (
             <Link color="foreground" href="/auth/signin" size="sm">
               Sign in
