@@ -60,7 +60,7 @@ export default async function RecipeDetailPage({
           />
         </div>
 
-        <div className="col-span-3 mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+        <div className="col-span-3 mt-10 sm:mt-16 lg:mt-0">
           <div className="flex justify-between">
             <div>
               <h1 className={title()}>{recipe.title}</h1>

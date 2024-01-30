@@ -22,7 +22,7 @@ export default function Loading() {
           <Skeleton className="rounded-md aspect-square" />
         </div>
 
-        <div className="col-span-3 mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+        <div className="col-span-3 mt-10 sm:mt-16 lg:mt-0">
           <div className="flex justify-between">
             <div>
               <Skeleton>
