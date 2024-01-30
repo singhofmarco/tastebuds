@@ -1,7 +1,6 @@
 'use server'
 
 import { OpenAiRecipe } from '@/types'
-import { PrismaClient } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { NextResponse } from 'next/server'
@@ -17,6 +16,7 @@ import { Argon2id } from 'oslo/password'
 import { cookies } from 'next/headers'
 import { generateId } from 'lucia'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import prisma from '@/lib/prisma'
 
 const s3Client = new S3Client({
   credentials: {
@@ -25,8 +25,6 @@ const s3Client = new S3Client({
   },
   region: process.env.AWS_REGION,
 })
-
-const prisma = new PrismaClient()
 
 export async function save(recipe: OpenAiRecipe, shouldGenerateImage: boolean) {
   const { user } = await checkIfUserAuthenticated()
