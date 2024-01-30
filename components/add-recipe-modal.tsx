@@ -14,11 +14,12 @@ import {
   ModalFooter,
 } from '@nextui-org/modal'
 import { Spinner } from '@nextui-org/spinner'
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { AiIcon, ClockIcon, GlobeIcon } from './icons'
-import { makeStreamingJsonRequest } from 'http-streaming-request'
 import SaveRecipeButton from './save-recipe-button'
 import { UserContext } from '@/app/providers'
+import { useCompletion } from 'ai/react'
+import { parse } from 'best-effort-json-parser'
 
 export default function AddRecipeModal({
   isOpen,
@@ -27,47 +28,55 @@ export default function AddRecipeModal({
   isOpen: boolean
   onClose: any
 }) {
-  const [isGenerating, setIsGenerating] = useState<boolean>(false)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [recipe, setRecipe] = useState<OpenAiRecipe | null>(null)
-  const [query, setQuery] = useState<string>('')
-  const [isQueryInvalid, setIsQueryInvalid] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
   const user = useContext(UserContext)
 
-  async function handleGenerateRecipe() {
-    if (!query.length) {
-      setIsQueryInvalid(true)
-      return
-    }
+  const {
+    complete,
+    completion,
+    stop,
+    input,
+    setInput,
+    isLoading: isGenerating,
+  } = useCompletion({
+    api: '/api/recipes/generate',
+    onError: (error) => {
+      setError(error.message)
+    },
+    onFinish: () => {
+      setError(null)
+    },
+  })
 
-    setIsGenerating(true)
-
-    try {
-      for await (const recipeResponse of makeStreamingJsonRequest<OpenAiRecipe>(
-        {
-          url: '/api/recipes/generate',
-          payload: {
-            query,
-            diet: user?.diet,
-          },
-          method: 'POST',
-        }
-      )) {
-        setRecipe(recipeResponse)
+  const generateRecipe = useCallback(
+    async (query: string) => {
+      if (!query.length) {
+        setError('Please enter a query')
+        return
       }
-    } catch (e: any) {
-      setError('Something went wrong. Please try again.')
-      setIsQueryInvalid(true)
-    }
 
-    setIsGenerating(false)
-  }
+      complete(query, {
+        body: {
+          diet: user?.diet,
+        },
+      })
+    },
+    [complete, user?.diet]
+  )
+
+  useEffect(() => {
+    if (completion) {
+      const parsedCompletion = parse(completion)
+      setRecipe(parsedCompletion)
+    }
+  }, [completion])
 
   function clearGeneratedRecipe() {
     setRecipe(null)
-    setQuery('')
+    setInput('')
   }
 
   async function handleSaveRecipe(shouldGenerateImage: boolean) {
@@ -86,9 +95,9 @@ export default function AddRecipeModal({
   }
 
   function handleOnClose() {
+    if (isGenerating) stop()
     clearGeneratedRecipe()
-    setIsQueryInvalid(false)
-    setQuery('')
+    setError(null)
     onClose()
   }
 
@@ -112,7 +121,7 @@ export default function AddRecipeModal({
                 <form
                   onSubmit={(e) => {
                     e.preventDefault()
-                    handleGenerateRecipe()
+                    generateRecipe(input)
                   }}
                 >
                   <Input
@@ -120,13 +129,19 @@ export default function AddRecipeModal({
                     label="What do you want to cook?"
                     placeholder="e.g. Chicken Parmesan"
                     variant="bordered"
+                    maxLength={100}
+                    endContent={
+                      <span className="text-foreground-400">
+                        {input.length}/100
+                      </span>
+                    }
                     onChange={(e) => {
-                      setQuery(e.target.value)
-                      setIsQueryInvalid(false)
+                      setInput(e.target.value)
+                      setError(null)
                     }}
                     isDisabled={isGenerating}
-                    isInvalid={isQueryInvalid}
-                    errorMessage={isQueryInvalid ? error : undefined}
+                    isInvalid={error !== null}
+                    errorMessage={error}
                   />
                 </form>
               )}
@@ -175,8 +190,8 @@ export default function AddRecipeModal({
                     >
                       <ul className="list-disc pl-4">
                         {recipe?.ingredients?.map(
-                          (ingredient: OpenAiIngredient) => (
-                            <li key={ingredient.name}>
+                          (ingredient: OpenAiIngredient, index: number) => (
+                            <li key={`Ingredient ${index}`}>
                               {ingredient.name} ({ingredient.quantity}{' '}
                               {ingredient.unit})
                             </li>
@@ -195,8 +210,8 @@ export default function AddRecipeModal({
                       }
                     >
                       <ul className="list-decimal pl-4">
-                        {recipe?.steps?.map((step: string) => (
-                          <li key={step}>{step}</li>
+                        {recipe?.steps?.map((step: string, index: number) => (
+                          <li key={`Step ${index}`}>{step}</li>
                         ))}
                       </ul>
                     </AccordionItem>
@@ -209,8 +224,8 @@ export default function AddRecipeModal({
               {(!recipe || isGenerating) && (
                 <Button
                   color="primary"
-                  onPress={handleGenerateRecipe}
-                  isDisabled={isGenerating || !query.length}
+                  onPress={() => generateRecipe(input)}
+                  isDisabled={isGenerating || !input.length}
                   endContent={
                     isGenerating && <Spinner size="sm" color="white" />
                   }
