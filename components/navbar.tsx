@@ -153,7 +153,7 @@ export const Navbar = () => {
                   </Link>
                 </NavbarMenuItem>
                 <NavbarMenuItem>
-                  <Link color="foreground" href="/settings" size="sm">
+                  <Link color="foreground" href="/auth/profile" size="sm">
                     Settings
                   </Link>
                 </NavbarMenuItem>
