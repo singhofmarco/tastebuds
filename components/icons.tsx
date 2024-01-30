@@ -10,6 +10,7 @@ export const BowlIcon: React.FC<IconSvgProps> = ({
   <svg
     height={size || height}
     viewBox="0 0 512 512"
+    fill="currentColor"
     width={size || width}
     {...props}
   >
