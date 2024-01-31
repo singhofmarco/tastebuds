@@ -6,17 +6,8 @@ import BreadcrumbItem from '@/components/breadcrumb-item'
 import RecipeImage from '@/components/recipe-image'
 import { notFound } from 'next/navigation'
 import prisma from '@/lib/prisma'
-import { Recipe } from '@prisma/client'
 import RecipeDropdown from '@/components/recipe-dropdown'
 import Ingredients from '@/components/ingredients'
-
-export async function generateStaticParams() {
-  const recipes = await prisma.recipe.findMany()
-
-  return recipes.map((recipe: Recipe) => ({
-    id: recipe.id.toString(),
-  }))
-}
 
 export default async function RecipeDetailPage({
   params,
