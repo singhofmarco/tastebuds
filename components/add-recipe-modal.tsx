@@ -46,9 +46,6 @@ export default function AddRecipeModal({
     onError: (error) => {
       setError(JSON.parse(error.message).error)
     },
-    onFinish: () => {
-      setError(null)
-    },
   })
 
   const generateRecipe = useCallback(
@@ -57,6 +54,8 @@ export default function AddRecipeModal({
         setError('Please enter a query')
         return
       }
+
+      setError(null)
 
       complete(query, {
         body: {
@@ -70,7 +69,13 @@ export default function AddRecipeModal({
   useEffect(() => {
     if (completion) {
       const parsedCompletion = parse(completion)
-      setRecipe(parsedCompletion)
+      if (parsedCompletion.error) {
+        setError(parsedCompletion.error)
+        setRecipe(null)
+      } else {
+        setError(null)
+        setRecipe(parsedCompletion)
+      }
     }
   }, [completion])
 
