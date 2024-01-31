@@ -7,6 +7,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@nextui-org/popover'
 import { Button } from '@nextui-org/button'
 import { Pagination } from '@nextui-org/pagination'
 import { BowlIcon } from './icons'
+import { roundHalf } from '@/lib/helpers'
 
 export default function Ingredients({
   ingredients,
@@ -55,9 +56,8 @@ export default function Ingredients({
             <li key={ingredient.id} className="text-gray-400">
               <span className="text-foreground">
                 <span className="capitalize">{ingredient.name}</span> (
-                {Math.round(
-                  (ingredient.quantity / defaultPortions) * portions
-                ) + (ingredient.unit ? ' ' + ingredient.unit : '')}
+                {roundHalf((ingredient.quantity / defaultPortions) * portions) +
+                  (ingredient.unit ? ' ' + ingredient.unit : '')}
                 )
               </span>
             </li>
