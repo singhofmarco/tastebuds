@@ -34,6 +34,23 @@ export async function POST(request: Request) {
   const { prompt, diet } = validatedRequest.data
 
   try {
+    // check if prompt violates OpenAI's content policy
+    const moderationResponse = await openai.moderations.create({
+      model: 'text-moderation-latest',
+      input: [prompt, diet],
+    })
+
+    if (
+      moderationResponse?.results?.[0].flagged ||
+      moderationResponse?.results?.[1].flagged
+    ) {
+      return NextResponse.json(
+        { error: 'Your query does not conform to our content policy.' },
+        { status: 400 }
+      )
+    }
+
+    // if not, generate recipe
     const response = await openai.chat.completions.create({
       messages: [
         {
@@ -42,7 +59,7 @@ export async function POST(request: Request) {
             'You are a system to generate a usable recipe based on a request from a user. Return one recipe per request. Adhere to proven ratios of ingredients in cooking and baking. Use the metric system. You may divert from the metric system, if it makes sense for the type of ingredient like bell peppers should be counted as opposed to be weighted, yeast comes in packets. The user request might be a vague description of a dish or baked good but it could also include a list of ingredients the user wants to have incorporated in the recipe. The recipe should always be for 4 portions in cooking. Always output a JSON object which looks like: {  title: string, totalTime: string, cuisineType: string, portions: number, description: string, ingredients: [{name: string, quantity: number, unit: string}], steps: string[] }',
         },
         { role: 'user', content: `My diet is ${diet ?? 'omnivore'}.` },
-        { role: 'user', content: prompt },
+        { role: 'user', content: 'I want to cook or bake: ' + prompt },
       ],
       model: 'gpt-3.5-turbo-1106',
       response_format: { type: 'json_object' },

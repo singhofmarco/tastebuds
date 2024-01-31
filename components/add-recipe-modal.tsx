@@ -44,7 +44,7 @@ export default function AddRecipeModal({
   } = useCompletion({
     api: '/api/recipes/generate',
     onError: (error) => {
-      setError(error.message)
+      setError(JSON.parse(error.message).error)
     },
     onFinish: () => {
       setError(null)
