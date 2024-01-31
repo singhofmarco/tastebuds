@@ -55,8 +55,9 @@ export default function Ingredients({
             <li key={ingredient.id} className="text-gray-400">
               <span className="text-foreground">
                 <span className="capitalize">{ingredient.name}</span> (
-                {Math.round(ingredient.quantity / defaultPortions) * portions +
-                  (ingredient.unit ? ' ' + ingredient.unit : '')}
+                {Math.round(
+                  (ingredient.quantity / defaultPortions) * portions
+                ) + (ingredient.unit ? ' ' + ingredient.unit : '')}
                 )
               </span>
             </li>
