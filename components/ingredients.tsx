@@ -42,7 +42,7 @@ export default function Ingredients({
                 isCompact
                 showControls
                 total={10}
-                initialPage={defaultPortions}
+                initialPage={portions}
                 onChange={(number) => setPortions(number)}
               />
             </div>
