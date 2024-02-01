@@ -3,6 +3,7 @@ import { Image } from '@nextui-org/image'
 import { Button } from '@nextui-org/button'
 import AddRecipeButton from '@/components/add-recipe-button'
 import Link from 'next/link'
+import TitleAnimation from '@/components/title-animation'
 
 export default function Home() {
   return (
@@ -16,7 +17,7 @@ export default function Home() {
       />
       <div className="inline-block max-w-xl text-center justify-center">
         <h1 className={title()}>Cook&nbsp;</h1>
-        <h1 className={title({ className: 'text-primary' })}>creative&nbsp;</h1>
+        <TitleAnimation />
         <br />
         <h1 className={title()}>
           meals with your friends, without the hassle.
