@@ -22,7 +22,7 @@ export default function EmptyView() {
     <div className="my-12 flex flex-col gap-4 justify-center items-center h-full text-center">
       <Image
         src="/logo.svg"
-        alt="Tastebuds"
+        alt="Tastebuds AI"
         width={680}
         height={823}
         className="w-24 h-24"

@@ -15,7 +15,7 @@ export default async function SignUp() {
         <Image
           className="mx-auto h-16 w-auto"
           src="/logo.svg"
-          alt="Tastebuds"
+          alt="Tastebuds AI"
           width={680}
           height={823}
         />

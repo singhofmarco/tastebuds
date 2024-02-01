@@ -46,12 +46,12 @@ export const Navbar = () => {
         >
           <Image
             src="/logo.svg"
-            alt="Tastebuds"
+            alt="Tastebuds AI"
             width={680}
             height={823}
             className="w-10 h-10"
           />
-          <p className="font-bold text-inherit tracking-tight">Tastebuds</p>
+          <p className="font-bold text-inherit tracking-tight">Tastebuds AI</p>
         </NextLink>
       </NavbarBrand>
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">

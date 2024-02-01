@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: 'Tastebuds',
+  name: 'Tastebuds AI',
   description: 'Cook together without the hassle.',
   navItems: [
     {

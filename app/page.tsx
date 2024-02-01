@@ -9,12 +9,12 @@ export default function Home() {
     <section className="flex flex-col items-center justify-center gap-8 py-8 px-4 sm:px-0 md:py-10">
       <Image
         src="/logo.svg"
-        alt="Tastebuds"
+        alt="Tastebuds AI"
         width={680}
         height={823}
         className="w-48 h-48 select-none"
       />
-      <div className="inline-block max-w-lg text-center justify-center">
+      <div className="inline-block max-w-xl text-center justify-center">
         <h1 className={title()}>Cook&nbsp;</h1>
         <h1 className={title({ className: 'text-primary' })}>creative&nbsp;</h1>
         <br />
@@ -22,7 +22,8 @@ export default function Home() {
           meals with your friends, without the hassle.
         </h1>
         <h2 className={subtitle({ class: 'mt-4' })}>
-          With Tastebuds, and <span className="italic">the power of AI</span>,
+          With Tastebuds AI, and{' '}
+          <span className="italic">the power of machine learning</span>,
           there&apos;s no need to put fun cooking nights on the back-burner.
         </h2>
       </div>
