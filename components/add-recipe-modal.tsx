@@ -60,7 +60,7 @@ export default function AddRecipeModal({
 
       complete(query, {
         body: {
-          diet: user?.diet,
+          diet: user?.diet || 'omnivore',
         },
       })
     },
