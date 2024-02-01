@@ -21,6 +21,7 @@ import SaveRecipeButton from './save-recipe-button'
 import { UserContext } from '@/app/providers'
 import { useCompletion } from 'ai/react'
 import { parse } from 'best-effort-json-parser'
+import { Link } from '@nextui-org/link'
 
 export default function AddRecipeModal({
   isOpen,
@@ -242,7 +243,20 @@ export default function AddRecipeModal({
                 </Button>
               )}
 
-              {recipe && !isGenerating && (
+              {!user && (
+                <Button
+                  variant="light"
+                  color="default"
+                  as={Link}
+                  href="/auth/signin"
+                  isDisabled={isGenerating}
+                  onPress={() => handleOnClose()}
+                >
+                  Sign in to save recipes
+                </Button>
+              )}
+
+              {user && recipe && !isGenerating && (
                 <>
                   <SaveRecipeButton
                     handleSaveRecipe={handleSaveRecipe}
