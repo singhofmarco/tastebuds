@@ -6,8 +6,8 @@ import { subtitle } from './primitives'
 import { Popover, PopoverTrigger, PopoverContent } from '@nextui-org/popover'
 import { Button } from '@nextui-org/button'
 import { Pagination } from '@nextui-org/pagination'
-import { BowlIcon } from './icons'
 import { roundHalf } from '@/lib/helpers'
+import { ScaleIcon } from '@heroicons/react/24/solid'
 
 export default function Ingredients({
   ingredients,
@@ -33,7 +33,7 @@ export default function Ingredients({
               variant="ghost"
             >
               <span className="sr-only sm:not-sr-only">Change portions</span>
-              <BowlIcon className="w-4 h-4" />
+              <ScaleIcon className="w-4 h-4" />
             </Button>
           </PopoverTrigger>
           <PopoverContent>

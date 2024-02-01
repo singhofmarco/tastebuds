@@ -1,10 +1,10 @@
 import Breadcrumbs from '@/components/breadcrumbs'
 import BreadcrumbItem from '@/components/breadcrumb-item'
 import { subtitle, title } from '@/components/primitives'
-import Image from 'next/image'
 import { Skeleton } from '@nextui-org/skeleton'
 import { Chip } from '@nextui-org/chip'
-import { ClockIcon, GearIcon, GlobeIcon } from '@/components/icons'
+import { ClockIcon, GlobeAmericasIcon } from '@heroicons/react/24/outline'
+import { CogIcon } from '@heroicons/react/16/solid'
 import { Button } from '@nextui-org/button'
 
 export default function Loading() {
@@ -34,12 +34,12 @@ export default function Loading() {
                   aria-label="Cuisine Type"
                   color="primary"
                   variant="flat"
-                  startContent={<GlobeIcon />}
+                  startContent={<GlobeAmericasIcon className="w-4 h-4" />}
                 >
                   <div className="w-20" />
                 </Chip>
                 <Chip
-                  startContent={<ClockIcon />}
+                  startContent={<ClockIcon className="w-6 h-6" />}
                   color="success"
                   variant="flat"
                 >
@@ -54,7 +54,7 @@ export default function Loading() {
               variant="faded"
               disabled
             >
-              <GearIcon size={20} />
+              <CogIcon className="h-4 w-4" />
               <span className="hidden sm:block">Actions</span>
             </Button>
           </div>

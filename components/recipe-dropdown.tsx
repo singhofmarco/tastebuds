@@ -7,9 +7,9 @@ import {
   DropdownMenu,
   DropdownItem,
 } from '@nextui-org/dropdown'
-import { GearIcon } from './icons'
 import { deleteRecipe } from '@/app/actions'
 import clsx from 'clsx'
+import { CogIcon } from '@heroicons/react/24/solid'
 
 export default function RecipeDropdown({
   recipeId,
@@ -26,7 +26,7 @@ export default function RecipeDropdown({
           color="default"
           variant="bordered"
         >
-          <GearIcon size={20} />
+          <CogIcon className="w-6 h-6" />
           <span className="hidden sm:block">Actions</span>
         </Button>
       </DropdownTrigger>

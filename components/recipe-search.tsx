@@ -1,7 +1,6 @@
 'use client'
 
 import { Input } from '@nextui-org/input'
-import { SearchIcon } from './icons'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
@@ -9,6 +8,7 @@ import { Chip } from '@nextui-org/chip'
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
 import { useEffect, useState, useTransition } from 'react'
 import { Spinner } from '@nextui-org/spinner'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 
 export const RecipeSearch = ({
   cuisineTypes,
@@ -100,7 +100,7 @@ export const RecipeSearch = ({
                 <Spinner size="sm" className="pr-1 absolute" color="current" />
               </div>
             ) : (
-              <SearchIcon className="w-5 h-5 pr-1 text-base text-default-400 pointer-events-none flex-shrink-0" />
+              <MagnifyingGlassIcon className="w-5 h-5 pr-1 text-base text-default-400 pointer-events-none flex-shrink-0" />
             )
           }
           type="search"

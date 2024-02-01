@@ -20,7 +20,7 @@ import { User } from '@nextui-org/user'
 import UserDropdown from './user-dropdown'
 import { Divider } from '@nextui-org/divider'
 import AddRecipeButton from './add-recipe-button'
-import { PlusIcon } from './icons'
+import { PlusIcon } from '@heroicons/react/16/solid'
 import React, { useContext, useState } from 'react'
 import { signOut } from '@/app/actions'
 import { UserContext } from '@/app/providers'
@@ -82,7 +82,7 @@ export const Navbar = () => {
           <NavbarItem>
             <AddRecipeButton
               size="sm"
-              startContent={<PlusIcon size={20} />}
+              startContent={<PlusIcon className="w-4 h-4" />}
               onClick={() => setIsMenuOpen(false)}
             >
               New Recipe
@@ -105,7 +105,7 @@ export const Navbar = () => {
         <NavbarItem>
           <AddRecipeButton
             size="sm"
-            startContent={<PlusIcon size={20} />}
+            startContent={<PlusIcon className="h-4 w-4" />}
             onClick={() => setIsMenuOpen(false)}
           >
             Recipe

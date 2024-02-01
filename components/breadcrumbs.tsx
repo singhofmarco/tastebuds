@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { HomeIcon } from './icons'
 import clsx from 'clsx'
+import { HomeIcon } from '@heroicons/react/24/solid'
 
 export default function Breadcrumbs({
   children,

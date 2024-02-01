@@ -1,13 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import { AiIcon } from './icons'
 import { Button } from '@nextui-org/button'
 import { useEffect, useState } from 'react'
 import { Spinner } from '@nextui-org/spinner'
 import { generateImage } from '@/app/actions'
 import { useRouter } from 'next/navigation'
 import { useInterval } from '@/lib/use-interval'
+import { SparklesIcon } from '@heroicons/react/24/solid'
 
 export default function RecipeImage({
   recipeId,
@@ -54,7 +54,7 @@ export default function RecipeImage({
               </div>
             ) : (
               <>
-                <AiIcon className="absolute w-10 h-10 text-foreground" />
+                <SparklesIcon className="absolute w-10 h-10 text-foreground" />
                 <Button
                   className="absolute bottom-4 right-0 left-0 mx-4"
                   color="default"

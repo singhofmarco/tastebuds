@@ -3,7 +3,7 @@
 import AddRecipeModal from './add-recipe-modal'
 import { useDisclosure } from '@nextui-org/modal'
 import { Button } from '@nextui-org/button'
-import { AiIcon } from './icons'
+import { SparklesIcon } from '@heroicons/react/24/solid'
 
 export default function AddRecipeButton({
   startContent,
@@ -29,9 +29,7 @@ export default function AddRecipeButton({
         size={size}
         radius="md"
         color="primary"
-        startContent={
-          startContent ?? <AiIcon size={20} className="flex-shrink-0" />
-        }
+        startContent={startContent ?? <SparklesIcon className="h-5 w-5" />}
         onPress={() => {
           onAddRecipeModalOpen()
           onClick?.()

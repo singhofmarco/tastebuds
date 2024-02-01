@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardBody, CardFooter } from '@nextui-org/card'
-import { PlusIcon } from './icons'
+import { PlusIcon } from '@heroicons/react/16/solid'
 import AddRecipeModal from './add-recipe-modal'
 import { useDisclosure } from '@nextui-org/modal'
 

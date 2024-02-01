@@ -15,7 +15,8 @@ import {
 } from '@nextui-org/modal'
 import { Spinner } from '@nextui-org/spinner'
 import { useCallback, useContext, useEffect, useState } from 'react'
-import { AiIcon, ClockIcon, GlobeIcon } from './icons'
+import { PhotoIcon } from '@heroicons/react/24/solid'
+import { ClockIcon, GlobeEuropeAfricaIcon } from '@heroicons/react/24/outline'
 import SaveRecipeButton from './save-recipe-button'
 import { UserContext } from '@/app/providers'
 import { useCompletion } from 'ai/react'
@@ -155,19 +156,21 @@ export default function AddRecipeModal({
                 <>
                   <div className="flex gap-4 items-start">
                     <div className="w-24 h-24 shadow-md rounded-sm bg-foreground-100 flex justify-center items-center">
-                      <AiIcon className="w-8 h-8 text-foreground" />
+                      <PhotoIcon className="w-6 h-6 text-foreground" />
                     </div>
                     <div className="flex flex-col gap-y-2">
                       <Chip
                         aria-label="Cuisine Type"
                         color="primary"
                         variant="flat"
-                        startContent={<GlobeIcon />}
+                        startContent={
+                          <GlobeEuropeAfricaIcon className="w-6 h-6" />
+                        }
                       >
                         {recipe?.cuisineType}
                       </Chip>
                       <Chip
-                        startContent={<ClockIcon />}
+                        startContent={<ClockIcon className="w-6 h-6" />}
                         color="success"
                         variant="flat"
                       >

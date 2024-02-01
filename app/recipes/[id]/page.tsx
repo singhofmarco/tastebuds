@@ -1,6 +1,6 @@
 import { subtitle, title } from '@/components/primitives'
 import { Chip } from '@nextui-org/chip'
-import { ClockIcon, GlobeIcon } from '@/components/icons'
+import { ClockIcon, GlobeAmericasIcon } from '@heroicons/react/24/outline'
 import Breadcrumbs from '@/components/breadcrumbs'
 import BreadcrumbItem from '@/components/breadcrumb-item'
 import RecipeImage from '@/components/recipe-image'
@@ -61,12 +61,12 @@ export default async function RecipeDetailPage({
                   aria-label="Cuisine Type"
                   color="danger"
                   variant="flat"
-                  startContent={<GlobeIcon />}
+                  startContent={<GlobeAmericasIcon className="w-6 h-6" />}
                 >
                   {recipe.cuisineType}
                 </Chip>
                 <Chip
-                  startContent={<ClockIcon />}
+                  startContent={<ClockIcon className="w-6 h-6" />}
                   color="success"
                   variant="flat"
                 >
