@@ -4,8 +4,16 @@ import { Button } from '@nextui-org/button'
 import AddRecipeButton from '@/components/add-recipe-button'
 import Link from 'next/link'
 import TitleAnimation from '@/components/title-animation'
+import { validateRequest } from '@/auth'
+import { redirect } from 'next/navigation'
 
-export default function Home() {
+export default async function Home() {
+  const { user } = await validateRequest()
+
+  if (user) {
+    return redirect('/recipes')
+  }
+
   return (
     <section className="flex flex-col items-center justify-center gap-8 py-8 px-4 sm:px-0 md:py-10">
       <Image
