@@ -31,7 +31,7 @@ export default function SaveRecipeButton({
   }
 
   return (
-    <ButtonGroup variant="flat">
+    <ButtonGroup variant="flat" fullWidth>
       <Button
         onPress={() => handleSaveRecipe(selectedOption === 'image')}
         color="primary"

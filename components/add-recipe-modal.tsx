@@ -15,7 +15,6 @@ import {
 } from '@nextui-org/modal'
 import { Spinner } from '@nextui-org/spinner'
 import { useCallback, useContext, useEffect, useState } from 'react'
-import { PhotoIcon } from '@heroicons/react/24/solid'
 import { ClockIcon, GlobeEuropeAfricaIcon } from '@heroicons/react/24/outline'
 import SaveRecipeButton from './save-recipe-button'
 import { UserContext } from '@/app/providers'
@@ -120,10 +119,35 @@ export default function AddRecipeModal({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {recipe && <div>{recipe?.title}</div>}
+              {recipe && (
+                <>
+                  <div>{recipe?.title}</div>
+                  <div className="mt-2 flex gap-4 items-start">
+                    <Chip
+                      aria-label="Cuisine Type"
+                      color="primary"
+                      variant="flat"
+                      radius="md"
+                      startContent={
+                        <GlobeEuropeAfricaIcon className="w-6 h-6" />
+                      }
+                    >
+                      {recipe?.cuisineType}
+                    </Chip>
+                    <Chip
+                      startContent={<ClockIcon className="w-6 h-6" />}
+                      color="success"
+                      radius="md"
+                      variant="flat"
+                    >
+                      {recipe?.totalTime}
+                    </Chip>
+                  </div>
+                </>
+              )}
               {!recipe && <div>Generate Recipe</div>}
             </ModalHeader>
-            <ModalBody>
+            <ModalBody className={recipe ? 'pt-0' : ''}>
               {!recipe && (
                 <form
                   onSubmit={(e) => {
@@ -155,30 +179,6 @@ export default function AddRecipeModal({
 
               {recipe && (
                 <>
-                  <div className="flex gap-4 items-start">
-                    <div className="w-24 h-24 shadow-md rounded-sm bg-foreground-100 flex justify-center items-center">
-                      <PhotoIcon className="w-6 h-6 text-foreground" />
-                    </div>
-                    <div className="flex flex-col gap-y-2">
-                      <Chip
-                        aria-label="Cuisine Type"
-                        color="primary"
-                        variant="flat"
-                        startContent={
-                          <GlobeEuropeAfricaIcon className="w-6 h-6" />
-                        }
-                      >
-                        {recipe?.cuisineType}
-                      </Chip>
-                      <Chip
-                        startContent={<ClockIcon className="w-6 h-6" />}
-                        color="success"
-                        variant="flat"
-                      >
-                        {recipe?.totalTime}
-                      </Chip>
-                    </div>
-                  </div>
                   <p>{recipe?.description}</p>
                   <Accordion
                     className="px-0"
@@ -197,7 +197,7 @@ export default function AddRecipeModal({
                         ' ingredients'
                       }
                     >
-                      <ul className="list-disc pl-4">
+                      <ul className="list-disc list-inside">
                         {recipe?.ingredients?.map(
                           (ingredient: OpenAiIngredient, index: number) => (
                             <li key={`Ingredient ${index}`}>
@@ -218,7 +218,7 @@ export default function AddRecipeModal({
                         ' steps'
                       }
                     >
-                      <ul className="list-decimal pl-4">
+                      <ul className="list-decimal list-inside space-y-2">
                         {recipe?.steps?.map((step: string, index: number) => (
                           <li key={`Step ${index}`}>{step}</li>
                         ))}
@@ -229,7 +229,7 @@ export default function AddRecipeModal({
               )}
             </ModalBody>
 
-            <ModalFooter>
+            <ModalFooter className="flex flex-col sm:flex-row gap-4">
               {(!recipe || isGenerating) && (
                 <Button
                   color="primary"
@@ -257,7 +257,7 @@ export default function AddRecipeModal({
               )}
 
               {user && recipe && !isGenerating && (
-                <>
+                <div className="flex flex-col sm:flex-row gap-4">
                   <SaveRecipeButton
                     handleSaveRecipe={handleSaveRecipe}
                     isSaving={isSaving}
@@ -267,10 +267,11 @@ export default function AddRecipeModal({
                     color="default"
                     onPress={clearGeneratedRecipe}
                     isDisabled={isSaving}
+                    fullWidth
                   >
-                    Generate Another
+                    New Recipe
                   </Button>
-                </>
+                </div>
               )}
             </ModalFooter>
           </>
