@@ -63,7 +63,7 @@ export default function RecipeImage({
                   size="lg"
                   onPress={() => {
                     setIsGenerating(true)
-                    generateImage(recipeId, title)
+                    generateImage(recipeId)
                   }}
                 >
                   Generate Image

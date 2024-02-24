@@ -63,17 +63,31 @@ export async function save(recipe: OpenAiRecipe, shouldGenerateImage: boolean) {
   revalidatePath('/recipes')
 
   if (shouldGenerateImage) {
-    await generateImage(storedRecipe.id, title)
+    await generateImage(storedRecipe.id)
   }
 
   redirect('/recipes/' + storedRecipe.id)
 }
 
-export async function generateImage(recipeId: number, title: string) {
+export async function generateImage(recipeId: number) {
   const DALL_E = 'https://api.openai.com/v1/images/generations'
 
   if (!process.env.QSTASH_TOKEN) {
     throw new Error('Qstash token is not set')
+  }
+
+  // get recipe from database
+  const recipe = await prisma.recipe.findUnique({
+    where: {
+      id: recipeId,
+    },
+    include: {
+      ingredients: true,
+    },
+  })
+
+  if (!recipe) {
+    return NextResponse.json({ error: 'Recipe not found' }, { status: 404 })
   }
 
   const client = new QstashClient({ token: process.env.QSTASH_TOKEN })
@@ -82,7 +96,11 @@ export async function generateImage(recipeId: number, title: string) {
       url: DALL_E,
       body: {
         model: 'dall-e-3',
-        prompt: 'Create a realistic image of: ' + title,
+        prompt:
+          'Create a realistic image of a dish named "' +
+          recipe?.title +
+          '" that is made using the following ingredients: ' +
+          recipe?.ingredients.map((ingredient) => ingredient.name).join(', '),
         n: 1,
         size: '1024x1024',
         response_format: 'url',
