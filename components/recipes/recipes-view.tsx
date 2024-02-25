@@ -1,10 +1,10 @@
 'use client'
 
 import { Recipe } from '@prisma/client'
-import { useState } from 'react'
 import GridView from '@/components/recipes/grid-view'
 import EmptyView from '@/components/empty-view'
 import ListView from '@/components/recipes/list-view'
+import { useView } from '@/app/hooks/use-view'
 
 export type ViewRecipe = Pick<
   Recipe,
@@ -16,13 +16,13 @@ interface RecipesViewProps {
 }
 
 export default function RecipesView({ recipes }: RecipesViewProps) {
-  const [isListView, setIsListView] = useState(true)
+  const { view } = useView()
 
   if (recipes.length === 0) {
     return <EmptyView />
   }
 
-  if (isListView) {
+  if (view === 'list') {
     return <ListView recipes={recipes} />
   }
 

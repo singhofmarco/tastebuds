@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { validateRequest } from '@/auth'
 import { redirect } from 'next/navigation'
 import RecipesView from '@/components/recipes/recipes-view'
+import { ViewSwitch } from '@/components/view-switch'
 
 export default async function RecipesPage({
   searchParams,
@@ -70,7 +71,7 @@ export default async function RecipesPage({
           <h2 className={subtitle()}>You have {savedRecipes.length} saved.</h2>
         </div>
 
-        {/* TODO: switch to list mode */}
+        <ViewSwitch />
       </div>
       <RecipeSearch cuisineTypes={cuisineTypes} />
 
