@@ -1,14 +1,10 @@
 import { subtitle, title } from '@/components/primitives'
-import { RecipeCard } from '@/components/recipe-card'
 import { RecipeSearch } from '@/components/recipe-search'
 import { Recipe } from '@prisma/client'
 import prisma from '@/lib/prisma'
-import AddRecipeCard from '@/components/add-recipe-card'
-import EmptyView from '@/components/empty-view'
-import { Suspense } from 'react'
-import { Skeleton } from '@nextui-org/skeleton'
 import { validateRequest } from '@/auth'
 import { redirect } from 'next/navigation'
+import RecipesView from '@/components/recipes/recipes-view'
 
 export default async function RecipesPage({
   searchParams,
@@ -34,16 +30,30 @@ export default async function RecipesPage({
   const cuisineTypesFilter = searchParams.cuisineTypes
 
   const filteredRecipes = savedRecipes
-    .filter((recipe: Recipe) => {
+    .filter((recipe) => {
       if (!query) return true
 
       return recipe.title.toLowerCase().includes(query.toLowerCase())
     })
-    .filter((recipe: Recipe) => {
+    .filter((recipe) => {
       if (!cuisineTypesFilter) return true
 
       return cuisineTypesFilter.includes(recipe.cuisineType)
     })
+    .map((recipe) => ({
+      id: recipe.id,
+      createdAtDateTime: recipe.createdAt.toISOString(),
+      // human readable date
+      createdAt: recipe.createdAt.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+      title: recipe.title,
+      cuisineType: recipe.cuisineType,
+      image: recipe.image,
+      totalTime: recipe.totalTime,
+    }))
 
   const cuisineTypes = savedRecipes
     .map((recipe: Recipe) => recipe.cuisineType)
@@ -54,7 +64,7 @@ export default async function RecipesPage({
 
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="mb-4 flex justify-between">
+      <div className="px-4 sm:px-8 sm:mb-4 flex justify-between">
         <div className="select-none">
           <h1 className={title()}>Recipes</h1>
           <h2 className={subtitle()}>You have {savedRecipes.length} saved.</h2>
@@ -63,23 +73,8 @@ export default async function RecipesPage({
         {/* TODO: switch to list mode */}
       </div>
       <RecipeSearch cuisineTypes={cuisineTypes} />
-      {filteredRecipes.length === 0 && <EmptyView />}
 
-      {filteredRecipes.length > 0 && (
-        <ul className="gap-4 grid grid-cols-12 grid-rows-2">
-          {filteredRecipes.map((recipe: Recipe) => (
-            <Suspense
-              key={recipe.id}
-              fallback={
-                <Skeleton className="col-span-12 sm:col-span-3 h-[300px] rounded-lg" />
-              }
-            >
-              <RecipeCard recipe={recipe} />
-            </Suspense>
-          ))}
-          <AddRecipeCard />
-        </ul>
-      )}
+      <RecipesView recipes={filteredRecipes} />
     </div>
   )
 }

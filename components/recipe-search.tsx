@@ -84,7 +84,7 @@ export const RecipeSearch = ({
 
   return (
     <>
-      <div className="flex flex-col flex-1 gap-4">
+      <div className="px-4 sm:px-8 flex flex-col flex-1 gap-4">
         <Input
           aria-label="Search"
           classNames={{

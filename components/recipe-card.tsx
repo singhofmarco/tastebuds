@@ -1,10 +1,14 @@
-import { Card, CardBody, CardFooter } from '@nextui-org/card'
+import { Card, CardFooter } from '@nextui-org/card'
 import Link from 'next/link'
 import Image from 'next/image'
 import clsx from 'clsx'
-import { Recipe } from '@prisma/client'
+import { ViewRecipe } from './recipes/recipes-view'
 
-export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
+interface RecipeCardProps {
+  recipe: ViewRecipe
+}
+
+export const RecipeCard = ({ recipe }: RecipeCardProps) => {
   return (
     <Link
       href={`/recipes/${recipe.id}`}
