@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 
 export default function Loading() {
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="px-4 sm:px-8 flex flex-col gap-y-4">
       <div className="mb-4 flex justify-between">
         <div>
           <h1 className={title()}>Recipes</h1>
