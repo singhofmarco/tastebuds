@@ -34,13 +34,17 @@ export default async function RecipeDetailPage({
 
   return (
     <>
-      <Breadcrumbs className="hidden md:block">
-        <BreadcrumbItem href="/recipes">Recipes</BreadcrumbItem>
-        <BreadcrumbItem href="#" current>
-          {recipe.title}
-        </BreadcrumbItem>
-      </Breadcrumbs>
-
+      <div className="flex justify-between">
+        <Breadcrumbs className="hidden md:block">
+          <BreadcrumbItem href="/recipes">Recipes</BreadcrumbItem>
+          <BreadcrumbItem href="#" current>
+            {recipe.title}
+          </BreadcrumbItem>
+        </Breadcrumbs>
+        <div className="hidden md:block">
+          <RecipeDropdown recipeId={recipe.id} className="select-none" />
+        </div>
+      </div>
       <div className="md:mt-8 lg:grid lg:grid-cols-5 lg:items-start lg:gap-x-8">
         <div className="col-span-2">
           <RecipeImage
@@ -52,29 +56,29 @@ export default async function RecipeDetailPage({
         </div>
 
         <div className="col-span-3 mt-10 sm:mt-16 lg:mt-0">
-          <div className="flex justify-between">
-            <div>
-              <h1 className={title()}>{recipe.title}</h1>
+          <div>
+            <h1 className={title()}>{recipe.title}</h1>
 
-              <div className="mt-4 flex items-center gap-4 select-none">
-                <Chip
-                  aria-label="Cuisine Type"
-                  color="danger"
-                  variant="flat"
-                  startContent={<GlobeAmericasIcon className="w-6 h-6" />}
-                >
-                  {recipe.cuisineType}
-                </Chip>
-                <Chip
-                  startContent={<ClockIcon className="w-6 h-6" />}
-                  color="success"
-                  variant="flat"
-                >
-                  {recipe.totalTime}
-                </Chip>
+            <div className="mt-4 flex items-center gap-4 select-none">
+              <Chip
+                aria-label="Cuisine Type"
+                color="danger"
+                variant="flat"
+                startContent={<GlobeAmericasIcon className="w-6 h-6" />}
+              >
+                {recipe.cuisineType}
+              </Chip>
+              <Chip
+                startContent={<ClockIcon className="w-6 h-6" />}
+                color="success"
+                variant="flat"
+              >
+                {recipe.totalTime}
+              </Chip>
+              <div className="md:hidden">
+                <RecipeDropdown recipeId={recipe.id} className="select-none" />
               </div>
             </div>
-            <RecipeDropdown className="ml-4 select-none" recipeId={recipe.id} />
           </div>
           <div className="mt-6 bg-foreground-50 border border-foreground-100 p-4 rounded-md shadow-sm">
             <h3 className="sr-only">Description</h3>

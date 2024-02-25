@@ -9,7 +9,7 @@ import {
 } from '@nextui-org/dropdown'
 import { deleteRecipe } from '@/app/actions'
 import clsx from 'clsx'
-import { CogIcon } from '@heroicons/react/24/solid'
+import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid'
 
 export default function RecipeDropdown({
   recipeId,
@@ -23,11 +23,11 @@ export default function RecipeDropdown({
       <DropdownTrigger>
         <Button
           className={clsx(className, 'flex flex-shrink-0 items-center gap-2')}
-          color="default"
-          variant="bordered"
+          color="secondary"
+          variant="light"
+          size="sm"
         >
-          <CogIcon className="w-6 h-6" />
-          <span className="hidden sm:block">Actions</span>
+          <EllipsisHorizontalIcon className="w-6 h-6" aria-label="Actions" />
         </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label="Actions">
