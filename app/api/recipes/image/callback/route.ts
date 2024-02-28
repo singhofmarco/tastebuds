@@ -23,6 +23,8 @@ const s3Client = new S3Client({
  * and update the recipe with the image URL
  */
 async function handler(_req: NextRequest) {
+  // TODO: validate if user is authenticated
+
   const data = await _req.json()
 
   const body = data.body

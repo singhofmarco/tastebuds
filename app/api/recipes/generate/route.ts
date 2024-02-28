@@ -24,6 +24,8 @@ const requestSchema = z.object({
 })
 
 export async function POST(request: Request) {
+  // TODO: validate if user is authenticated
+
   const data = await request.json()
   const validatedRequest = requestSchema.safeParse(data)
 

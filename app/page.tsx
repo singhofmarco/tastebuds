@@ -1,11 +1,11 @@
 import { title, subtitle } from '@/components/primitives'
 import { Image } from '@nextui-org/image'
 import { Button } from '@nextui-org/button'
-import AddRecipeButton from '@/components/add-recipe-button'
 import Link from 'next/link'
 import TitleAnimation from '@/components/title-animation'
 import { validateRequest } from '@/auth'
 import { redirect } from 'next/navigation'
+import { SparklesIcon } from '@heroicons/react/24/solid'
 
 export default async function Home() {
   const { user } = await validateRequest()
@@ -38,7 +38,17 @@ export default async function Home() {
       </div>
 
       <div className="max-w-[900px] gap-4 flex px-8">
-        <AddRecipeButton size="lg" />
+        <Button
+          variant="shadow"
+          radius="md"
+          color="primary"
+          size="lg"
+          as={Link}
+          href="/auth/signin"
+          startContent={<SparklesIcon className="h-5 w-5" />}
+        >
+          Generate Recipe
+        </Button>
         <Button
           variant="shadow"
           radius="md"

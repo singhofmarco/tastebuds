@@ -79,15 +79,17 @@ export const Navbar = () => {
         justify="end"
       >
         <div className="hidden sm:flex gap-6">
-          <NavbarItem>
-            <AddRecipeButton
-              size="sm"
-              startContent={<PlusIcon className="w-4 h-4" />}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              New Recipe
-            </AddRecipeButton>
-          </NavbarItem>
+          {user && (
+            <NavbarItem>
+              <AddRecipeButton
+                size="sm"
+                startContent={<PlusIcon className="w-4 h-4" />}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                New Recipe
+              </AddRecipeButton>
+            </NavbarItem>
+          )}
 
           <ThemeSwitch />
 
@@ -102,15 +104,17 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <NavbarItem>
-          <AddRecipeButton
-            size="sm"
-            startContent={<PlusIcon className="h-4 w-4" />}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Recipe
-          </AddRecipeButton>
-        </NavbarItem>
+        {user && (
+          <NavbarItem>
+            <AddRecipeButton
+              size="sm"
+              startContent={<PlusIcon className="h-4 w-4" />}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Recipe
+            </AddRecipeButton>
+          </NavbarItem>
+        )}
 
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
