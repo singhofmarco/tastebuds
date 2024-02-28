@@ -6,6 +6,7 @@ import { validateRequest } from '@/auth'
 import { redirect } from 'next/navigation'
 import RecipesView from '@/components/recipes/recipes-view'
 import { ViewSwitch } from '@/components/view-switch'
+import { Suspense } from 'react'
 
 export default async function RecipesPage({
   searchParams,
@@ -75,7 +76,9 @@ export default async function RecipesPage({
       </div>
       <RecipeSearch cuisineTypes={cuisineTypes} />
 
-      <RecipesView recipes={filteredRecipes} />
+      <Suspense>
+        <RecipesView recipes={filteredRecipes} />
+      </Suspense>
     </div>
   )
 }

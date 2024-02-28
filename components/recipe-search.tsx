@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
 import { Chip } from '@nextui-org/chip'
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useRef, useState, useTransition } from 'react'
 import { Spinner } from '@nextui-org/spinner'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 
@@ -19,17 +19,19 @@ export const RecipeSearch = ({
 }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [query, setQuery] = useState<string>(searchParams.get('query') || '')
   const { replace } = useRouter()
   const [isPending, startTransition] = useTransition()
   const [cuisineTypesToFilter, setCuisineTypesToFilter] = useState<string[]>(
     searchParams.get('cuisineTypes')?.split(',') || []
   )
+  const formRef = useRef<HTMLFormElement>(null)
+  const query = searchParams.get('query')?.toString()
 
-  function handleQueryChange(query: string) {
-    setQuery(query)
-    updateQuery(query)
-  }
+  useEffect(() => {
+    if (formRef.current && !query?.length) {
+      formRef.current.reset()
+    }
+  }, [query])
 
   const updateQuery = useDebouncedCallback((query: string) => {
     const params = new URLSearchParams(window.location.search)
@@ -46,9 +48,7 @@ export const RecipeSearch = ({
 
   // update filters when query params change
   useEffect(() => {
-    const query = searchParams.get('query') ?? ''
     const cuisineTypes = searchParams.get('cuisineTypes')?.split(',') ?? []
-    setQuery(query)
     setCuisineTypesToFilter(cuisineTypes)
   }, [searchParams])
 
@@ -85,31 +85,37 @@ export const RecipeSearch = ({
   return (
     <>
       <div className="px-4 sm:px-8 flex flex-col flex-1 gap-4">
-        <Input
-          aria-label="Search"
-          classNames={{
-            inputWrapper: 'bg-default-100 select-none',
-            input: 'text-sm',
-          }}
-          disabled={disabled}
-          labelPlacement="outside"
-          placeholder="Search..."
-          startContent={
-            isPending ? (
-              <div className="relative w-5 h-5 flex items-center justify-center">
-                <Spinner size="sm" className="pr-1 absolute" color="current" />
-              </div>
-            ) : (
-              <MagnifyingGlassIcon className="w-5 h-5 pr-1 text-base text-default-400 pointer-events-none flex-shrink-0" />
-            )
-          }
-          type="search"
-          autoComplete="off"
-          value={query}
-          onChange={(e) => {
-            handleQueryChange(e.target.value)
-          }}
-        />
+        <form ref={formRef}>
+          <Input
+            aria-label="Search"
+            classNames={{
+              inputWrapper: 'bg-default-100 select-none',
+              input: 'text-sm',
+            }}
+            disabled={disabled}
+            labelPlacement="outside"
+            placeholder="Search..."
+            startContent={
+              isPending ? (
+                <div className="relative w-5 h-5 flex items-center justify-center">
+                  <Spinner
+                    size="sm"
+                    className="pr-1 absolute"
+                    color="current"
+                  />
+                </div>
+              ) : (
+                <MagnifyingGlassIcon className="w-5 h-5 pr-1 text-base text-default-400 pointer-events-none flex-shrink-0" />
+              )
+            }
+            type="search"
+            autoComplete="off"
+            defaultValue={query}
+            onValueChange={(value) => {
+              updateQuery(value)
+            }}
+          />
+        </form>
         <ScrollShadow
           hideScrollBar
           orientation="horizontal"
