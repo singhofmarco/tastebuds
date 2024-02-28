@@ -41,7 +41,7 @@ export const Navbar = () => {
       <NavbarBrand className="max-w-fit">
         <NextLink
           className="flex justify-start items-center gap-2"
-          href="/"
+          href={user ? '/recipes' : '/'}
           onClick={() => setIsMenuOpen(false)}
         >
           <Image
