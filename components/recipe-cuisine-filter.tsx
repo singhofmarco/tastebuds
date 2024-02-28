@@ -8,11 +8,9 @@ import { useEffect, useState } from 'react'
 
 export const RecipeCuisineFilter = ({
   cuisineTypes,
-  isPending,
   startTransition,
 }: {
   cuisineTypes?: string[]
-  isPending: boolean
   startTransition: (callback: () => void) => void
 }) => {
   const pathname = usePathname()

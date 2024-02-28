@@ -79,7 +79,6 @@ export const RecipeSearch = ({
 
         <RecipeCuisineFilter
           cuisineTypes={cuisineTypes}
-          isPending={isPending}
           startTransition={startTransition}
         />
       </div>
