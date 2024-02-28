@@ -15,7 +15,7 @@ export default function AddRecipeCard() {
   return (
     <>
       <Card
-        className="col-span-12 sm:col-span-3 h-[300px] group"
+        className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 h-[300px] group"
         onPress={onAddRecipeModalOpen}
         isPressable
         isFooterBlurred
