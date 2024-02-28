@@ -57,12 +57,8 @@ export const RecipeSearch = ({
             placeholder="Search..."
             startContent={
               isPending ? (
-                <div className="relative w-5 h-5 flex items-center justify-center">
-                  <Spinner
-                    size="sm"
-                    className="pr-1 absolute"
-                    color="current"
-                  />
+                <div className="w-5 h-5 flex items-center justify-center">
+                  <Spinner size="sm" className="pr-1" color="current" />
                 </div>
               ) : (
                 <MagnifyingGlassIcon className="w-5 h-5 pr-1 text-base text-default-400 pointer-events-none flex-shrink-0" />
