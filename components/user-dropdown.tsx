@@ -31,10 +31,6 @@ export default function UserDropdown() {
           <p className="font-semibold">Signed in as</p>
           <p className="font-semibold">{user?.email}</p>
         </DropdownItem>
-        <DropdownItem key="team_settings">Team</DropdownItem>
-        <DropdownItem key="settings" href="/auth/profile">
-          Settings
-        </DropdownItem>
         <DropdownItem
           key="logout"
           color="danger"

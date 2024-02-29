@@ -152,16 +152,6 @@ export const Navbar = () => {
               />
               <div className="ml-12 flex flex-col gap-2">
                 <NavbarMenuItem>
-                  <Link color="foreground" href="/team-settings" size="sm">
-                    Team
-                  </Link>
-                </NavbarMenuItem>
-                <NavbarMenuItem>
-                  <Link color="foreground" href="/auth/profile" size="sm">
-                    Settings
-                  </Link>
-                </NavbarMenuItem>
-                <NavbarMenuItem>
                   <Link
                     color="danger"
                     size="sm"
