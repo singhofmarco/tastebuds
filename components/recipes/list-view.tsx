@@ -13,12 +13,12 @@ export default function ListView({ recipes }: ListViewProps) {
   return (
     <ul
       role="list"
-      className="sm:mx-8 divide-y divide-foreground-100 overflow-hidden bg-background shadow-sm ring-1 ring-foreground-100 sm:rounded-xl"
+      className="sm:mx-8 divide-y divide-foreground-50 overflow-hidden bg-background shadow-sm ring-1 ring-foreground-50 sm:rounded-xl"
     >
       {recipes.map((recipe) => (
         <li
           key={recipe.id}
-          className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-foreground-50 sm:px-6"
+          className="relative flex justify-between gap-x-6 px-4 py-5 active:bg-foreground-50 sm:hover:bg-foreground-50 sm:px-6"
         >
           <div className="flex min-w-0 gap-x-4">
             {recipe.image ? (
