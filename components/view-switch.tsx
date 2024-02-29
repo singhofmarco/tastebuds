@@ -3,9 +3,7 @@
 import { FC } from 'react'
 import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { SwitchProps, useSwitch } from '@nextui-org/switch'
-import { useIsSSR } from '@react-aria/ssr'
 import clsx from 'clsx'
-
 import { ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/solid'
 import { useView } from '@/app/hooks/use-view'
 
@@ -16,7 +14,6 @@ export interface ViewSwitchProps {
 
 export const ViewSwitch: FC<ViewSwitchProps> = ({ className, classNames }) => {
   const { view, setView } = useView()
-  const isSSR = useIsSSR()
 
   const onChange = () => {
     view === 'grid' ? setView('list') : setView('grid')
@@ -30,8 +27,8 @@ export const ViewSwitch: FC<ViewSwitchProps> = ({ className, classNames }) => {
     getInputProps,
     getWrapperProps,
   } = useSwitch({
-    isSelected: view === 'grid' || isSSR,
-    'aria-label': `Switch to ${view === 'grid' || isSSR ? 'list' : 'grid'} view`,
+    isSelected: view === 'grid',
+    'aria-label': `Switch to ${view === 'grid' ? 'list' : 'grid'} view`,
     onChange,
   })
 
@@ -67,7 +64,7 @@ export const ViewSwitch: FC<ViewSwitchProps> = ({ className, classNames }) => {
           ),
         })}
       >
-        {!isSelected || isSSR ? (
+        {!isSelected ? (
           <Squares2X2Icon className="h-6 w-6" />
         ) : (
           <ListBulletIcon className="h-6 w-6" />

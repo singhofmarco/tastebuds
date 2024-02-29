@@ -1,24 +1,10 @@
-import { useContext, useEffect } from 'react'
-import { ViewContext } from '../providers'
+import { parseAsStringEnum, useQueryState } from 'nuqs'
 
 export const useView = () => {
-  const { view, setView: setViewType } = useContext(ViewContext)
-
-  // read the current view from localStorage
-  // if it exists, set the view to the value from localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedView = localStorage.getItem('view')
-      if (storedView) {
-        setViewType(storedView as 'list' | 'grid')
-      }
-    }
-  }, [setViewType])
-
-  function setView(newView: 'list' | 'grid') {
-    setViewType(newView)
-    localStorage.setItem('view', newView)
-  }
+  const [view, setView] = useQueryState(
+    'view',
+    parseAsStringEnum(['list', 'grid']).withDefault('grid')
+  )
 
   return {
     view,

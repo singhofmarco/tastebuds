@@ -14,32 +14,14 @@ export interface ProvidersProps {
 }
 
 export const UserContext = React.createContext<User | null>(null)
-export const ViewContext = React.createContext<{
-  view: 'list' | 'grid'
-  setView: React.Dispatch<React.SetStateAction<'list' | 'grid'>>
-}>({
-  view: 'grid',
-  setView: () => {},
-})
 
 export function Providers({ children, themeProps, user }: ProvidersProps) {
   const router = useRouter()
 
-  const [view, setView] = React.useState<'list' | 'grid'>('grid')
-
   return (
     <UserContext.Provider value={user}>
       <NextUIProvider navigate={router.push}>
-        <NextThemesProvider {...themeProps}>
-          <ViewContext.Provider
-            value={{
-              view,
-              setView,
-            }}
-          >
-            {children}
-          </ViewContext.Provider>
-        </NextThemesProvider>
+        <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
       </NextUIProvider>
     </UserContext.Provider>
   )
