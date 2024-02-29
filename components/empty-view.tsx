@@ -3,19 +3,29 @@
 import Image from 'next/image'
 import AddRecipeButton from './add-recipe-button'
 import { Button } from '@nextui-org/button'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
+import { useState } from 'react'
 
 export default function EmptyView() {
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const { replace } = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [filters, setFilter] = useQueryStates(
+    {
+      query: parseAsString,
+      cuisineTypes: parseAsArrayOf(parseAsString),
+    },
+    {
+      shallow: false,
+    }
+  )
 
-  const query = searchParams.get('query')
-  const cuisineTypes = searchParams.getAll('cuisineTypes')
-  const filtersApplied = query || cuisineTypes.length > 0
+  const filtersApplied = filters.query || filters.cuisineTypes
 
   function handleRemoveFilters() {
-    replace(pathname)
+    setIsLoading(true)
+    setFilter({
+      query: null,
+      cuisineTypes: null,
+    })
   }
 
   return (
@@ -29,11 +39,12 @@ export default function EmptyView() {
       />
       <p className="text-default-400">No recipes found.</p>
 
-      {filtersApplied ? (
+      {filtersApplied || isLoading ? (
         <Button
           variant="shadow"
           color="secondary"
           onPress={handleRemoveFilters}
+          disabled={isLoading}
         >
           Remove filters
         </Button>
