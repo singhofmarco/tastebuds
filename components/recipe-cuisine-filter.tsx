@@ -1,10 +1,8 @@
 'use client'
 
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
 import { Chip } from '@nextui-org/chip'
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
-import { useEffect, useState } from 'react'
+import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 
 export const RecipeCuisineFilter = ({
   cuisineTypes,
@@ -13,47 +11,26 @@ export const RecipeCuisineFilter = ({
   cuisineTypes?: string[]
   startTransition: (callback: () => void) => void
 }) => {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const { replace } = useRouter()
-  const [cuisineTypesToFilter, setCuisineTypesToFilter] = useState<string[]>(
-    searchParams.get('cuisineTypes')?.split(',') || []
+  const [cuisineTypesToFilter, setCuisineTypesToFilter] = useQueryState(
+    'cuisineTypes',
+    parseAsArrayOf(parseAsString).withOptions({ startTransition })
   )
 
-  // update filters when query params change
-  useEffect(() => {
-    const cuisineTypes = searchParams.get('cuisineTypes')?.split(',') ?? []
-    setCuisineTypesToFilter(cuisineTypes)
-  }, [searchParams])
-
-  function createCuisineTypeParam(cuisineTypes: string[]) {
-    const params = new URLSearchParams(window.location.search)
-    if (cuisineTypes.length === 1) {
-      params.set('cuisineTypes', cuisineTypes[0])
-    } else if (cuisineTypes.length > 1) {
-      params.set('cuisineTypes', cuisineTypes.join(','))
-    } else {
-      params.delete('cuisineTypes')
-    }
-    return params.toString()
-  }
-
   function toggleCuisineType(cuisineType: string) {
-    let newCuisineTypesFilter: string[] = []
-    if (cuisineTypesToFilter.includes(cuisineType)) {
+    let newCuisineTypesFilter: string[] | null = []
+    if (cuisineTypesToFilter && cuisineTypesToFilter.includes(cuisineType)) {
       newCuisineTypesFilter = cuisineTypesToFilter.filter(
         (ct: string) => ct !== cuisineType
       )
+
+      if (newCuisineTypesFilter.length === 0) {
+        newCuisineTypesFilter = null
+      }
     } else {
-      newCuisineTypesFilter = [...cuisineTypesToFilter, cuisineType]
+      newCuisineTypesFilter = [...(cuisineTypesToFilter ?? []), cuisineType]
     }
 
     setCuisineTypesToFilter(newCuisineTypesFilter)
-
-    const params = createCuisineTypeParam(newCuisineTypesFilter)
-    startTransition(() => {
-      replace(`${pathname}?${params}`)
-    })
   }
 
   return (
@@ -81,7 +58,7 @@ export const RecipeCuisineFilter = ({
         const color =
           colorMapForIndex[index % Object.keys(colorMapForIndex).length]
 
-        const isActive = cuisineTypesToFilter.includes(cuisineType)
+        const isActive = cuisineTypesToFilter?.includes(cuisineType)
 
         return (
           <Chip
