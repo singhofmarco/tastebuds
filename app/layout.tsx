@@ -64,9 +64,7 @@ export default async function RootLayout({
         >
           <div className="relative flex flex-col h-screen">
             <Navbar />
-            <main className="container mx-auto max-w-7xl py-8 sm:py-12 flex-grow">
-              {children}
-            </main>
+            <main className="py-8 sm:py-12 flex-grow">{children}</main>
           </div>
         </Providers>
         <Analytics />
