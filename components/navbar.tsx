@@ -78,7 +78,7 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <div className="hidden sm:flex gap-6">
+        <div className="flex gap-6">
           {user && (
             <NavbarItem>
               <AddRecipeButton
@@ -113,6 +113,14 @@ export const Navbar = () => {
             >
               Recipe
             </AddRecipeButton>
+          </NavbarItem>
+        )}
+
+        {!user && (
+          <NavbarItem className="mr-2">
+            <Link color="foreground" href="/auth/signin">
+              Sign in
+            </Link>
           </NavbarItem>
         )}
 
