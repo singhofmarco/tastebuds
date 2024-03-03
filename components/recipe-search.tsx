@@ -1,60 +1,66 @@
-"use client"
+'use client'
 
-import { Input } from "@nextui-org/input"
-import { SearchIcon } from "./icons"
-import { RecipeCard } from "./recipe-card"
-import { EdamamHit, OpenAiRecipe } from "@/types"
-import { FormEvent, useEffect, useState } from "react"
+import { Input } from '@nextui-org/input'
+import { useRouter } from 'next/navigation'
+import { useDebouncedCallback } from 'use-debounce'
+import { useTransition } from 'react'
+import { Spinner } from '@nextui-org/spinner'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { RecipeCuisineFilter } from './recipe-cuisine-filter'
+import { parseAsString, useQueryState } from 'nuqs'
 
-export const RecipeSearch = ({savedRecipes}: {savedRecipes: any}) => {
-    const [query, setQuery] = useState<string>('')
-	const [edamamRecipes, setEdamamRecipes] = useState<OpenAiRecipe[]>([])
-	const [recipes, setRecipes] = useState<OpenAiRecipe[]>([])
-	const [image_url, setImageUrl] = useState<string>('')
+export const RecipeSearch = ({
+  cuisineTypes,
+  disabled,
+}: {
+  cuisineTypes?: string[]
+  disabled?: boolean
+}) => {
+  const { refresh } = useRouter()
+  const [isPending, startTransition] = useTransition()
+  const [query, setQuery] = useQueryState('query', parseAsString)
 
-	async function onSubmit(e: FormEvent<HTMLFormElement>) {
-		e.preventDefault()
+  const debouncedRefresh = useDebouncedCallback(() => {
+    startTransition(() => {
+      refresh()
+    })
+  }, 300)
 
-		const res = await fetch(`/api/recipes/generate?query=${query}`)
+  return (
+    <>
+      <div className="px-4 sm:px-8 flex flex-col flex-1 gap-4">
+        <Input
+          aria-label="Search"
+          classNames={{
+            inputWrapper: 'bg-default-100 select-none',
+            input: 'text-sm',
+          }}
+          disabled={disabled}
+          labelPlacement="outside"
+          placeholder="Search..."
+          startContent={
+            isPending ? (
+              <div className="w-5 h-5 flex items-center justify-center">
+                <Spinner size="sm" className="pr-1" color="current" />
+              </div>
+            ) : (
+              <MagnifyingGlassIcon className="w-5 h-5 pr-1 text-base text-default-400 pointer-events-none flex-shrink-0" />
+            )
+          }
+          type="search"
+          autoComplete="off"
+          value={query || ''}
+          onValueChange={(value) => {
+            setQuery(value.length ? value : null)
+            debouncedRefresh()
+          }}
+        />
 
-		const recipes = await res.json()
-
-		setEdamamRecipes([recipes.data])
-		setImageUrl(recipes.image_url)
-	}
-
-	useEffect(() => {
-		const recipesToShow = query.length && edamamRecipes.length ? edamamRecipes : savedRecipes
-		setRecipes(recipesToShow)
-	}, [query, edamamRecipes, savedRecipes])
-
-    return (
-        <div className="mt-8 flex flex-col gap-y-4 px-8">
-			<form
-				onSubmit={onSubmit}>
-				<Input
-					aria-label="Search"
-					classNames={{
-						inputWrapper: "bg-default-100",
-						input: "text-sm",
-					}}
-					labelPlacement="outside"
-					placeholder="Search..."
-					startContent={
-						<SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-					}
-					type="search"
-					autoComplete="off"
-					onChange={async (e) => {
-						setQuery(e.target.value)
-					}}
-				/>
-			</form>
-			<ul className="gap-4 grid grid-cols-12 grid-rows-2">
-				{recipes.map((recipe: OpenAiRecipe) => (
-					<RecipeCard key={recipe.title} recipe={recipe} />
-				))}
-			</ul>
-        </div>
-    )
+        <RecipeCuisineFilter
+          cuisineTypes={cuisineTypes}
+          startTransition={startTransition}
+        />
+      </div>
+    </>
+  )
 }

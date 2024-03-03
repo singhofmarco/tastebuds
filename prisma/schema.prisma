@@ -4,31 +4,36 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Recipe {
-  id          Int              @id @default(autoincrement())
-  title       String           @db.VarChar(255)
-  createdAt   DateTime         @default(now()) @db.Timestamp(6)
-  updatedAt   DateTime         @default(now()) @db.Timestamp(6)
-  description String?
-  published   Boolean          @default(false)
-  image       String           @db.Text
-  userId      Int?
-  user        User?             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  ingredients Json
-  steps       Json
-  totalTime   String
-  cuisineType     String
-  teams       TeamsOnRecipes[]
+  id                Int              @id @default(autoincrement())
+  title             String           @db.VarChar(255)
+  createdAt         DateTime         @default(now()) @db.Timestamp(6)
+  updatedAt         DateTime         @default(now()) @db.Timestamp(6)
+  description       String?
+  published         Boolean          @default(false)
+  image             String?          @db.Text
+  qStashMessageId   String?          @db.Text
+  userId            String?
+  user              User?            @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ingredients       Ingredient[]
+  steps             Json
+  totalTime         String
+  cuisineType       String
+  portions          Int              @default(4)
+  teams             TeamsOnRecipes[]
 }
 
 model Ingredient {
   id       Int    @id @default(autoincrement())
   name     String @db.VarChar(255)
+  quantity Int
+  unit     String @db.VarChar(255)
   recipeId Int
-  // recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Team {
@@ -49,10 +54,22 @@ model TeamsOnRecipes {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String   @db.VarChar(255)
-  email    String   @unique @db.VarChar(255)
-  password String   @db.VarChar(255)
-  recipes  Recipe[]
-  teams    Team[]
+  id              String    @id @unique
+  sessions        Session[]
+
+  email           String    @db.Text @unique
+  hashedPassword  String    @db.Text
+  name            String    @db.Text
+  diet            String    @db.Text @default("omnivore")
+  recipes         Recipe[]
+  teams           Team[]
+}
+
+model Session {
+  id             String @id @unique
+  userId        String
+  expiresAt     DateTime
+  user           User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@index([userId])
 }

@@ -1,13 +1,3 @@
-export default function RecipesLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
-	return (
-		<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-			<div className="w-full inline-block text-center justify-center">
-				{children}
-			</div>
-		</section>
-	);
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <div className="container mx-auto max-w-7xl mt-8">{children}</div>
 }
