@@ -1,9 +1,8 @@
+import { validateRequest } from '@/auth'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { z } from 'zod'
-
-export const runtime = 'edge'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -24,7 +23,11 @@ const requestSchema = z.object({
 })
 
 export async function POST(request: Request) {
-  // TODO: validate if user is authenticated
+  const { user } = await validateRequest()
+
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   const data = await request.json()
   const validatedRequest = requestSchema.safeParse(data)
