@@ -258,19 +258,19 @@ export default function AddRecipeModal({
 
               {user && recipe && !isGenerating && (
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <SaveRecipeButton
-                    handleSaveRecipe={handleSaveRecipe}
-                    isSaving={isSaving}
-                  />
                   <Button
                     variant="flat"
-                    color="default"
+                    color="danger"
                     onPress={clearGeneratedRecipe}
                     isDisabled={isSaving}
                     fullWidth
                   >
-                    New Recipe
+                    Start over
                   </Button>
+                  <SaveRecipeButton
+                    handleSaveRecipe={handleSaveRecipe}
+                    isSaving={isSaving}
+                  />
                 </div>
               )}
             </ModalFooter>
