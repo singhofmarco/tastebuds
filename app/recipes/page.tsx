@@ -74,7 +74,8 @@ export default async function RecipesPage({
 
         <ViewSwitch />
       </div>
-      <RecipeSearch cuisineTypes={cuisineTypes} />
+
+      {savedRecipes.length && <RecipeSearch cuisineTypes={cuisineTypes} />}
 
       <Suspense>
         <RecipesView recipes={filteredRecipes} />
