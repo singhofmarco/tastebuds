@@ -36,7 +36,7 @@ export default function MarketingHeader() {
           color="primary"
           size="lg"
           as={Link}
-          href="/auth/signin"
+          href="/auth/signup"
         >
           Get started
         </Button>
