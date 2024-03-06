@@ -3,7 +3,7 @@ import TitleAnimation from '../title-animation'
 import { subtitle, title } from '../primitives'
 import { Link } from '@nextui-org/link'
 import { Button } from '@nextui-org/button'
-import { ArrowRightIcon } from '@heroicons/react/20/solid'
+import LearnMoreButton from './lean-more-button'
 
 export default function MarketingHeader() {
   return (
@@ -38,18 +38,9 @@ export default function MarketingHeader() {
           as={Link}
           href="/auth/signin"
         >
-          Get Started
+          Get started
         </Button>
-        <Button
-          variant="light"
-          radius="md"
-          size="lg"
-          as={Link}
-          href="/recipes"
-          endContent={<ArrowRightIcon className="w-5 h-5" />}
-        >
-          Learn more
-        </Button>
+        <LearnMoreButton />
       </div>
     </section>
   )
