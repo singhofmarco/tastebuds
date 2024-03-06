@@ -9,7 +9,6 @@ import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 import { verifySignatureAppRouter } from '@upstash/qstash/dist/nextjs'
 import prisma from '@/lib/prisma'
-import { validateRequest } from '@/auth'
 
 const s3Client = new S3Client({
   credentials: {
@@ -24,12 +23,6 @@ const s3Client = new S3Client({
  * and update the recipe with the image URL
  */
 async function handler(_req: NextRequest) {
-  const { user } = await validateRequest()
-
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   const data = await _req.json()
 
   const body = data.body
