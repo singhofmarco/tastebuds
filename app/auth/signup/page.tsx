@@ -7,7 +7,7 @@ import { title } from '@/components/primitives'
 
 export default async function SignUp() {
   const { user } = await validateRequest()
-  if (user) redirect('/')
+  if (user) redirect('/recipes')
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">

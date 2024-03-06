@@ -4,7 +4,7 @@ import { ClockIcon, GlobeAmericasIcon } from '@heroicons/react/24/outline'
 import Breadcrumbs from '@/components/breadcrumbs'
 import BreadcrumbItem from '@/components/breadcrumb-item'
 import RecipeImage from '@/components/recipe-image'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import RecipeDropdown from '@/components/recipe-dropdown'
 import Ingredients from '@/components/ingredients'
@@ -17,14 +17,10 @@ export default async function RecipeDetailPage({
 }) {
   const { user } = await validateRequest()
 
-  if (!user) {
-    return redirect('/auth/signin')
-  }
-
   const recipe = await prisma.recipe.findUnique({
     where: {
       id: Number(params.id),
-      userId: user.id,
+      userId: user?.id,
     },
     include: {
       ingredients: true,

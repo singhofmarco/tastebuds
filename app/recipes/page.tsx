@@ -3,7 +3,6 @@ import { RecipeSearch } from '@/components/recipe-search'
 import { Recipe } from '@prisma/client'
 import prisma from '@/lib/prisma'
 import { validateRequest } from '@/auth'
-import { redirect } from 'next/navigation'
 import RecipesView from '@/components/recipes/recipes-view'
 import { ViewSwitch } from '@/components/view-switch'
 import { Suspense } from 'react'
@@ -15,13 +14,9 @@ export default async function RecipesPage({
 }) {
   const { user } = await validateRequest()
 
-  if (!user) {
-    return redirect('/auth/signin')
-  }
-
   const savedRecipes = await prisma.recipe.findMany({
     where: {
-      userId: user.id,
+      userId: user?.id,
     },
     orderBy: {
       createdAt: 'desc',
