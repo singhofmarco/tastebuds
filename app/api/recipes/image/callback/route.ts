@@ -7,8 +7,8 @@ import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
-import { verifySignatureAppRouter } from '@upstash/qstash/dist/nextjs'
 import prisma from '@/lib/prisma'
+import { verifySignatureAppRouter } from '@upstash/qstash/nextjs'
 
 const s3Client = new S3Client({
   credentials: {

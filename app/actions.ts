@@ -107,7 +107,9 @@ export async function generateImage(recipeId: number) {
         'Content-Type': 'application/json',
         'Upstash-Forward-Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
       },
-      callback: `${process.env.NODE_ENV !== 'production' ? process.env.CALLBACK_BASE_URL : 'https://' + process.env.VERCEL_URL}/api/recipes/image/callback`,
+      callback:
+        `${process.env.NODE_ENV !== 'production' ? process.env.CALLBACK_BASE_URL : 'https://' + process.env.VERCEL_URL}` +
+        '/api/recipes/image/callback',
       method: 'POST',
     })
     .catch((error) => {

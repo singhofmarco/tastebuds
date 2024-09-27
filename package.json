@@ -12,7 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.61",
+    "@ai-sdk/openai": "^0.0.62",
     "@aws-sdk/client-s3": "^3.496.0",
     "@heroicons/react": "^2.1.5",
     "@lucia-auth/adapter-prisma": "^4.0.0",
@@ -58,8 +58,8 @@
     "next-themes": "^0.3.0",
     "nuqs": "^1.17.0",
     "oslo": "^1.0.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-type-animation": "^3.2.0",
     "sharp": "^0.33.2",
     "use-debounce": "^10.0.0",
@@ -69,16 +69,16 @@
   "devDependencies": {
     "@types/uuid": "^9.0.7",
     "autoprefixer": "^10.4.20",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.1",
     "eslint-config-next": "^14.1.0",
     "eslint-config-prettier": "^9.1.0",
-    "husky": "^9.0.6",
-    "lint-staged": "^15.2.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "postcss": "^8.4.47",
-    "prettier": "^3.2.4",
+    "prettier": "^3.3.3",
     "prisma": "^5.7.1",
     "tailwind-variants": "^0.2.1",
     "tailwindcss": "^3.4.13",
-    "typescript": "^5.3.3"
+    "typescript": "^5.6.2"
   }
 }
