@@ -1,6 +1,5 @@
 'use server'
 
-import { OpenAiRecipe } from '@/types'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { NextResponse } from 'next/server'
@@ -17,6 +16,7 @@ import { cookies } from 'next/headers'
 import { generateId } from 'lucia'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import prisma from '@/lib/prisma'
+import { Recipe } from './api/recipes/schema'
 
 const s3Client = new S3Client({
   credentials: {
@@ -26,13 +26,12 @@ const s3Client = new S3Client({
   region: process.env.AWS_REGION,
 })
 
-export async function save(recipe: OpenAiRecipe, shouldGenerateImage: boolean) {
+export async function save(recipe: Recipe, shouldGenerateImage: boolean) {
   const { user } = await checkIfUserAuthenticated()
 
   const {
     title,
     description,
-    image,
     ingredients,
     steps,
     totalTime,
@@ -47,7 +46,6 @@ export async function save(recipe: OpenAiRecipe, shouldGenerateImage: boolean) {
       steps,
       totalTime,
       cuisineType,
-      image,
       userId: user.id,
       portions,
       ingredients: {

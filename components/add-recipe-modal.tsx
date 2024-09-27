@@ -1,8 +1,6 @@
 'use client'
 
 import { save } from '@/app/actions'
-import { OpenAiIngredient, OpenAiRecipe } from '@/types'
-import { Accordion, AccordionItem } from '@nextui-org/accordion'
 import { Button } from '@nextui-org/button'
 import { Chip } from '@nextui-org/chip'
 import { Input } from '@nextui-org/input'
@@ -14,13 +12,14 @@ import {
   ModalFooter,
 } from '@nextui-org/modal'
 import { Spinner } from '@nextui-org/spinner'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { ClockIcon, GlobeEuropeAfricaIcon } from '@heroicons/react/24/outline'
 import SaveRecipeButton from './save-recipe-button'
 import { UserContext } from '@/app/providers'
-import { useCompletion } from 'ai/react'
-import { parse } from 'best-effort-json-parser'
 import { Link } from '@nextui-org/link'
+import { experimental_useObject as useObject } from 'ai/react'
+import { Recipe, recipeSchema } from '@/app/api/recipes/schema'
+import RecipeDetail from './recipes/recipe-detail'
 
 export default function AddRecipeModal({
   isOpen,
@@ -30,67 +29,62 @@ export default function AddRecipeModal({
   onClose: any
 }) {
   const [isSaving, setIsSaving] = useState<boolean>(false)
-  const [recipe, setRecipe] = useState<OpenAiRecipe | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [input, setInput] = useState<string>('')
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+  const [generatedRecipe, setGeneratedRecipe] = useState<Recipe | null>(null)
 
   const user = useContext(UserContext)
 
-  const {
-    complete,
-    completion,
-    stop,
-    input,
-    setInput,
-    isLoading: isGenerating,
-  } = useCompletion({
+  const { object, submit, isLoading, stop } = useObject({
     api: '/api/recipes/generate',
     onError: (error) => {
-      setError(JSON.parse(error.message).error)
+      setError(error.message)
+      setIsSubmitted(false)
+      setGeneratedRecipe(null)
     },
-  })
-
-  const generateRecipe = useCallback(
-    async (query: string) => {
-      if (!query.length) {
-        setError('Please enter a query')
+    onFinish({ object }) {
+      if (object?.recipe === undefined) {
+        setError('An error occurred while generating the recipe')
+        setIsSubmitted(false)
+        setGeneratedRecipe(null)
         return
       }
 
-      setError(null)
-
-      complete(query, {
-        body: {
-          diet: user?.diet || 'omnivore',
-        },
-      })
-    },
-    [complete, user?.diet]
-  )
-
-  useEffect(() => {
-    if (completion) {
-      const parsedCompletion = parse(completion)
-      if (parsedCompletion.error) {
-        setError(parsedCompletion.error)
-        setRecipe(null)
-      } else {
-        setError(null)
-        setRecipe(parsedCompletion)
+      if (object.recipe !== null) {
+        setGeneratedRecipe(object.recipe)
       }
+    },
+    schema: recipeSchema,
+  })
+
+  const generateRecipe = async (query: string) => {
+    if (!query.length) {
+      setError('Please enter a query')
+      return
     }
-  }, [completion])
+
+    setError(null)
+    setIsSubmitted(true)
+
+    submit({
+      prompt: query,
+      diet: user?.diet || 'omnivore',
+    })
+  }
 
   function clearGeneratedRecipe() {
-    setRecipe(null)
     setInput('')
+    setGeneratedRecipe(null)
+    setIsSubmitted(false)
   }
 
   async function handleSaveRecipe(shouldGenerateImage: boolean) {
-    if (!recipe) return
+    if (!generatedRecipe) return
 
     setIsSaving(true)
 
-    await save(recipe, shouldGenerateImage)
+    await save(generatedRecipe, shouldGenerateImage)
       .then(() => {
         clearGeneratedRecipe()
         onClose()
@@ -101,7 +95,7 @@ export default function AddRecipeModal({
   }
 
   function handleOnClose() {
-    if (isGenerating) stop()
+    if (isLoading) stop()
     clearGeneratedRecipe()
     setError(null)
     onClose()
@@ -116,12 +110,12 @@ export default function AddRecipeModal({
       placement="top-center"
     >
       <ModalContent className="select-none">
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {recipe && (
+              {isSubmitted && object?.recipe && (
                 <>
-                  <div>{recipe?.title}</div>
+                  <div>{object.recipe?.title}</div>
                   <div className="mt-2 flex gap-4 items-start">
                     <Chip
                       aria-label="Cuisine Type"
@@ -132,7 +126,7 @@ export default function AddRecipeModal({
                         <GlobeEuropeAfricaIcon className="w-6 h-6" />
                       }
                     >
-                      {recipe?.cuisineType}
+                      {object.recipe?.cuisineType}
                     </Chip>
                     <Chip
                       startContent={<ClockIcon className="w-6 h-6" />}
@@ -140,15 +134,15 @@ export default function AddRecipeModal({
                       radius="md"
                       variant="flat"
                     >
-                      {recipe?.totalTime}
+                      {object.recipe?.totalTime}
                     </Chip>
                   </div>
                 </>
               )}
-              {!recipe && <div>Generate Recipe</div>}
+              {!isSubmitted && <div>Generate Recipe</div>}
             </ModalHeader>
-            <ModalBody className={recipe ? 'pt-0' : ''}>
-              {!recipe && (
+            <ModalBody className={object?.recipe ? 'pt-0' : ''}>
+              {!(isSubmitted && object?.recipe) && (
                 <form
                   onSubmit={(e) => {
                     e.preventDefault()
@@ -170,76 +164,27 @@ export default function AddRecipeModal({
                       setInput(e.target.value)
                       setError(null)
                     }}
-                    isDisabled={isGenerating}
+                    isDisabled={isLoading}
                     isInvalid={error !== null}
                     errorMessage={error}
                   />
                 </form>
               )}
 
-              {recipe && (
-                <>
-                  <p>{recipe?.description}</p>
-                  <Accordion
-                    className="px-0"
-                    variant="splitted"
-                    defaultExpandedKeys={['1']}
-                  >
-                    <AccordionItem
-                      key="1"
-                      aria-label={`Ingredients for ${recipe.portions} people`}
-                      title={`Ingredients for ${recipe.portions} people`}
-                      subtitle={
-                        (recipe?.ingredients
-                          ? recipe?.ingredients?.length
-                          : '0') +
-                        (isGenerating ? '+' : '') +
-                        ' ingredients'
-                      }
-                    >
-                      <ul className="list-disc list-inside">
-                        {recipe?.ingredients?.map(
-                          (ingredient: OpenAiIngredient, index: number) => (
-                            <li key={`Ingredient ${index}`}>
-                              {ingredient.name} ({ingredient.quantity}{' '}
-                              {ingredient.unit})
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </AccordionItem>
-                    <AccordionItem
-                      key="2"
-                      aria-label="Instructions"
-                      title="Instructions"
-                      subtitle={
-                        (recipe?.steps ? recipe?.steps?.length : '0') +
-                        (isGenerating ? '+' : '') +
-                        ' steps'
-                      }
-                    >
-                      <ul className="list-decimal list-inside space-y-2">
-                        {recipe?.steps?.map((step: string, index: number) => (
-                          <li key={`Step ${index}`}>{step}</li>
-                        ))}
-                      </ul>
-                    </AccordionItem>
-                  </Accordion>
-                </>
+              {isSubmitted && object?.recipe && (
+                <RecipeDetail recipe={object.recipe} isLoading={isLoading} />
               )}
             </ModalBody>
 
             <ModalFooter className="flex flex-col sm:flex-row gap-4">
-              {(!recipe || isGenerating) && (
+              {!isSubmitted && (
                 <Button
                   color="primary"
                   onPress={() => generateRecipe(input)}
-                  isDisabled={isGenerating || !input.length}
-                  endContent={
-                    isGenerating && <Spinner size="sm" color="white" />
-                  }
+                  isDisabled={isLoading || !input.length}
+                  endContent={isLoading && <Spinner size="sm" color="white" />}
                 >
-                  {isGenerating ? 'Generating' : 'Generate Recipe'}
+                  {isLoading ? 'Generating' : 'Generate Recipe'}
                 </Button>
               )}
 
@@ -249,14 +194,14 @@ export default function AddRecipeModal({
                   color="default"
                   as={Link}
                   href="/auth/signin"
-                  isDisabled={isGenerating}
+                  isDisabled={isLoading}
                   onPress={() => handleOnClose()}
                 >
                   Sign in to save recipes
                 </Button>
               )}
 
-              {user && recipe && !isGenerating && (
+              {user && isSubmitted && object?.recipe && !isLoading && (
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button
                     variant="flat"
