@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     system:
       'You are a system to generate a usable recipe based on a request from a user. ' +
       'Return one recipe per request. ' +
-      'The recipe should be compatible with a ${diet} diet, if not, adapt it. ' +
+      `The recipe should be compatible with a ${diet} diet, if not, adapt it. ` +
       'Adhere to proven ratios of ingredients in cooking and baking. ' +
       'The user request might be a vague description of a dish or baked good ' +
       'but it could also include a list of ingredients the user wants to have incorporated in the recipe. ' +
