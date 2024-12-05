@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       'Always try to create a recipe. ' +
       'Never respond with a question.',
     prompt: 'I want to cook or bake: ' + prompt,
-    model: openai.languageModel('gpt-3.5-turbo-1106'),
+    model: openai.languageModel('gpt-4o-mini'),
     mode: 'json',
     maxRetries: 0,
     schema: recipeSchema,
