@@ -12,7 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.62",
+    "@ai-sdk/openai": "^1.0.7",
     "@aws-sdk/client-s3": "^3.496.0",
     "@heroicons/react": "^2.1.5",
     "@lucia-auth/adapter-prisma": "^4.0.0",
@@ -49,7 +49,7 @@
     "@upstash/qstash": "^2.3.0",
     "@vercel/analytics": "^1.1.2",
     "@vercel/speed-insights": "^1.0.7",
-    "ai": "^3.4.4",
+    "ai": "^4.0.12",
     "clsx": "^2.1.1",
     "framer-motion": "^10.18.0",
     "intl-messageformat": "^10.5.0",

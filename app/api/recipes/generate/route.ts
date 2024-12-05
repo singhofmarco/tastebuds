@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
   const { prompt, diet } = validatedRequest.data
 
-  const result = await streamObject({
+  const result = streamObject({
     system:
       'You are a system to generate a usable recipe based on a request from a user. ' +
       'Return one recipe per request. ' +
