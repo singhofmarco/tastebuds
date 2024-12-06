@@ -60,7 +60,7 @@ export default async function RootLayout({
       >
         <Providers
           user={user}
-          themeProps={{ attribute: 'class', defaultTheme: 'dark' }}
+          themeProps={{ attribute: 'class', defaultTheme: 'dark', children }}
         >
           <div className="relative flex flex-col h-screen">
             <Navbar />
