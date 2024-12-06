@@ -66,7 +66,10 @@ export default function SaveRecipeButton({
           selectionMode="single"
           onSelectionChange={(keys: Selection) => {
             if (keys instanceof Set) {
-              setSelectedOption(keys.entries().next().value[0])
+              const selectedKey = keys.entries().next().value?.[0]
+              if (selectedKey) {
+                setSelectedOption(selectedKey as string)
+              }
             }
           }}
           className="max-w-[300px]"
